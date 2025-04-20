@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-black text-white;
+}
+
+/* ===================== */
+/* ✅ Logo 特效樣式區塊 */
+/* ===================== */
+
+.shadow-logo {
+  /* 粒子光暈效果：藍光內外發光 */
+  filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.5))
+          drop-shadow(0 0 25px rgba(0, 100, 255, 0.3));
+}
+
+/* Logo 閃光掃描線動畫 */
+.logo-glint::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.25), transparent);
+  transform: skewX(-20deg);
+  animation: glint 2.4s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 20;
+  border-radius: 9999px;
+}
+
+@keyframes glint {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 125%;
+  }
+}
