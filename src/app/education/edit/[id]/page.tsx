@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { v4 as uuid } from 'uuid'
 
 export default function EditPostPage() {
   const { id } = useParams()
@@ -17,7 +16,10 @@ export default function EditPostPage() {
     if (stored) {
       const parsed = JSON.parse(stored)
       const found = parsed.find((p: any) => p.id === id)
-      if (!found) return router.push('/education')
+      if (!found) {
+        alert('找不到貼文，將返回列表')
+        return router.push('/education')
+      }
       setPost(found)
       setTitle(found.title)
       setContent(found.content)
@@ -50,7 +52,7 @@ export default function EditPostPage() {
     router.push('/education')
   }
 
-  if (!post) return null
+  if (!post) return <div className="text-white p-8">載入中或找不到資料</div>
 
   return (
     <div className="min-h-screen bg-black text-white p-8">
