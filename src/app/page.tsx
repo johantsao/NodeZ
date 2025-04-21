@@ -21,7 +21,7 @@ export default function Home() {
   const [particles, setParticles] = useState(generateParticles)
   const [showLogo, setShowLogo] = useState(true)
   const { ref, inView } = useInView({ threshold: 0.3 })
-  const canvasRef = useRef(null)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null) // ✅ 加上型別
   const mouseRef = useRef({ x: 0, y: 0 })
   const [activeNav, setActiveNav] = useState('')
   const navItems = [
@@ -39,10 +39,12 @@ export default function Home() {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    let animationFrameId
+    let animationFrameId: number
     let particles = Array.from({ length: 180 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -88,8 +90,10 @@ export default function Home() {
         if (p.x < 0 || p.x > canvas.width) p.dx *= -1
         if (p.y < 0 || p.y > canvas.height) p.dy *= -1
       })
+
       animationFrameId = requestAnimationFrame(render)
     }
+
     render()
 
     return () => {
@@ -198,4 +202,3 @@ export default function Home() {
     </ClientWrapper>
   )
 }
-    
