@@ -1,7 +1,6 @@
 {
-  "/not-found": "app/not-found.js",
-  "/education/new/page": "app/education/new/page.js",
-  "/page": "app/page.js",
   "/education/page": "app/education/page.js",
-  "/education/edit/[id]/page": "app/education/edit/[id]/page.js"
+  "/education/post/[id]/page": "app/education/post/[id]/page.js",
+  "/education/new/page": "app/education/new/page.js",
+  "/page": "app/page.js"
 }
