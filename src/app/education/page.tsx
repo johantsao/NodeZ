@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import ClientWrapper from '@/app/components/ClientWrapper'
+import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 
 interface Post {
   id: string
@@ -15,28 +16,10 @@ interface Post {
 }
 
 export default function EducationPage() {
-  const router = useRouter()
   const canvasRef = useRef(null)
+  const router = useRouter()
+  const { supabase, userEmail, isAdmin } = useSupabaseSession()
   const [posts, setPosts] = useState<Post[]>([])
-
-  // 讀取貼文
-  useEffect(() => {
-    const stored = localStorage.getItem('posts')
-    if (stored) {
-      const parsed = JSON.parse(stored) as Post[]
-      setPosts(parsed.reverse()) // 最新在上
-    }
-  }, [])
-
-  // 刪除貼文
-  const handleDelete = (id: string) => {
-    const confirm = window.confirm('確定要刪除這篇貼文嗎？')
-    if (!confirm) return
-
-    const updated = posts.filter((p) => p.id !== id)
-    setPosts(updated)
-    localStorage.setItem('posts', JSON.stringify(updated.reverse()))
-  }
 
   // 背景粒子動畫
   useEffect(() => {
@@ -72,6 +55,23 @@ export default function EducationPage() {
     render()
   }, [])
 
+  // 載入貼文資料
+  useEffect(() => {
+    const stored = localStorage.getItem('posts')
+    if (stored) {
+      const parsed = JSON.parse(stored) as Post[]
+      setPosts(parsed.reverse())
+    }
+  }, [])
+
+  // 刪除貼文
+  const handleDelete = (id: string) => {
+    if (!confirm('確定刪除這篇貼文？')) return
+    const updated = posts.filter((p) => p.id !== id)
+    setPosts(updated)
+    localStorage.setItem('posts', JSON.stringify(updated))
+  }
+
   return (
     <ClientWrapper>
       <div className="relative min-h-screen bg-black text-white font-sans overflow-hidden">
@@ -94,23 +94,41 @@ export default function EducationPage() {
               </li>
             ))}
           </ul>
+
+          {/* 登入狀態 + 登出按鈕 */}
+          {userEmail && (
+            <div className="text-xs text-[#37a8ff] ml-4 hidden md:flex gap-4 items-center">
+              {isAdmin ? '管理員登入中' : '一般使用者'}
+              <button
+                onClick={async () => {
+                  await supabase.auth.signOut()
+                  router.push('/auth')
+                }}
+                className="text-red-400 hover:underline"
+              >
+                登出
+              </button>
+            </div>
+          )}
         </nav>
 
-        {/* 主區域 */}
+        {/* 貼文列表區塊 */}
         <div className="pt-32 px-4 md:px-12 max-w-6xl mx-auto relative z-10">
           <div className="flex justify-between items-center mb-10">
             <h1 className="text-4xl font-bold">教學貼文</h1>
-            <Link href="/education/new">
-              <button className="px-4 py-2 bg-[#37a8ff] text-black font-bold rounded hover:bg-[#1c7dc7]">
-                ➕ 新增貼文
-              </button>
-            </Link>
+            {isAdmin && (
+              <Link href="/education/new">
+                <button className="px-4 py-2 bg-[#37a8ff] text-black font-bold rounded hover:bg-[#1c7dc7]">
+                  ➕ 新增貼文
+                </button>
+              </Link>
+            )}
           </div>
 
           {/* 卡片列表 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {posts.length === 0 ? (
-              <p className="text-gray-400">目前沒有貼文，點擊右上新增貼文！</p>
+              <p className="text-gray-400">目前沒有貼文，{isAdmin ? '快新增一篇吧！' : '敬請期待！'}</p>
             ) : (
               posts.map((post) => (
                 <motion.div
@@ -120,31 +138,30 @@ export default function EducationPage() {
                   transition={{ duration: 0.4 }}
                   className="group bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 hover:border-[#37a8ff] transition duration-300"
                 >
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-48 object-cover"
-                    onClick={() => router.push(`/education/post/${post.id}`)}
-                  />
+                  <Link href={`/education/post/${post.id}`}>
+                    <img src={post.image} alt={post.title} className="w-full h-48 object-cover" />
+                  </Link>
                   <div className="p-4">
                     <h2 className="text-xl font-semibold mb-2 group-hover:text-[#37a8ff] transition">
                       {post.title}
                     </h2>
-                    <p className="text-sm text-gray-300 mb-4">{new Date(post.createdAt).toLocaleString()}</p>
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => router.push(`/education/edit/${post.id}`)}
-                        className="text-sm text-blue-400 hover:text-blue-200 border border-blue-400 px-3 py-1 rounded"
-                      >
-                        ✏️ 編輯
-                      </button>
-                      <button
-                        onClick={() => handleDelete(post.id)}
-                        className="text-sm text-red-400 hover:text-red-200 border border-red-400 px-3 py-1 rounded"
-                      >
-                        🗑️ 刪除
-                      </button>
-                    </div>
+                    <p className="text-sm text-gray-300">{new Date(post.createdAt).toLocaleString()}</p>
+                    {isAdmin && (
+                      <div className="flex gap-3 mt-3">
+                        <button
+                          onClick={() => router.push(`/education/edit/${post.id}`)}
+                          className="text-sm text-blue-400 hover:underline"
+                        >
+                          編輯
+                        </button>
+                        <button
+                          onClick={() => handleDelete(post.id)}
+                          className="text-sm text-red-400 hover:underline"
+                        >
+                          刪除
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))
