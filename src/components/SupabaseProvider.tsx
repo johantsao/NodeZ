@@ -3,7 +3,7 @@
 import { SessionContextProvider } from '@supabase/auth-helpers-react'
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
 import { useState } from 'react'
-import type { Database } from '../utils/supabase/types'
+import type { Database } from '../../utils/supabase/types'
 import type { Session } from '@supabase/auth-helpers-react'
 
 export default function SupabaseProvider({
