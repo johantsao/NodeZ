@@ -1,34 +1,71 @@
 {
   "compilerOptions": {
+    // 目標 JavaScript 版本
     "target": "es5",
+
+    // 編譯時使用的標準函式庫
     "lib": ["dom", "dom.iterable", "esnext"],
+
+    // 允許 JavaScript 檔案一併編譯
     "allowJs": true,
+
+    // 略過 library 檢查
     "skipLibCheck": true,
+
+    // 更嚴格的型別檢查
     "strict": true,
+
+    // 檔名大小寫一致性
     "forceConsistentCasingInFileNames": true,
+
+    // 不輸出編譯結果（由 Next.js 接手）
     "noEmit": true,
+
+    // 支援 ES Module 互通性
     "esModuleInterop": true,
+
+    // 模組系統
     "module": "esnext",
+
+    // 模組解析方式（bundler 專用）
     "moduleResolution": "bundler",
+
+    // 允許載入 JSON 模組
     "resolveJsonModule": true,
+
+    // 強制所有檔案被視為 module
     "isolatedModules": true,
+
+    // 使用 JSX 原樣保留，交由 Babel 處理
     "jsx": "preserve",
-    "baseUrl": ".", // ✅ 改回根目錄，這樣才不會出錯
+
+    // ✅ 設定根目錄為專案根目錄
+    "baseUrl": ".",
+
+    // ✅ 自定路徑別名（支援 @/ 開頭路徑）
     "paths": {
-      "@/*": ["src/*"] // ✅ @ 指向 src 資料夾底下所有檔案
+      "@/*": ["src/*"]
     },
+
+    // 增量編譯
     "incremental": true,
+
+    // Next.js 專用 Plugin
     "plugins": [
       {
         "name": "next"
       }
     ]
   },
+
+  // 包含的檔案範圍
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
+
+  // 排除 node_modules
   "exclude": ["node_modules"]
 }
