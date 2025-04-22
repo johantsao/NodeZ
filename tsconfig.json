@@ -15,10 +15,10 @@
     "jsx": "preserve",
     "incremental": true,
 
-    // ✅ 最關鍵設定：確保 import type from '@/...' 能正確指向 src
+    // ✅ 這裡設定 alias 正確指向 src 資料夾
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["./*"]        // ✅ 多加一層 ./ 更穩定
     },
 
     "typeRoots": [
