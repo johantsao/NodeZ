@@ -9,22 +9,22 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-
-    // ✅ 關鍵修正：改為 node 模組解析方式，避免 Vercel 找不到類型
     "moduleResolution": "node",
-
-    // ✅ 確保 types 被正確掃描（可搭配 node_modules/@types）
-    "typeRoots": ["./types", "./node_modules/@types"],
-
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
     "incremental": true,
+
+    // ✅ 最關鍵設定：確保 import type from '@/...' 能正確指向 src
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    },
+
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ],
 
     "plugins": [
       {
