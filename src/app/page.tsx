@@ -4,10 +4,10 @@ import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useInView } from 'react-intersection-observer'
-import ClientWrapper from './components/ClientWrapper'
+import ClientWrapper from '@/components/ClientWrapper'
+import BackgroundCanvas from '@/components/BackgroundCanvas'
 
 const particleCount = 180
-
 const generateParticles = () =>
   Array.from({ length: particleCount }, (_, i) => ({
     id: i,
@@ -21,8 +21,6 @@ export default function Home() {
   const [particles, setParticles] = useState(generateParticles)
   const [showLogo, setShowLogo] = useState(true)
   const { ref, inView } = useInView({ threshold: 0.3 })
-  const canvasRef = useRef<HTMLCanvasElement | null>(null) // ✅ 加上型別
-  const mouseRef = useRef({ x: 0, y: 0 })
   const [activeNav, setActiveNav] = useState('')
   const navItems = [
     { name: '教學專區', path: '/education' },
@@ -31,76 +29,8 @@ export default function Home() {
   ]
 
   useEffect(() => {
-    if (!inView) setShowLogo(false)
-    else setShowLogo(true)
+    setShowLogo(inView)
   }, [inView])
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
-    let animationFrameId: number
-    let particles = Array.from({ length: 180 }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 2.5 + 2.5,
-      dx: Math.random() * 0.8 - 0.4,
-      dy: Math.random() * 0.8 - 0.4
-    }))
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY }
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-
-    const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-      gradient.addColorStop(0, '#37a8ff')
-      gradient.addColorStop(0.8, '#37a8ff')
-      gradient.addColorStop(1, 'rgba(55, 168, 255, 0)')
-      ctx.fillStyle = gradient
-
-      particles.forEach(p => {
-        const dx = mouseRef.current.x - p.x
-        const dy = mouseRef.current.y - p.y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        const forceDirectionX = dx / dist
-        const forceDirectionY = dy / dist
-        const maxDist = 200
-        const force = (maxDist - dist) / maxDist
-
-        if (dist < maxDist) {
-          p.x -= forceDirectionX * force * 2
-          p.y -= forceDirectionY * force * 2
-        }
-
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fill()
-        p.x += p.dx
-        p.y += p.dy
-        if (p.x < 0 || p.x > canvas.width) p.dx *= -1
-        if (p.y < 0 || p.y > canvas.height) p.dy *= -1
-      })
-
-      animationFrameId = requestAnimationFrame(render)
-    }
-
-    render()
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      cancelAnimationFrame(animationFrameId)
-    }
-  }, [])
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 40 },
@@ -113,7 +43,7 @@ export default function Home() {
   return (
     <ClientWrapper>
       <div className="bg-black text-white min-h-screen font-sans relative overflow-hidden">
-        <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
+        <BackgroundCanvas />
 
         <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 z-50">
           <img src="/logo-icon.png" alt="NodeZ Icon" className="w-8 h-8 md:w-10 md:h-10" />

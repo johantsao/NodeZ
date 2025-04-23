@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import ClientWrapper from '@/app/components/ClientWrapper'
+import ClientWrapper from '@/components/ClientWrapper'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
+import TopLogo from '@/components/TopLogo'
 
 interface Post {
   id: string
@@ -21,7 +22,6 @@ export default function EducationPage() {
   const { supabase, userEmail, isAdmin } = useSupabaseSession()
   const [posts, setPosts] = useState<Post[]>([])
 
-  // 背景粒子動畫
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement | null
     if (!canvas) return
@@ -55,7 +55,6 @@ export default function EducationPage() {
     render()
   }, [])
 
-  // 載入貼文資料
   useEffect(() => {
     const stored = localStorage.getItem('posts')
     if (stored) {
@@ -64,7 +63,6 @@ export default function EducationPage() {
     }
   }, [])
 
-  // 刪除貼文
   const handleDelete = (id: string) => {
     if (!confirm('確定刪除這篇貼文？')) return
     const updated = posts.filter((p) => p.id !== id)
@@ -77,9 +75,8 @@ export default function EducationPage() {
       <div className="relative min-h-screen bg-black text-white font-sans overflow-hidden">
         <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
 
-        {/* 導覽列 */}
         <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 z-50">
-          <img src="/logo-icon.png" alt="NodeZ Icon" className="w-8 h-8 md:w-10 md:h-10" />
+          <TopLogo />
           <ul className="hidden md:flex gap-6 text-white font-medium relative">
             {[
               { name: '教學專區', path: '/education' },
@@ -94,8 +91,6 @@ export default function EducationPage() {
               </li>
             ))}
           </ul>
-
-          {/* 登入狀態 + 登出按鈕 */}
           {userEmail && (
             <div className="text-xs text-[#37a8ff] ml-4 hidden md:flex gap-4 items-center">
               {isAdmin ? '管理員登入中' : '一般使用者'}
@@ -112,7 +107,6 @@ export default function EducationPage() {
           )}
         </nav>
 
-        {/* 貼文列表區塊 */}
         <div className="pt-32 px-4 md:px-12 max-w-6xl mx-auto relative z-10">
           <div className="flex justify-between items-center mb-10">
             <h1 className="text-4xl font-bold">教學貼文</h1>
@@ -125,7 +119,6 @@ export default function EducationPage() {
             )}
           </div>
 
-          {/* 卡片列表 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {posts.length === 0 ? (
               <p className="text-gray-400">目前沒有貼文，{isAdmin ? '快新增一篇吧！' : '敬請期待！'}</p>
