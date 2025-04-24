@@ -1,3 +1,4 @@
+// ✅ 改進後的 /education/edit/[id]/page.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -7,7 +8,7 @@ import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 export default function EditPostPage() {
   const { id } = useParams()
   const router = useRouter()
-  const { isAdmin } = useSupabaseSession()
+  const { isAdmin, loading } = useSupabaseSession()
 
   const [post, setPost] = useState<any>(null)
   const [title, setTitle] = useState('')
@@ -15,10 +16,11 @@ export default function EditPostPage() {
   const [image, setImage] = useState<string | null>(null)
 
   useEffect(() => {
-    if (isAdmin === false) router.replace('/education')
-  }, [isAdmin])
+    if (!loading && !isAdmin) router.replace('/education')
+  }, [isAdmin, loading])
 
   useEffect(() => {
+    if (loading) return
     const stored = localStorage.getItem('posts')
     if (stored) {
       const parsed = JSON.parse(stored)
@@ -30,12 +32,9 @@ export default function EditPostPage() {
         setImage(target.image)
       }
     }
-  }, [id])
+  }, [id, loading])
 
-  if (isAdmin === null) {
-    return <div className="text-white p-10">檢查使用者權限中...</div>
-  }
-
+  if (loading) return <div className="text-white p-10">檢查使用者權限中...</div>
   if (!post) return <div className="text-white p-10">載入中...</div>
 
   const handleSave = () => {

@@ -9,17 +9,21 @@ export default function NewPostPage() {
   const router = useRouter()
   const { isAdmin } = useSupabaseSession()
 
+  const [loading, setLoading] = useState(true)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [image, setImage] = useState<string | null>(null)
 
   useEffect(() => {
-    if (isAdmin === false) router.replace('/education')
+    if (isAdmin !== null) {
+      setLoading(false)
+      if (isAdmin === false) {
+        router.replace('/education')
+      }
+    }
   }, [isAdmin])
 
-  if (isAdmin === null) {
-    return <div className="text-white p-10">檢查使用者權限中...</div>
-  }
+  if (loading) return <div className="text-white p-10">檢查使用者權限中...</div>
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
