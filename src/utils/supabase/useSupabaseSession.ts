@@ -1,28 +1,37 @@
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+'use client'
+
 import { useEffect, useState } from 'react'
+import { createClient } from '@/utils/supabase/client'
 
 export function useSupabaseSession() {
-  const supabase = useSupabaseClient()
-  const session = useSession()
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
+  const [userEmail, setUserEmail] = useState<string | null>(null)
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
 
   useEffect(() => {
-    if (!session?.user?.email) {
-      setLoading(false)
-      return
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      const email = session?.user?.email || null
+      setUserEmail(email)
+
+      if (email) {
+        const admins = ['johantsao2014@gmail.com', 'nodezblockchain@gmail.com']
+        setIsAdmin(admins.includes(email))
+      } else {
+        setIsAdmin(false)
+      }
     }
 
-    const adminEmails = ['johantsao2014@gmail.com', 'nodezblockchain@gmail.com']
-    setIsAdmin(adminEmails.includes(session.user.email))
-    setLoading(false)
-  }, [session])
+    getSession()
 
-  return {
-    supabase,
-    session,
-    userEmail: session?.user?.email || null,
-    isAdmin,
-    loading,
-  }
+    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+      getSession()
+    })
+
+    return () => {
+      listener.subscription.unsubscribe()
+    }
+  }, [supabase])
+
+  return { supabase, userEmail, isAdmin }
 }

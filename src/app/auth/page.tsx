@@ -5,16 +5,20 @@ import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 
 export default function AuthPage() {
-  const canvasRef = useRef(null)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const supabase = createClient()
   const router = useRouter()
+
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const canvas = canvasRef.current as HTMLCanvasElement | null
+    const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
@@ -27,12 +31,12 @@ export default function AuthPage() {
     }))
 
     const render = () => {
-      ctx!.clearRect(0, 0, canvas.width, canvas.height)
-      ctx!.fillStyle = '#37a8ff88'
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.fillStyle = '#37a8ff88'
       particles.forEach((p) => {
-        ctx!.beginPath()
-        ctx!.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx!.fill()
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fill()
         p.x += p.dx
         p.y += p.dy
         if (p.x < 0 || p.x > canvas.width) p.dx *= -1
@@ -45,18 +49,27 @@ export default function AuthPage() {
   }, [])
 
   const handleLogin = async () => {
-    setMessage('寄送登入連結中...')
+    if (!email) {
+      setMessage('請輸入正確 Email')
+      return
+    }
+
+    setLoading(true)
+    setMessage(null)
+
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${location.origin}/education`
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/education`
       }
     })
 
+    setLoading(false)
+
     if (error) {
-      setMessage('登入失敗，請重試')
+      setMessage('登入失敗，請重新嘗試')
     } else {
-      setMessage('已發送登入連結，請到信箱確認')
+      setMessage('登入連結已寄出，請到信箱確認')
     }
   }
 
@@ -65,7 +78,8 @@ export default function AuthPage() {
       <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
 
       <div className="z-10 w-full max-w-md mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-8">
-        <h1 className="text-2xl font-bold mb-4 text-center">登入 NodeZ 管理後台</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">登入 NodeZ 後台</h1>
+
         <input
           type="email"
           placeholder="請輸入 Email"
@@ -73,13 +87,24 @@ export default function AuthPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+
         <button
           onClick={handleLogin}
-          className="w-full bg-[#37a8ff] text-black font-bold py-2 rounded hover:bg-[#1c7dc7]"
+          disabled={loading}
+          className="w-full bg-[#37a8ff] text-black font-bold py-2 rounded hover:bg-[#1c7dc7] transition"
         >
-          發送登入連結
+          {loading ? '寄送中...' : '發送登入連結'}
         </button>
-        {message && <p className="text-sm mt-4 text-center text-[#37a8ff]">{message}</p>}
+
+        {message && (
+          <p
+            className={`text-sm mt-4 text-center ${
+              message.includes('失敗') ? 'text-red-400' : 'text-[#37a8ff]'
+            }`}
+          >
+            {message}
+          </p>
+        )}
       </div>
     </div>
   )

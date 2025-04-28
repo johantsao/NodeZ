@@ -8,42 +8,72 @@ import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
+import { createClient } from '@/utils/supabase/client'
 
 interface Post {
   id: string
   title: string
   content: string
-  image: string
-  createdAt: string
+  image_url: string
+  created_at: string
 }
 
 export default function EducationPage() {
   const router = useRouter()
-  const { supabase, userEmail, isAdmin } = useSupabaseSession()
+  const { userEmail, isAdmin } = useSupabaseSession()
+  const supabase = createClient()
+
   const [posts, setPosts] = useState<Post[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const stored = localStorage.getItem('posts')
-    if (stored) {
-      const parsed = JSON.parse(stored) as Post[]
-      setPosts(parsed.reverse())
-    }
-  }, [])
+    const fetchPosts = async () => {
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .order('created_at', { ascending: false })
 
-  const handleDelete = (id: string) => {
+      if (error) {
+        console.error('讀取貼文失敗:', error)
+      } else if (data) {
+        setPosts(data)
+      }
+      setLoading(false)
+    }
+
+    fetchPosts()
+  }, [supabase])
+
+  const handleDelete = async (id: string) => {
     if (!confirm('確定刪除這篇貼文？')) return
-    const updated = posts.filter((p) => p.id !== id)
-    setPosts(updated)
-    localStorage.setItem('posts', JSON.stringify(updated))
+
+    const { error } = await supabase.from('posts').delete().eq('id', id)
+    if (error) {
+      console.error('刪除失敗:', error)
+      alert('刪除失敗，請稍後再試')
+      return
+    }
+
+    setPosts((prev) => prev.filter((post) => post.id !== id))
+    alert('刪除成功')
+  }
+
+  if (loading) {
+    return (
+      <div className="text-white p-10">
+        <BackgroundCanvas />
+        貼文載入中...
+      </div>
+    )
   }
 
   return (
     <ClientWrapper>
       <div className="relative min-h-screen bg-black text-white font-sans overflow-hidden">
-        {/* ✅ 統一背景動畫 */}
+        {/* ✅ 背景粒子動畫 */}
         <BackgroundCanvas />
 
-        {/* 導覽列 */}
+        {/* ✅ 導覽列 */}
         <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 z-50">
           <TopLogo />
           <ul className="hidden md:flex gap-6 text-white font-medium relative">
@@ -66,6 +96,7 @@ export default function EducationPage() {
               {isAdmin ? '管理員登入中' : '一般使用者'}
               <button
                 onClick={async () => {
+                  const supabase = createClient()
                   await supabase.auth.signOut()
                   router.push('/auth')
                 }}
@@ -77,7 +108,7 @@ export default function EducationPage() {
           )}
         </nav>
 
-        {/* 教學內容區塊 */}
+        {/* ✅ 教學內容主區 */}
         <div className="pt-32 px-4 md:px-12 max-w-6xl mx-auto relative z-10">
           <div className="flex justify-between items-center mb-10">
             <h1 className="text-4xl font-bold">教學貼文</h1>
@@ -105,15 +136,17 @@ export default function EducationPage() {
                   className="group bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 hover:border-[#37a8ff] transition duration-300"
                 >
                   <Link href={`/education/post/${post.id}`}>
-                    <img src={post.image} alt={post.title} className="w-full h-48 object-cover" />
+                    <img
+                      src={post.image_url}
+                      alt={post.title}
+                      className="w-full h-48 object-cover"
+                    />
                   </Link>
                   <div className="p-4">
                     <h2 className="text-xl font-semibold mb-2 group-hover:text-[#37a8ff] transition">
                       {post.title}
                     </h2>
-                    <p className="text-sm text-gray-300">
-                      {new Date(post.createdAt).toLocaleString()}
-                    </p>
+                    <p className="text-sm text-gray-300">{new Date(post.created_at).toLocaleString()}</p>
                     {isAdmin && (
                       <div className="flex gap-3 mt-3">
                         <button
