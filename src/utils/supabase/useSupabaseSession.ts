@@ -1,37 +1,46 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/utils/supabase/client'
+import { supabase } from './client'
 
 export function useSupabaseSession() {
-  const supabase = createClient()
   const [userEmail, setUserEmail] = useState<string | null>(null)
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      const email = session?.user?.email || null
-      setUserEmail(email)
+    const fetchSession = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession()
 
-      if (email) {
-        const admins = ['johantsao2014@gmail.com', 'nodezblockchain@gmail.com']
-        setIsAdmin(admins.includes(email))
+      if (error) {
+        console.error('Session Error:', error)
+        setUserEmail(null)
+        setIsAdmin(false)
+      } else if (session) {
+        const email = session.user.email
+        setUserEmail(email)
+        setIsAdmin(
+          email === 'johantsao2014@gmail.com' || email === 'nodezblockchain@gmail.com'
+        )
       } else {
+        setUserEmail(null)
         setIsAdmin(false)
       }
+
+      setLoading(false)
     }
 
-    getSession()
+    fetchSession()
 
+    // 監聽登入/登出變化，立即更新
     const { data: listener } = supabase.auth.onAuthStateChange(() => {
-      getSession()
+      fetchSession()
     })
 
     return () => {
       listener.subscription.unsubscribe()
     }
-  }, [supabase])
+  }, [])
 
-  return { supabase, userEmail, isAdmin }
+  return { supabase, userEmail, isAdmin, loading }
 }

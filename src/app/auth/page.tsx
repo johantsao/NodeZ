@@ -1,17 +1,16 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { createClient } from '@/utils/supabase/client'
+import { supabase } from '@/utils/supabase/client'  // ✅ 重點！改成直接拿 supabase
 import { useRouter } from 'next/navigation'
 
 export default function AuthPage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const supabase = createClient()
   const router = useRouter()
-
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : '')
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -27,7 +26,7 @@ export default function AuthPage() {
       y: Math.random() * canvas.height,
       r: Math.random() * 2.5 + 2,
       dx: Math.random() * 0.5 - 0.25,
-      dy: Math.random() * 0.5 - 0.25
+      dy: Math.random() * 0.5 - 0.25,
     }))
 
     const render = () => {
@@ -50,36 +49,32 @@ export default function AuthPage() {
 
   const handleLogin = async () => {
     if (!email) {
-      setMessage('請輸入正確 Email')
+      setMessage('請輸入有效的 Email')
       return
     }
 
-    setLoading(true)
-    setMessage(null)
+    setMessage('寄送登入連結中...')
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/education`
+        emailRedirectTo: `${siteUrl}/education`
       }
     })
 
-    setLoading(false)
-
     if (error) {
-      setMessage('登入失敗，請重新嘗試')
+      console.error(error)
+      setMessage('登入失敗，請重試')
     } else {
-      setMessage('登入連結已寄出，請到信箱確認')
+      setMessage('已發送登入連結，請到信箱確認')
     }
   }
 
   return (
     <div className="relative h-screen flex items-center justify-center bg-black text-white overflow-hidden">
       <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
-
       <div className="z-10 w-full max-w-md mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-8">
-        <h1 className="text-2xl font-bold mb-6 text-center">登入 NodeZ 後台</h1>
-
+        <h1 className="text-2xl font-bold mb-4 text-center">登入 NodeZ 管理後台</h1>
         <input
           type="email"
           placeholder="請輸入 Email"
@@ -87,24 +82,13 @@ export default function AuthPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-
         <button
           onClick={handleLogin}
-          disabled={loading}
-          className="w-full bg-[#37a8ff] text-black font-bold py-2 rounded hover:bg-[#1c7dc7] transition"
+          className="w-full bg-[#37a8ff] text-black font-bold py-2 rounded hover:bg-[#1c7dc7]"
         >
-          {loading ? '寄送中...' : '發送登入連結'}
+          發送登入連結
         </button>
-
-        {message && (
-          <p
-            className={`text-sm mt-4 text-center ${
-              message.includes('失敗') ? 'text-red-400' : 'text-[#37a8ff]'
-            }`}
-          >
-            {message}
-          </p>
-        )}
+        {message && <p className="text-sm mt-4 text-center text-[#37a8ff]">{message}</p>}
       </div>
     </div>
   )
