@@ -1,36 +1,35 @@
-export const getCroppedImg = (imageSrc: string, croppedAreaPixels: any): Promise<File> => {
-    return new Promise((resolve, reject) => {
-      const image = new Image()
-      image.src = imageSrc
-      image.onload = () => {
-        const canvas = document.createElement('canvas')
-        canvas.width = croppedAreaPixels.width
-        canvas.height = croppedAreaPixels.height
-        const ctx = canvas.getContext('2d')
+// src/utils/cropImage.ts
+export default async function cropImage(imageSrc: string, pixelCrop: { x: number; y: number; width: number; height: number }): Promise<Blob | null> {
+    const image = new Image()
+    image.src = imageSrc
+    await new Promise((resolve) => {
+      image.onload = resolve
+    })
   
-        if (!ctx) return reject(new Error('無法取得 Canvas Context'))
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
   
-        ctx.drawImage(
-          image,
-          croppedAreaPixels.x,
-          croppedAreaPixels.y,
-          croppedAreaPixels.width,
-          croppedAreaPixels.height,
-          0,
-          0,
-          croppedAreaPixels.width,
-          croppedAreaPixels.height
-        )
+    if (!ctx) return null
   
-        canvas.toBlob((blob) => {
-          if (!blob) {
-            return reject(new Error('裁切失敗'))
-          }
-          const file = new File([blob], 'cropped.jpg', { type: 'image/jpeg' })
-          resolve(file)
-        }, 'image/jpeg')
-      }
-      image.onerror = () => reject(new Error('載入圖片失敗'))
+    canvas.width = pixelCrop.width
+    canvas.height = pixelCrop.height
+  
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height
+    )
+  
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        resolve(blob)
+      }, 'image/jpeg')
     })
   }
   
