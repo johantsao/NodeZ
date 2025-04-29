@@ -13,11 +13,10 @@ export default function ImageCropper({ image, onCropped }: ImageCropperProps) {
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null)
 
-  const onCropComplete = async (_: any, croppedAreaPixels: any) => {
+  const onCropComplete = (_: any, croppedAreaPixels: any) => {
     setCroppedAreaPixels(croppedAreaPixels)
+    // 等你按下「裁切」按鈕時，再在外部呼叫 cropImage
   }
-
-  // 注意！你最後要在外部呼叫 cropImage 傳回裁切完的 Blob！
 
   return (
     <div className="relative w-full h-[300px] bg-black">
