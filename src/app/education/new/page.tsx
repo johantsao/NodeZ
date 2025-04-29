@@ -8,10 +8,9 @@ import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
 import ImageCropper from '@/components/ImageCropper'
-import { cropImage } from '@/utils/cropImage'
-import { v4 as uuidv4 } from 'uuid'
+import cropImage from '@/utils/cropImage'
 import dynamic from 'next/dynamic'
-import 'react-quill/dist/quill.snow.css'
+import { v4 as uuidv4 } from 'uuid'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
@@ -23,7 +22,8 @@ export default function NewPostPage() {
   const [content, setContent] = useState('')
   const [tags, setTags] = useState<string[]>([])
   const [imageFile, setImageFile] = useState<File | null>(null)
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [croppedImage, setCroppedImage] = useState<Blob | null>(null)
   const [uploading, setUploading] = useState(false)
 
   if (loading) {
@@ -35,54 +35,52 @@ export default function NewPostPage() {
     return null
   }
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setImageFile(file)
+      setImagePreview(URL.createObjectURL(file))
+    }
+  }
+
   const handleSubmit = async () => {
-    if (!title || !content || !imageFile) {
+    if (!title || !content || !croppedImage) {
       alert('請填寫完整資訊')
       return
     }
 
     setUploading(true)
 
-    let finalImageUrl = ''
-
     try {
-      if (imageFile && croppedAreaPixels) {
-        const croppedImageBlob = await cropImage(imageFile, croppedAreaPixels)
-        const fileExt = imageFile.name.split('.').pop()
-        const fileName = `${uuidv4()}.${fileExt}`
+      const fileName = `${uuidv4()}.jpg`
+      const { error: uploadError } = await supabase.storage
+        .from('posts-images')
+        .upload(`posts/${fileName}`, croppedImage, {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: 'image/jpeg'
+        })
 
-        const { error: uploadError } = await supabase.storage
-          .from('posts-images')
-          .upload(fileName, croppedImageBlob)
+      if (uploadError) throw uploadError
 
-        if (uploadError) {
-          console.error(uploadError)
-          alert('圖片上傳失敗')
-          setUploading(false)
-          return
-        }
-
-        finalImageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/posts-images/${fileName}`
-      }
+      const { data } = supabase.storage.from('posts-images').getPublicUrl(`posts/${fileName}`)
+      const imageUrl = data.publicUrl
 
       const { error } = await supabase.from('posts').insert([
         {
           title,
           content,
-          image: finalImageUrl,
+          image: imageUrl,
           tags
         }
       ])
 
-      if (error) {
-        console.error(error)
-        alert('新增貼文失敗')
-      } else {
-        router.push('/education')
-      }
+      if (error) throw error
+
+      router.push('/education')
     } catch (error) {
-      console.error('提交失敗', error)
-      alert('上傳失敗')
+      console.error(error)
+      alert('新增貼文失敗')
     } finally {
       setUploading(false)
     }
@@ -98,28 +96,37 @@ export default function NewPostPage() {
 
         <div className="pt-32 px-6 max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">新增貼文</h1>
+
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="貼文標題"
             className="w-full p-3 mb-4 rounded bg-white/10 text-white"
           />
-          <ReactQuill
-            value={content}
-            onChange={setContent}
-            className="bg-white text-black rounded mb-4"
-            modules={{
-              toolbar: [['bold', 'italic', 'underline'], [{ header: [1, 2, 3, false] }], ['image', 'link'], ['clean']]
-            }}
+
+          {imagePreview && <ImageCropper image={imagePreview} onCropped={setCroppedImage} />}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="text-white mb-4"
           />
-          <ImageCropper imageFile={imageFile} setImageFile={setImageFile} setCroppedAreaPixels={setCroppedAreaPixels} />
+
           <input
             type="text"
-            placeholder="標籤 (以逗號分隔)"
             value={tags.join(',')}
-            onChange={(e) => setTags(e.target.value.split(',').map(t => t.trim()))}
-            className="w-full p-2 rounded bg-white/10 text-white mb-6"
+            onChange={(e) => setTags(e.target.value.split(',').map(tag => tag.trim()))}
+            placeholder="標籤 (用逗號分隔)"
+            className="w-full p-3 mb-4 rounded bg-white/10 text-white"
           />
+
+          <ReactQuill
+            theme="snow"
+            value={content}
+            onChange={setContent}
+            className="bg-white text-black mb-6 rounded"
+          />
+
           <button
             onClick={handleSubmit}
             disabled={uploading}
