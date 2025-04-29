@@ -19,13 +19,13 @@ interface Post {
 
 export default function EducationPage() {
   const router = useRouter()
-  const { supabase, userEmail, isAdmin, loading } = useSupabaseSession()
+  const { supabase, userEmail, isAdmin } = useSupabaseSession()
   const [posts, setPosts] = useState<Post[]>([])
+  const [loading, setLoading] = useState(true) // 用自己的 loading
 
   useEffect(() => {
-    if (loading) return // 還沒抓到 Session，不要動
     fetchPosts()
-  }, [loading])
+  }, [])
 
   const fetchPosts = async () => {
     const { data, error } = await supabase
@@ -35,9 +35,10 @@ export default function EducationPage() {
 
     if (error) {
       console.error('讀取貼文錯誤:', error)
-    } else if (data) {
+    } else {
       setPosts(data as Post[])
     }
+    setLoading(false) // 不管有沒有 error，都讓畫面解除 loading
   }
 
   const handleDelete = async (id: string) => {
@@ -66,10 +67,8 @@ export default function EducationPage() {
   return (
     <ClientWrapper>
       <div className="relative min-h-screen bg-black text-white font-sans overflow-hidden">
-        {/* ✅ 粒子動畫背景 */}
         <BackgroundCanvas />
 
-        {/* ✅ 導覽列 */}
         <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 z-50">
           <TopLogo />
           <ul className="hidden md:flex gap-6 text-white font-medium">
@@ -100,7 +99,6 @@ export default function EducationPage() {
           )}
         </nav>
 
-        {/* ✅ 主內容 */}
         <div className="pt-32 px-4 md:px-12 max-w-6xl mx-auto relative z-10">
           <div className="flex justify-between items-center mb-10">
             <h1 className="text-4xl font-bold">教學貼文</h1>
