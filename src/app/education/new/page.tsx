@@ -7,7 +7,13 @@ import { supabase } from '@/utils/supabase/client'
 import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
+import ImageCropper from '@/components/ImageCropper'
+import { cropImage } from '@/utils/cropImage'
 import { v4 as uuidv4 } from 'uuid'
+import dynamic from 'next/dynamic'
+import 'react-quill/dist/quill.snow.css'
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 export default function NewPostPage() {
   const router = useRouter()
@@ -15,7 +21,9 @@ export default function NewPostPage() {
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [tags, setTags] = useState<string[]>([])
   const [imageFile, setImageFile] = useState<File | null>(null)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
   const [uploading, setUploading] = useState(false)
 
   if (loading) {
@@ -35,36 +43,49 @@ export default function NewPostPage() {
 
     setUploading(true)
 
-    const fileExt = imageFile.name.split('.').pop()
-    const fileName = `${uuidv4()}.${fileExt}`
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('posts-images')
-      .upload(fileName, imageFile)
+    let finalImageUrl = ''
 
-    if (uploadError) {
-      console.error(uploadError)
-      alert('圖片上傳失敗')
-      setUploading(false)
-      return
-    }
+    try {
+      if (imageFile && croppedAreaPixels) {
+        const croppedImageBlob = await cropImage(imageFile, croppedAreaPixels)
+        const fileExt = imageFile.name.split('.').pop()
+        const fileName = `${uuidv4()}.${fileExt}`
 
-    const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/posts-images/${fileName}`
+        const { error: uploadError } = await supabase.storage
+          .from('posts-images')
+          .upload(fileName, croppedImageBlob)
 
-    const { error } = await supabase.from('posts').insert([
-      {
-        title,
-        content,
-        image: imageUrl,
+        if (uploadError) {
+          console.error(uploadError)
+          alert('圖片上傳失敗')
+          setUploading(false)
+          return
+        }
+
+        finalImageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/posts-images/${fileName}`
       }
-    ])
 
-    if (error) {
-      console.error(error)
-      alert('新增貼文失敗')
-    } else {
-      router.push('/education')
+      const { error } = await supabase.from('posts').insert([
+        {
+          title,
+          content,
+          image: finalImageUrl,
+          tags
+        }
+      ])
+
+      if (error) {
+        console.error(error)
+        alert('新增貼文失敗')
+      } else {
+        router.push('/education')
+      }
+    } catch (error) {
+      console.error('提交失敗', error)
+      alert('上傳失敗')
+    } finally {
+      setUploading(false)
     }
-    setUploading(false)
   }
 
   return (
@@ -83,17 +104,21 @@ export default function NewPostPage() {
             placeholder="貼文標題"
             className="w-full p-3 mb-4 rounded bg-white/10 text-white"
           />
-          <textarea
+          <ReactQuill
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="貼文內容"
-            className="w-full p-3 mb-4 rounded bg-white/10 text-white h-40"
+            onChange={setContent}
+            className="bg-white text-black rounded mb-4"
+            modules={{
+              toolbar: [['bold', 'italic', 'underline'], [{ header: [1, 2, 3, false] }], ['image', 'link'], ['clean']]
+            }}
           />
+          <ImageCropper imageFile={imageFile} setImageFile={setImageFile} setCroppedAreaPixels={setCroppedAreaPixels} />
           <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-            className="text-white mb-4"
+            type="text"
+            placeholder="標籤 (以逗號分隔)"
+            value={tags.join(',')}
+            onChange={(e) => setTags(e.target.value.split(',').map(t => t.trim()))}
+            className="w-full p-2 rounded bg-white/10 text-white mb-6"
           />
           <button
             onClick={handleSubmit}

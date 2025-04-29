@@ -14,18 +14,19 @@ interface Post {
   title: string
   content: string
   image: string
+  tags: string[]
   created_at: string
 }
 
 export default function EducationPage() {
   const router = useRouter()
-  const { supabase, userEmail, isAdmin } = useSupabaseSession()
+  const { supabase, userEmail, isAdmin, loading } = useSupabaseSession()
   const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(true) // 用自己的 loading
 
   useEffect(() => {
+    if (loading) return
     fetchPosts()
-  }, [])
+  }, [loading])
 
   const fetchPosts = async () => {
     const { data, error } = await supabase
@@ -35,19 +36,15 @@ export default function EducationPage() {
 
     if (error) {
       console.error('讀取貼文錯誤:', error)
-    } else {
+    } else if (data) {
       setPosts(data as Post[])
     }
-    setLoading(false) // 不管有沒有 error，都讓畫面解除 loading
   }
 
   const handleDelete = async (id: string) => {
     if (!confirm('確定要刪除這篇貼文？')) return
 
-    const { error } = await supabase
-      .from('posts')
-      .delete()
-      .eq('id', id)
+    const { error } = await supabase.from('posts').delete().eq('id', id)
 
     if (error) {
       alert('刪除失敗，請重試')
@@ -132,9 +129,21 @@ export default function EducationPage() {
                     <h2 className="text-xl font-semibold mb-2 group-hover:text-[#37a8ff] transition">
                       {post.title}
                     </h2>
-                    <p className="text-sm text-gray-300">
+                    <p className="text-sm text-gray-300 mb-2">
                       {new Date(post.created_at).toLocaleString()}
                     </p>
+                    {post.tags?.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {post.tags.map((tag, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-1 text-xs bg-[#37a8ff]/20 text-[#37a8ff] rounded-full"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                     {isAdmin && (
                       <div className="flex gap-3 mt-3">
                         <button
