@@ -1,3 +1,4 @@
+// ✅ 最終版 /education/new/page.tsx
 'use client'
 
 import { useState } from 'react'

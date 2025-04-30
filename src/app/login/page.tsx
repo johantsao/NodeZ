@@ -9,7 +9,16 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    const { error } = await supabase.auth.signInWithOtp({ email })
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${siteUrl}/education`, // ✅ 指定 redirect
+      }
+    })
+
     if (error) {
       setMessage('登入失敗：' + error.message)
     } else {
