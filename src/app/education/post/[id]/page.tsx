@@ -55,7 +55,7 @@ export default function PostDetailPage() {
             {[
               { name: '教學專區', path: '/education' },
               { name: '影音專區', path: '/video' },
-              { name: '社群專區', path: '/community' }
+              { name: '社群專區', path: '/community' },
             ].map((item) => (
               <li key={item.path} className="hover:text-[#37a8ff] transition">
                 <a href={item.path}>{item.name}</a>
@@ -79,14 +79,9 @@ export default function PostDetailPage() {
           )}
 
           {post.image && (
-            <img
-              src={post.image}
-              alt="封面圖片"
-              className="w-full max-h-[400px] object-cover rounded-lg mb-6"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none'
-              }}
-            />
+            <img src={post.image} alt="封面圖片" className="w-full rounded-lg mb-6" onError={(e) => {
+              (e.target as HTMLImageElement).src = '/default-cover.jpg'
+            }} />
           )}
 
           <div

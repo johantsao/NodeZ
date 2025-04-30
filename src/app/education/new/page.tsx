@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic'
 import { v4 as uuidv4 } from 'uuid'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
+import 'react-quill/dist/quill.snow.css'
 
 export default function NewPostPage() {
   const router = useRouter()
@@ -97,29 +98,33 @@ export default function NewPostPage() {
         <div className="pt-32 px-6 max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">新增貼文</h1>
 
+          <label className="block mb-2">貼文標題</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="貼文標題"
-            className="w-full p-3 mb-4 rounded bg-white/10 text-white"
+            placeholder="請輸入貼文標題"
+            className="w-full p-3 mb-6 rounded bg-white/10 text-white"
           />
 
+          <label className="block mb-2">封面圖片</label>
           {imagePreview && <ImageCropper image={imagePreview} onCropped={setCroppedImage} />}
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="text-white mb-4"
+            className="text-white mb-6"
           />
 
+          <label className="block mb-2">標籤（用逗號分隔）</label>
           <input
             type="text"
             value={tags.join(',')}
             onChange={(e) => setTags(e.target.value.split(',').map(tag => tag.trim()))}
-            placeholder="標籤 (用逗號分隔)"
-            className="w-full p-3 mb-4 rounded bg-white/10 text-white"
+            placeholder="輸入標籤如：blockchain, defi, 教學"
+            className="w-full p-3 mb-6 rounded bg-white/10 text-white"
           />
 
+          <label className="block mb-2">貼文內容（支援圖文混排）</label>
           <ReactQuill
             theme="snow"
             value={content}

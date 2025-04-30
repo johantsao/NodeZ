@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { supabase } from '@/utils/supabase/client'
 import ClientWrapper from '@/components/ClientWrapper'
@@ -19,35 +19,38 @@ export default function EditPostPage() {
   const { id } = useParams()
   const { isAdmin, loading } = useSupabaseSession()
 
+  const [post, setPost] = useState<any>(null)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [tags, setTags] = useState<string[]>([])
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [newImageFile, setNewImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [croppedImage, setCroppedImage] = useState<Blob | null>(null)
-  const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     if (!id || !isAdmin) return
-    fetchPost()
-  }, [id, isAdmin])
-
-  const fetchPost = async () => {
-    const { data, error } = await supabase.from('posts').select('*').eq('id', id).single()
-    if (error) {
-      console.error('讀取貼文失敗', error)
-      router.push('/education')
-    } else {
+    const fetchPost = async () => {
+      const { data, error } = await supabase.from('posts').select('*').eq('id', id).single()
+      if (error) {
+        console.error('載入貼文失敗', error)
+        router.replace('/education')
+        return
+      }
+      setPost(data)
       setTitle(data.title)
       setContent(data.content)
+      setImageUrl(data.image)
       setTags(data.tags || [])
-      setExistingImageUrl(data.image)
     }
-  }
+    fetchPost()
+  }, [id, isAdmin])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      setNewImageFile(file)
       setImagePreview(URL.createObjectURL(file))
     }
   }
@@ -59,18 +62,17 @@ export default function EditPostPage() {
     }
 
     setUploading(true)
+    let finalImageUrl = imageUrl
 
     try {
-      let finalImageUrl = existingImageUrl
-
-      if (croppedImage) {
+      if (newImageFile && croppedImage) {
         const fileName = `${uuidv4()}.jpg`
         const { error: uploadError } = await supabase.storage
           .from('posts-images')
           .upload(`posts/${fileName}`, croppedImage, {
             cacheControl: '3600',
             upsert: false,
-            contentType: 'image/jpeg'
+            contentType: 'image/jpeg',
           })
 
         if (uploadError) throw uploadError
@@ -79,25 +81,30 @@ export default function EditPostPage() {
         finalImageUrl = data.publicUrl
       }
 
-      const { error } = await supabase.from('posts').update({
-        title,
-        content,
-        tags,
-        image: finalImageUrl
-      }).eq('id', id)
+      const { error: updateError } = await supabase
+        .from('posts')
+        .update({
+          title,
+          content,
+          image: finalImageUrl,
+          tags,
+        })
+        .eq('id', id)
 
-      if (error) throw error
+      if (updateError) throw updateError
 
       router.push('/education')
     } catch (error) {
-      console.error('更新貼文失敗', error)
-      alert('儲存失敗，請重試')
+      console.error(error)
+      alert('更新貼文失敗')
     } finally {
       setUploading(false)
     }
   }
 
-  if (loading || !isAdmin) return <div className="text-white p-10">載入中...</div>
+  if (loading || !post) {
+    return <div className="text-white p-10">載入中...</div>
+  }
 
   return (
     <ClientWrapper>
@@ -117,18 +124,7 @@ export default function EditPostPage() {
             className="w-full p-3 mb-4 rounded bg-white/10 text-white"
           />
 
-          {imagePreview ? (
-            <ImageCropper image={imagePreview} onCropped={setCroppedImage} />
-          ) : (
-            existingImageUrl && (
-              <img
-                src={existingImageUrl}
-                alt="封面預覽"
-                className="w-full h-auto rounded mb-4 border border-white/20"
-              />
-            )
-          )}
-
+          {imagePreview && <ImageCropper image={imagePreview} onCropped={setCroppedImage} />}
           <input
             type="file"
             accept="image/*"
