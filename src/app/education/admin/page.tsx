@@ -10,6 +10,7 @@ import BackgroundCanvas from '@/components/BackgroundCanvas'
 interface Post {
   id: string
   title: string
+  image: string
   created_at: string
 }
 
@@ -25,7 +26,10 @@ export default function AdminPage() {
   }, [loading, isAdmin])
 
   const fetchPosts = async () => {
-    const { data, error } = await supabase.from('posts').select('id, title, created_at').order('created_at', { ascending: false })
+    const { data, error } = await supabase
+      .from('posts')
+      .select('id, title, image, created_at')
+      .order('created_at', { ascending: false })
     if (error) console.error('讀取失敗', error)
     else setPosts(data as Post[])
   }
@@ -36,7 +40,7 @@ export default function AdminPage() {
     if (error) {
       alert('刪除失敗')
     } else {
-      setPosts(posts.filter((p) => p.id !== id))
+      setPosts((prev) => prev.filter((p) => p.id !== id))
     }
   }
 
@@ -57,12 +61,22 @@ export default function AdminPage() {
           <ul className="space-y-4">
             {posts.map((post) => (
               <li key={post.id} className="bg-white/5 p-4 rounded-lg border border-white/10">
-                <div className="flex justify-between items-center">
-                  <div>
+                <div className="flex items-center gap-4">
+                  {post.image && (
+                    <img
+                      src={post.image}
+                      alt="封面"
+                      className="w-24 h-16 object-cover rounded"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/fallback.jpg'
+                      }}
+                    />
+                  )}
+                  <div className="flex-1">
                     <p className="font-bold text-lg">{post.title}</p>
                     <p className="text-sm text-gray-400">{new Date(post.created_at).toLocaleString()}</p>
                   </div>
-                  <div className="flex gap-4">
+                  <div className="flex gap-3">
                     <button
                       className="text-blue-400 hover:underline"
                       onClick={() => router.push(`/education/edit/${post.id}`)}

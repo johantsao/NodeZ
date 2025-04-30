@@ -43,9 +43,7 @@ export default function EducationPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('確定要刪除這篇貼文？')) return
-
     const { error } = await supabase.from('posts').delete().eq('id', id)
-
     if (error) {
       alert('刪除失敗，請重試')
     } else {
@@ -72,7 +70,7 @@ export default function EducationPage() {
             {[
               { name: '教學專區', path: '/education' },
               { name: '影音專區', path: '/video' },
-              { name: '社群專區', path: '/community' }
+              { name: '社群專區', path: '/community' },
             ].map((item) => (
               <li key={item.path} className="hover:text-[#37a8ff] transition">
                 <Link href={item.path}>{item.name}</Link>
@@ -124,10 +122,12 @@ export default function EducationPage() {
                 >
                   <Link href={`/education/post/${post.id}`}>
                     <img
-                      src={post.image}
+                      src={post.image || '/default-cover.jpg'}
                       alt={post.title}
-                      className="w-full h-48 object-cover"
-                      onError={(e) => (e.currentTarget.src = '/fallback.png')}
+                      className="w-full h-48 object-cover bg-black"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/default-cover.jpg'
+                      }}
                     />
                   </Link>
                   <div className="p-4">
