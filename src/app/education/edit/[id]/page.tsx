@@ -1,78 +1,69 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { supabase } from '@/utils/supabase/client'
+import dynamic from 'next/dynamic'
+import { v4 as uuidv4 } from 'uuid'
 import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
-import ImageCropper from '@/components/ImageCropper'
-import cropImage from '@/utils/cropImage'
-import dynamic from 'next/dynamic'
-import { v4 as uuidv4 } from 'uuid'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 export default function EditPostPage() {
-  const router = useRouter()
   const { id } = useParams()
+  const router = useRouter()
   const { isAdmin, loading } = useSupabaseSession()
 
-  const [post, setPost] = useState<any>(null)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [tags, setTags] = useState<string[]>([])
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [newImageFile, setNewImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [croppedImage, setCroppedImage] = useState<Blob | null>(null)
-  const [uploading, setUploading] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    if (!id || !isAdmin) return
+    if (!id || loading) return
     const fetchPost = async () => {
       const { data, error } = await supabase.from('posts').select('*').eq('id', id).single()
-      if (error) {
-        console.error('載入貼文失敗', error)
+      if (error || !data) {
+        console.error('貼文讀取失敗', error)
         router.replace('/education')
-        return
+      } else {
+        setTitle(data.title)
+        setContent(data.content)
+        setTags(data.tags || [])
+        setImageUrl(data.image)
       }
-      setPost(data)
-      setTitle(data.title)
-      setContent(data.content)
-      setImageUrl(data.image)
-      setTags(data.tags || [])
     }
     fetchPost()
-  }, [id, isAdmin])
+  }, [id, loading])
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       setNewImageFile(file)
-      setImagePreview(URL.createObjectURL(file))
     }
   }
 
-  const handleSubmit = async () => {
+  const handleUpdate = async () => {
     if (!title || !content) {
       alert('請填寫完整資訊')
       return
     }
-
-    setUploading(true)
+    setSubmitting(true)
     let finalImageUrl = imageUrl
 
     try {
-      if (newImageFile && croppedImage) {
-        const fileName = `${uuidv4()}.jpg`
+      if (newImageFile) {
+        const ext = newImageFile.name.split('.').pop()
+        const fileName = `${uuidv4()}.${ext}`
         const { error: uploadError } = await supabase.storage
           .from('posts-images')
-          .upload(`posts/${fileName}`, croppedImage, {
-            cacheControl: '3600',
-            upsert: false,
-            contentType: 'image/jpeg',
+          .upload(`posts/${fileName}`, newImageFile, {
+            upsert: true
           })
 
         if (uploadError) throw uploadError
@@ -81,30 +72,25 @@ export default function EditPostPage() {
         finalImageUrl = data.publicUrl
       }
 
-      const { error: updateError } = await supabase
-        .from('posts')
-        .update({
-          title,
-          content,
-          image: finalImageUrl,
-          tags,
-        })
-        .eq('id', id)
+      const { error: updateError } = await supabase.from('posts').update({
+        title,
+        content,
+        tags,
+        image: finalImageUrl
+      }).eq('id', id)
 
       if (updateError) throw updateError
 
       router.push('/education')
-    } catch (error) {
-      console.error(error)
+    } catch (err) {
+      console.error(err)
       alert('更新貼文失敗')
     } finally {
-      setUploading(false)
+      setSubmitting(false)
     }
   }
 
-  if (loading || !post) {
-    return <div className="text-white p-10">載入中...</div>
-  }
+  if (loading || !id) return <div className="text-white p-10">載入中...</div>
 
   return (
     <ClientWrapper>
@@ -124,11 +110,12 @@ export default function EditPostPage() {
             className="w-full p-3 mb-4 rounded bg-white/10 text-white"
           />
 
-          {imagePreview && <ImageCropper image={imagePreview} onCropped={setCroppedImage} />}
+          {imageUrl && <img src={imageUrl} alt="預覽圖" className="w-full rounded mb-4" />}
+
           <input
             type="file"
             accept="image/*"
-            onChange={handleImageChange}
+            onChange={handleImageUpload}
             className="text-white mb-4"
           />
 
@@ -148,11 +135,11 @@ export default function EditPostPage() {
           />
 
           <button
-            onClick={handleSubmit}
-            disabled={uploading}
+            onClick={handleUpdate}
+            disabled={submitting}
             className="w-full bg-[#37a8ff] py-3 rounded font-bold hover:bg-[#1c7dc7] transition"
           >
-            {uploading ? '儲存中...' : '儲存變更'}
+            {submitting ? '儲存中...' : '儲存變更'}
           </button>
         </div>
       </div>

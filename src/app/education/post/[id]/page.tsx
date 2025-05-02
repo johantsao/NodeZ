@@ -67,23 +67,28 @@ export default function PostDetailPage() {
         <div className="pt-32 px-6 max-w-3xl mx-auto relative z-10">
           <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
           <p className="text-sm text-gray-400 mb-4">{new Date(post.created_at).toLocaleString()}</p>
-
           {post.tags?.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
               {post.tags.map((tag, idx) => (
-                <span key={idx} className="px-2 py-1 text-xs bg-[#37a8ff]/20 text-[#37a8ff] rounded-full">
+                <span
+                  key={idx}
+                  className="px-2 py-1 text-xs bg-[#37a8ff]/20 text-[#37a8ff] rounded-full"
+                >
                   #{tag}
                 </span>
               ))}
             </div>
           )}
-
           {post.image && (
-            <img src={post.image} alt="封面圖片" className="w-full rounded-lg mb-6" onError={(e) => {
-              (e.target as HTMLImageElement).src = '/default-cover.jpg'
-            }} />
+            <img
+              src={post.image}
+              alt="封面圖片"
+              className="w-full rounded-lg mb-6"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/default-cover.jpg'
+              }}
+            />
           )}
-
           <div
             className="prose prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: post.content }}

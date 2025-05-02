@@ -7,13 +7,15 @@ import { supabase } from '@/utils/supabase/client'
 import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
-import ImageCropper from '@/components/ImageCropper'
-import cropImage from '@/utils/cropImage'
 import dynamic from 'next/dynamic'
+import Quill from 'quill'
+import ImageUploader from 'quill-image-uploader'
 import { v4 as uuidv4 } from 'uuid'
 
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 import 'react-quill/dist/quill.snow.css'
+Quill.register('modules/imageUploader', ImageUploader)
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 export default function NewPostPage() {
   const router = useRouter()
@@ -23,8 +25,6 @@ export default function NewPostPage() {
   const [content, setContent] = useState('')
   const [tags, setTags] = useState<string[]>([])
   const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [croppedImage, setCroppedImage] = useState<Blob | null>(null)
   const [uploading, setUploading] = useState(false)
 
   if (loading) {
@@ -40,12 +40,23 @@ export default function NewPostPage() {
     const file = e.target.files?.[0]
     if (file) {
       setImageFile(file)
-      setImagePreview(URL.createObjectURL(file))
     }
   }
 
+  const uploadImageToSupabase = async (file: File) => {
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${uuidv4()}.${fileExt}`
+    const filePath = `posts/${fileName}`
+
+    const { error } = await supabase.storage.from('posts-images').upload(filePath, file)
+    if (error) throw error
+
+    const { data } = supabase.storage.from('posts-images').getPublicUrl(filePath)
+    return data.publicUrl
+  }
+
   const handleSubmit = async () => {
-    if (!title || !content || !croppedImage) {
+    if (!title || !content) {
       alert('請填寫完整資訊')
       return
     }
@@ -53,19 +64,10 @@ export default function NewPostPage() {
     setUploading(true)
 
     try {
-      const fileName = `${uuidv4()}.jpg`
-      const { error: uploadError } = await supabase.storage
-        .from('posts-images')
-        .upload(`posts/${fileName}`, croppedImage, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: 'image/jpeg'
-        })
-
-      if (uploadError) throw uploadError
-
-      const { data } = supabase.storage.from('posts-images').getPublicUrl(`posts/${fileName}`)
-      const imageUrl = data.publicUrl
+      let imageUrl = ''
+      if (imageFile) {
+        imageUrl = await uploadImageToSupabase(imageFile)
+      }
 
       const { error } = await supabase.from('posts').insert([
         {
@@ -77,13 +79,26 @@ export default function NewPostPage() {
       ])
 
       if (error) throw error
-
       router.push('/education')
     } catch (error) {
       console.error(error)
       alert('新增貼文失敗')
     } finally {
       setUploading(false)
+    }
+  }
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link', 'image'],
+      ['clean']
+    ],
+    imageUploader: {
+      upload: uploadImageToSupabase
     }
   }
 
@@ -98,39 +113,37 @@ export default function NewPostPage() {
         <div className="pt-32 px-6 max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">新增貼文</h1>
 
-          <label className="block mb-2">貼文標題</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="請輸入貼文標題"
-            className="w-full p-3 mb-6 rounded bg-white/10 text-white"
+            className="w-full p-3 mb-4 rounded bg-white/10 text-white"
           />
 
-          <label className="block mb-2">封面圖片</label>
-          {imagePreview && <ImageCropper image={imagePreview} onCropped={setCroppedImage} />}
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="text-white mb-6"
+            className="text-white mb-4"
           />
 
-          <label className="block mb-2">標籤（用逗號分隔）</label>
           <input
             type="text"
             value={tags.join(',')}
             onChange={(e) => setTags(e.target.value.split(',').map(tag => tag.trim()))}
             placeholder="輸入標籤如：blockchain, defi, 教學"
-            className="w-full p-3 mb-6 rounded bg-white/10 text-white"
+            className="w-full p-3 mb-4 rounded bg-white/10 text-white"
           />
 
-          <label className="block mb-2">貼文內容（支援圖文混排）</label>
-          <ReactQuill
-            theme="snow"
-            value={content}
-            onChange={setContent}
-            className="bg-white text-black mb-6 rounded"
-          />
+          <div className="mb-6">
+            <label className="block mb-2">貼文內容（支援圖文混排）</label>
+            <ReactQuill
+              value={content}
+              onChange={setContent}
+              modules={modules}
+              className="bg-white text-black rounded"
+            />
+          </div>
 
           <button
             onClick={handleSubmit}
