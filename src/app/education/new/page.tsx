@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { supabase } from '@/utils/supabase/client'
@@ -8,12 +8,9 @@ import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
 import dynamic from 'next/dynamic'
-import Quill from 'quill'
-import ImageUploader from 'quill-image-uploader'
 import { v4 as uuidv4 } from 'uuid'
 
 import 'react-quill/dist/quill.snow.css'
-Quill.register('modules/imageUploader', ImageUploader)
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
@@ -26,6 +23,16 @@ export default function NewPostPage() {
   const [tags, setTags] = useState<string[]>([])
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('quill-image-uploader').then((module) => {
+        const ImageUploader = module.default
+        const Quill = require('quill')
+        Quill.register('modules/imageUploader', ImageUploader)
+      })
+    }
+  }, [])
 
   if (loading) {
     return <div className="text-white p-10">檢查使用者權限中...</div>
