@@ -28,11 +28,12 @@ export default function PostDetailPage() {
   }, [id, loading])
 
   const fetchPost = async () => {
-    const { data, error } = await supabase.from('posts').select('*').eq('id', id).single()
-    if (error) {
-      console.error('貼文讀取失敗', error)
-    } else {
+    try {
+      const { data, error } = await supabase.from('posts').select('*').eq('id', id).single()
+      if (error) throw error
       setPost(data)
+    } catch (error) {
+      console.error('貼文讀取失敗:', error)
     }
   }
 
@@ -65,7 +66,7 @@ export default function PostDetailPage() {
         </nav>
 
         <div className="pt-32 px-6 max-w-3xl mx-auto relative z-10">
-          <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
+          <h1 className="text-4xl font-bold mb-6 break-words">{post.title}</h1>
           <p className="text-sm text-gray-400 mb-4">{new Date(post.created_at).toLocaleString()}</p>
 
           {post.tags?.length > 0 && (
@@ -89,7 +90,10 @@ export default function PostDetailPage() {
             />
           )}
 
-          <div className="prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} />
+          <div
+            className="prose prose-invert max-w-none"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
 
           {isAdmin && (
             <div className="mt-8 flex justify-end gap-4">
