@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { supabase } from '@/utils/supabase/client'
@@ -8,59 +8,63 @@ import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
 import dynamic from 'next/dynamic'
-import Quill from 'quill'
-import ImageUploader from 'quill-image-uploader'
 import { v4 as uuidv4 } from 'uuid'
+
 import 'react-quill/dist/quill.snow.css'
 
-Quill.register('modules/imageUploader', ImageUploader)
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
+const ReactQuill = dynamic(async () => {
+  const Quill = (await import('react-quill')).default
+  const ImageUploader = (await import('quill-image-uploader')).default
+  const QuillLib = await import('quill')
+  if (typeof window !== 'undefined' && QuillLib?.default?.register) {
+    QuillLib.default.register('modules/imageUploader', ImageUploader)
+  }
+  return Quill
+}, { ssr: false })
 
 export default function EditPostPage() {
-  const router = useRouter()
   const { id } = useParams()
-  const { isAdmin, loading, supabase } = useSupabaseSession()
+  const router = useRouter()
+  const { isAdmin, loading } = useSupabaseSession()
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [tags, setTags] = useState<string[]>([])
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
-  const [initialImageUrl, setInitialImageUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!id || !isAdmin) return
-    const fetchPost = async () => {
-      const { data, error } = await supabase.from('posts').select('*').eq('id', id).single()
-      if (error) {
-        console.error('載入貼文失敗', error)
-        router.replace('/education')
-        return
-      }
-      setTitle(data.title)
-      setContent(data.content)
-      setTags(data.tags || [])
-      setInitialImageUrl(data.image)
-    }
+    if (loading || !id) return
     fetchPost()
-  }, [id, isAdmin])
+  }, [loading, id])
+
+  const fetchPost = async () => {
+    const { data, error } = await supabase.from('posts').select('*').eq('id', id).single()
+    if (error) {
+      console.error('載入貼文失敗', error)
+      return
+    }
+    setTitle(data.title || '')
+    setContent(data.content || '')
+    setTags(data.tags || [])
+  }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) setImageFile(file)
+    if (file) {
+      setImageFile(file)
+    }
   }
 
   const uploadImageToSupabase = async (file: File) => {
-    const ext = file.name.split('.').pop()
-    const fileName = `${uuidv4()}.${ext}`
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${uuidv4()}.${fileExt}`
     const filePath = `posts/${fileName}`
 
     const { error } = await supabase.storage.from('posts-images').upload(filePath, file)
     if (error) throw error
 
     const { data } = supabase.storage.from('posts-images').getPublicUrl(filePath)
-    if (!data?.publicUrl) throw new Error('取得圖片連結失敗')
-
     return data.publicUrl
   }
 
@@ -71,20 +75,26 @@ export default function EditPostPage() {
     }
 
     setUploading(true)
+
     try {
-      let imageUrl = initialImageUrl
+      let imageUrl = undefined
       if (imageFile) {
         imageUrl = await uploadImageToSupabase(imageFile)
       }
 
-      const { error } = await supabase.from('posts')
-        .update({ title, content, tags, image: imageUrl })
-        .eq('id', id)
+      const updateData: any = {
+        title,
+        content,
+        tags
+      }
+      if (imageUrl) updateData.image = imageUrl
+
+      const { error } = await supabase.from('posts').update(updateData).eq('id', id)
 
       if (error) throw error
       router.push('/education')
-    } catch (err) {
-      console.error(err)
+    } catch (error) {
+      console.error(error)
       alert('更新貼文失敗')
     } finally {
       setUploading(false)
@@ -98,15 +108,21 @@ export default function EditPostPage() {
       ['blockquote', 'code-block'],
       [{ list: 'ordered' }, { list: 'bullet' }],
       ['link', 'image'],
-      ['clean'],
+      ['clean']
     ],
     imageUploader: {
-      upload: uploadImageToSupabase,
-    },
+      upload: uploadImageToSupabase
+    }
   }
 
-  if (loading) return <div className="text-white p-10">權限確認中...</div>
-  if (!isAdmin) return null
+  if (loading) {
+    return <div className="text-white p-10">載入中...</div>
+  }
+
+  if (!isAdmin) {
+    router.replace('/education')
+    return null
+  }
 
   return (
     <ClientWrapper>
