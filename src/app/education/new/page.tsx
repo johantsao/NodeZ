@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { supabase } from '@/utils/supabase/client'
@@ -8,10 +8,12 @@ import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
 import dynamic from 'next/dynamic'
+import Quill from 'quill'
+import ImageUploader from 'quill-image-uploader'
 import { v4 as uuidv4 } from 'uuid'
-
 import 'react-quill/dist/quill.snow.css'
 
+Quill.register('modules/imageUploader', ImageUploader)
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 export default function NewPostPage() {
@@ -24,20 +26,7 @@ export default function NewPostPage() {
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      import('quill-image-uploader').then((module) => {
-        const ImageUploader = module.default
-        const Quill = require('quill')
-        Quill.register('modules/imageUploader', ImageUploader)
-      })
-    }
-  }, [])
-
-  if (loading) {
-    return <div className="text-white p-10">檢查使用者權限中...</div>
-  }
-
+  if (loading) return <div className="text-white p-10">檢查使用者權限中...</div>
   if (!isAdmin) {
     router.replace('/education')
     return null
@@ -45,51 +34,50 @@ export default function NewPostPage() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      setImageFile(file)
-    }
+    if (file) setImageFile(file)
   }
 
   const uploadImageToSupabase = async (file: File) => {
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${uuidv4()}.${fileExt}`
+    const ext = file.name.split('.').pop()
+    const fileName = `${uuidv4()}.${ext}`
     const filePath = `posts/${fileName}`
 
-    const { error } = await supabase.storage.from('posts-images').upload(filePath, file)
-    if (error) throw error
+    const { error: uploadError } = await supabase.storage
+      .from('posts-images')
+      .upload(filePath, file)
+
+    if (uploadError) throw uploadError
 
     const { data } = supabase.storage.from('posts-images').getPublicUrl(filePath)
+    if (!data?.publicUrl) throw new Error('取得圖片連結失敗')
+
     return data.publicUrl
   }
 
   const handleSubmit = async () => {
-    if (!title || !content) {
-      alert('請填寫完整資訊')
+    if (!title || !content || !imageFile) {
+      alert('請填寫完整資訊並上傳封面圖片')
       return
     }
 
     setUploading(true)
-
     try {
-      let imageUrl = ''
-      if (imageFile) {
-        imageUrl = await uploadImageToSupabase(imageFile)
-      }
+      const imageUrl = await uploadImageToSupabase(imageFile)
 
       const { error } = await supabase.from('posts').insert([
         {
           title,
           content,
           image: imageUrl,
-          tags
-        }
+          tags,
+        },
       ])
 
       if (error) throw error
       router.push('/education')
-    } catch (error) {
-      console.error(error)
-      alert('新增貼文失敗')
+    } catch (err) {
+      console.error(err)
+      alert('新增貼文失敗，請重試')
     } finally {
       setUploading(false)
     }
@@ -102,11 +90,11 @@ export default function NewPostPage() {
       ['blockquote', 'code-block'],
       [{ list: 'ordered' }, { list: 'bullet' }],
       ['link', 'image'],
-      ['clean']
+      ['clean'],
     ],
     imageUploader: {
-      upload: uploadImageToSupabase
-    }
+      upload: uploadImageToSupabase,
+    },
   }
 
   return (
@@ -137,7 +125,9 @@ export default function NewPostPage() {
           <input
             type="text"
             value={tags.join(',')}
-            onChange={(e) => setTags(e.target.value.split(',').map(tag => tag.trim()))}
+            onChange={(e) =>
+              setTags(e.target.value.split(',').map((tag) => tag.trim()))
+            }
             placeholder="輸入標籤如：blockchain, defi, 教學"
             className="w-full p-3 mb-4 rounded bg-white/10 text-white"
           />

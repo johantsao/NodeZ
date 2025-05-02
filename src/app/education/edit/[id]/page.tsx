@@ -1,51 +1,67 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { supabase } from '@/utils/supabase/client'
-import dynamic from 'next/dynamic'
-import { v4 as uuidv4 } from 'uuid'
 import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
+import dynamic from 'next/dynamic'
+import Quill from 'quill'
+import ImageUploader from 'quill-image-uploader'
+import { v4 as uuidv4 } from 'uuid'
+import 'react-quill/dist/quill.snow.css'
 
+Quill.register('modules/imageUploader', ImageUploader)
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 
 export default function EditPostPage() {
-  const { id } = useParams()
   const router = useRouter()
-  const { isAdmin, loading } = useSupabaseSession()
+  const { id } = useParams()
+  const { isAdmin, loading, supabase } = useSupabaseSession()
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [tags, setTags] = useState<string[]>([])
-  const [imageUrl, setImageUrl] = useState<string | null>(null)
-  const [newImageFile, setNewImageFile] = useState<File | null>(null)
-  const [submitting, setSubmitting] = useState(false)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [uploading, setUploading] = useState(false)
+  const [initialImageUrl, setInitialImageUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!id || loading) return
+    if (!id || !isAdmin) return
     const fetchPost = async () => {
       const { data, error } = await supabase.from('posts').select('*').eq('id', id).single()
-      if (error || !data) {
-        console.error('貼文讀取失敗', error)
+      if (error) {
+        console.error('載入貼文失敗', error)
         router.replace('/education')
-      } else {
-        setTitle(data.title)
-        setContent(data.content)
-        setTags(data.tags || [])
-        setImageUrl(data.image)
+        return
       }
+      setTitle(data.title)
+      setContent(data.content)
+      setTags(data.tags || [])
+      setInitialImageUrl(data.image)
     }
     fetchPost()
-  }, [id, loading])
+  }, [id, isAdmin])
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      setNewImageFile(file)
-    }
+    if (file) setImageFile(file)
+  }
+
+  const uploadImageToSupabase = async (file: File) => {
+    const ext = file.name.split('.').pop()
+    const fileName = `${uuidv4()}.${ext}`
+    const filePath = `posts/${fileName}`
+
+    const { error } = await supabase.storage.from('posts-images').upload(filePath, file)
+    if (error) throw error
+
+    const { data } = supabase.storage.from('posts-images').getPublicUrl(filePath)
+    if (!data?.publicUrl) throw new Error('取得圖片連結失敗')
+
+    return data.publicUrl
   }
 
   const handleUpdate = async () => {
@@ -53,44 +69,44 @@ export default function EditPostPage() {
       alert('請填寫完整資訊')
       return
     }
-    setSubmitting(true)
-    let finalImageUrl = imageUrl
 
+    setUploading(true)
     try {
-      if (newImageFile) {
-        const ext = newImageFile.name.split('.').pop()
-        const fileName = `${uuidv4()}.${ext}`
-        const { error: uploadError } = await supabase.storage
-          .from('posts-images')
-          .upload(`posts/${fileName}`, newImageFile, {
-            upsert: true
-          })
-
-        if (uploadError) throw uploadError
-
-        const { data } = supabase.storage.from('posts-images').getPublicUrl(`posts/${fileName}`)
-        finalImageUrl = data.publicUrl
+      let imageUrl = initialImageUrl
+      if (imageFile) {
+        imageUrl = await uploadImageToSupabase(imageFile)
       }
 
-      const { error: updateError } = await supabase.from('posts').update({
-        title,
-        content,
-        tags,
-        image: finalImageUrl
-      }).eq('id', id)
+      const { error } = await supabase.from('posts')
+        .update({ title, content, tags, image: imageUrl })
+        .eq('id', id)
 
-      if (updateError) throw updateError
-
+      if (error) throw error
       router.push('/education')
     } catch (err) {
       console.error(err)
       alert('更新貼文失敗')
     } finally {
-      setSubmitting(false)
+      setUploading(false)
     }
   }
 
-  if (loading || !id) return <div className="text-white p-10">載入中...</div>
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link', 'image'],
+      ['clean'],
+    ],
+    imageUploader: {
+      upload: uploadImageToSupabase,
+    },
+  }
+
+  if (loading) return <div className="text-white p-10">權限確認中...</div>
+  if (!isAdmin) return null
 
   return (
     <ClientWrapper>
@@ -106,16 +122,14 @@ export default function EditPostPage() {
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="貼文標題"
+            placeholder="請輸入貼文標題"
             className="w-full p-3 mb-4 rounded bg-white/10 text-white"
           />
-
-          {imageUrl && <img src={imageUrl} alt="預覽圖" className="w-full rounded mb-4" />}
 
           <input
             type="file"
             accept="image/*"
-            onChange={handleImageUpload}
+            onChange={handleImageChange}
             className="text-white mb-4"
           />
 
@@ -123,23 +137,26 @@ export default function EditPostPage() {
             type="text"
             value={tags.join(',')}
             onChange={(e) => setTags(e.target.value.split(',').map(tag => tag.trim()))}
-            placeholder="標籤 (用逗號分隔)"
+            placeholder="輸入標籤如：blockchain, defi, 教學"
             className="w-full p-3 mb-4 rounded bg-white/10 text-white"
           />
 
-          <ReactQuill
-            theme="snow"
-            value={content}
-            onChange={setContent}
-            className="bg-white text-black mb-6 rounded"
-          />
+          <div className="mb-6">
+            <label className="block mb-2">貼文內容（支援圖文混排）</label>
+            <ReactQuill
+              value={content}
+              onChange={setContent}
+              modules={modules}
+              className="bg-white text-black rounded"
+            />
+          </div>
 
           <button
             onClick={handleUpdate}
-            disabled={submitting}
+            disabled={uploading}
             className="w-full bg-[#37a8ff] py-3 rounded font-bold hover:bg-[#1c7dc7] transition"
           >
-            {submitting ? '儲存中...' : '儲存變更'}
+            {uploading ? '儲存中...' : '儲存變更'}
           </button>
         </div>
       </div>
