@@ -121,14 +121,20 @@ export default function EducationPage() {
                   className="group bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 hover:border-[#37a8ff] transition duration-300"
                 >
                   <Link href={`/education/post/${post.id}`}>
-                    <img
-                      src={post.image || '/default-cover.jpg'}
-                      alt={post.title}
-                      className="w-full h-48 object-cover bg-black"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/default-cover.jpg'
-                      }}
-                    />
+                    {post.image?.includes('supabase.co') ? (
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-48 object-cover bg-black"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none'
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-48 bg-black flex items-center justify-center text-sm text-gray-500">
+                        無圖片
+                      </div>
+                    )}
                   </Link>
                   <div className="p-4">
                     <h2 className="text-xl font-semibold mb-2 group-hover:text-[#37a8ff] transition">
