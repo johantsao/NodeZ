@@ -127,7 +127,9 @@ export default function EducationPage() {
                         alt={post.title}
                         className="w-full h-48 object-cover bg-black"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none'
+                          const target = e.target as HTMLImageElement
+                          target.onerror = null
+                          target.src = '/fallback.jpg'
                         }}
                       />
                     ) : (

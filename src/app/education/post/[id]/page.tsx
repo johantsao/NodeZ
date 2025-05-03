@@ -21,6 +21,7 @@ export default function PostDetailPage() {
   const router = useRouter()
   const { supabase, isAdmin, loading } = useSupabaseSession()
   const [post, setPost] = useState<Post | null>(null)
+  const [imageError, setImageError] = useState(false)
 
   useEffect(() => {
     if (!id || loading) return
@@ -79,15 +80,17 @@ export default function PostDetailPage() {
             </div>
           )}
 
-          {post.image && (
+          {post.image?.includes('supabase.co') && !imageError ? (
             <img
               src={post.image}
               alt="封面圖片"
               className="w-full rounded-lg mb-6 bg-black"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = '/default-cover.jpg'
-              }}
+              onError={() => setImageError(true)}
             />
+          ) : (
+            <div className="w-full h-48 bg-black mb-6 flex items-center justify-center text-gray-500">
+              無圖片
+            </div>
           )}
 
           <div
