@@ -16,6 +16,19 @@ export default function BackgroundCanvas({
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const mouse = useRef({ x: 0, y: 0 })
 
+  // 將 blurAmount 對應為 Tailwind className
+  const blurClass = {
+    0: 'blur-0',
+    1: 'blur-sm',
+    2: 'blur',
+    3: 'blur-md',
+    4: 'blur-lg',
+    5: 'blur-xl',
+    6: 'blur-2xl',
+    7: 'blur-3xl',
+    8: 'blur-[8px]',
+  }[blurAmount] ?? 'blur-md'
+
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -78,7 +91,7 @@ export default function BackgroundCanvas({
   return (
     <canvas
       ref={canvasRef}
-      className={`fixed inset-0 w-full h-full z-0 pointer-events-none blur-[${blurAmount}px]`}
+      className={`fixed inset-0 w-full h-full z-0 pointer-events-none ${blurClass}`}
     />
   )
 }
