@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
+import { supabase } from '@/utils/supabase/client'
 import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
@@ -19,9 +20,8 @@ interface Post {
 export default function PostDetailPage() {
   const { id } = useParams()
   const router = useRouter()
-  const { supabase, isAdmin, loading } = useSupabaseSession()
+  const { isAdmin, loading } = useSupabaseSession()
   const [post, setPost] = useState<Post | null>(null)
-  const [imageError, setImageError] = useState(false)
 
   useEffect(() => {
     if (!id || loading) return
@@ -80,15 +80,17 @@ export default function PostDetailPage() {
             </div>
           )}
 
-          {post.image?.includes('supabase.co') && !imageError ? (
+          {post.image?.includes('supabase.co') ? (
             <img
               src={post.image}
               alt="封面圖片"
               className="w-full rounded-lg mb-6 bg-black"
-              onError={() => setImageError(true)}
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none'
+              }}
             />
           ) : (
-            <div className="w-full h-48 bg-black mb-6 flex items-center justify-center text-gray-500">
+            <div className="w-full h-48 bg-black flex items-center justify-center text-sm text-gray-500 mb-6">
               無圖片
             </div>
           )}

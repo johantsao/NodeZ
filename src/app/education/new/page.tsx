@@ -51,7 +51,7 @@ export default function NewPostPage() {
   const uploadImageToSupabase = async (file: File) => {
     const fileExt = file.name.split('.').pop()
     const fileName = `${uuidv4()}.${fileExt}`
-    const filePath = `posts/${fileName}`
+    const filePath = `${fileName}` // ✅ 修正：不要加上 "posts/"
 
     const { error } = await supabase.storage.from('posts-images').upload(filePath, file)
     if (error) throw error

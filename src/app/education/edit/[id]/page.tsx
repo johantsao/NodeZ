@@ -59,7 +59,7 @@ export default function EditPostPage() {
   const uploadImageToSupabase = async (file: File) => {
     const fileExt = file.name.split('.').pop()
     const fileName = `${uuidv4()}.${fileExt}`
-    const filePath = `posts/${fileName}`
+    const filePath = `${fileName}` // ✅ 路徑不要帶 posts/
 
     const { error } = await supabase.storage.from('posts-images').upload(filePath, file)
     if (error) throw error
