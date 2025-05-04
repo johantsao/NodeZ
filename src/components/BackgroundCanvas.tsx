@@ -1,7 +1,8 @@
 'use client'
+
 import { useEffect, useRef } from 'react'
 
-export default function BackgroundCanvas() {
+export default function BackgroundCanvas({ className = '-z-10' }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const mouse = useRef({ x: 0, y: 0 })
 
@@ -67,7 +68,7 @@ export default function BackgroundCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]"
+      className={`fixed inset-0 w-full h-full pointer-events-none blur-[3px] ${className}`}
     />
   )
 }

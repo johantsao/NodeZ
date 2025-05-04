@@ -62,7 +62,7 @@ export default function EducationPage() {
   return (
     <ClientWrapper>
       <div className="relative min-h-screen bg-black text-white font-sans overflow-hidden">
-        <BackgroundCanvas />
+        <BackgroundCanvas className="-z-10" />
 
         <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 z-50">
           <TopLogo />
@@ -121,7 +121,7 @@ export default function EducationPage() {
                   className="group bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 hover:border-[#37a8ff] transition duration-300"
                 >
                   <Link href={`/education/post/${post.id}`}>
-                    {post.image?.includes('supabase.co') ? (
+                    {post.image ? (
                       <img
                         src={post.image}
                         alt={post.title}
@@ -129,7 +129,7 @@ export default function EducationPage() {
                         onError={(e) => {
                           const target = e.target as HTMLImageElement
                           target.onerror = null
-                          target.src = '/fallback.jpg'
+                          target.src = '/default-cover.jpg' // ← 預設 fallback 圖片
                         }}
                       />
                     ) : (
