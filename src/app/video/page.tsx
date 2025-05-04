@@ -52,6 +52,7 @@ export default function VideoPage() {
             {[
               { name: '教學專區', path: '/education' },
               { name: '影音專區', path: '/video' },
+              { name: '新聞專區', path: '/news' },
               { name: '社群專區', path: '/community' }
             ].map((item) => (
               <li key={item.path} className="hover:text-[#37a8ff] transition">

@@ -2,7 +2,17 @@
 
 import { useEffect, useRef } from 'react'
 
-export default function BackgroundCanvas({ className = '-z-10' }: { className?: string }) {
+interface BackgroundCanvasProps {
+  particleCount?: number
+  blurAmount?: number
+  particleColor?: string
+}
+
+export default function BackgroundCanvas({
+  particleCount = 180,
+  blurAmount = 3,
+  particleColor = '#37a8ff88',
+}: BackgroundCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const mouse = useRef({ x: 0, y: 0 })
 
@@ -15,7 +25,7 @@ export default function BackgroundCanvas({ className = '-z-10' }: { className?: 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const particles = Array.from({ length: 180 }, () => ({
+    const particles = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       r: Math.random() * 2.5 + 2,
@@ -31,7 +41,7 @@ export default function BackgroundCanvas({ className = '-z-10' }: { className?: 
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.fillStyle = '#37a8ff88'
+      ctx.fillStyle = particleColor
 
       particles.forEach(p => {
         const dx = mouse.current.x - p.x
@@ -63,12 +73,12 @@ export default function BackgroundCanvas({ className = '-z-10' }: { className?: 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
     }
-  }, [])
+  }, [particleCount, particleColor])
 
   return (
     <canvas
       ref={canvasRef}
-      className={`fixed inset-0 w-full h-full pointer-events-none blur-[3px] ${className}`}
+      className={`fixed inset-0 w-full h-full z-0 pointer-events-none blur-[${blurAmount}px]`}
     />
   )
 }
