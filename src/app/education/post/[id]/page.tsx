@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
-import { supabase } from '@/utils/supabase/client'
 import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
@@ -20,7 +19,7 @@ interface Post {
 export default function PostDetailPage() {
   const { id } = useParams()
   const router = useRouter()
-  const { isAdmin, loading } = useSupabaseSession()
+  const { supabase, isAdmin, loading } = useSupabaseSession()
   const [post, setPost] = useState<Post | null>(null)
 
   useEffect(() => {
@@ -49,7 +48,7 @@ export default function PostDetailPage() {
   return (
     <ClientWrapper>
       <div className="relative min-h-screen bg-black text-white font-sans overflow-hidden">
-        <BackgroundCanvas />
+        <BackgroundCanvas particleCount={180} blurAmount={3} particleColor="#37a8ff88" />
 
         <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 z-50">
           <TopLogo />
@@ -80,13 +79,15 @@ export default function PostDetailPage() {
             </div>
           )}
 
-          {post.image?.includes('supabase.co') ? (
+          {post.image && post.image.length > 10 ? (
             <img
               src={post.image}
               alt="封面圖片"
               className="w-full rounded-lg mb-6 bg-black"
               onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none'
+                const target = e.target as HTMLImageElement
+                target.onerror = null
+                target.src = '/fallback.jpg'
               }}
             />
           ) : (
