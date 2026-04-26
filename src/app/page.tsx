@@ -278,7 +278,7 @@ export default function Home() {
             <div className="grid md:grid-cols-[1.3fr_1fr] gap-16 items-center w-full">
               <div>
                 <motion.h1
-                  className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-9"
+                  className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold leading-[1.1] tracking-tight mb-9"
                   initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
                   animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                   transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
@@ -306,6 +306,24 @@ export default function Home() {
                   <a href="#contact" className="animate-breathe px-7 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300">{t('hero.cta1')}</a>
                   <a href="#services" className="px-7 py-4 border border-white/20 rounded-xl font-semibold hover:border-[#37a8ff] hover:text-[#37a8ff] hover:bg-[#37a8ff]/5 hover:scale-105 transition-all duration-300">{t('hero.cta2')}</a>
                 </motion.div>
+                {/* Hero stats */}
+                <motion.div
+                  className="flex gap-8 mt-12 pt-8 border-t border-white/10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 1 }}
+                >
+                  {[
+                    { num: '10+', label: isEn ? 'Brands' : isCN ? '合作品牌' : '合作品牌' },
+                    { num: '50+', label: isEn ? 'Events' : isCN ? '活动' : '活動' },
+                    { num: '3+', label: isEn ? 'Media' : isCN ? '媒体' : '媒體' },
+                  ].map((s, i) => (
+                    <div key={i} className="text-center">
+                      <div className="text-2xl font-heading font-bold text-[#37a8ff]">{s.num}</div>
+                      <div className="text-[11px] text-gray-500 tracking-wide mt-1">{s.label}</div>
+                    </div>
+                  ))}
+                </motion.div>
               </div>
               <motion.div
                 className="relative hidden md:flex items-center justify-center aspect-square"
@@ -332,41 +350,33 @@ export default function Home() {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
                 <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">About Us</span>
               </div>
-              <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15]">
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold tracking-tight leading-[1.15]">
                 {t('about.lead').split(t('about.lead.highlight')).map((part, i, arr) => (
                   <span key={i}>{part}{i < arr.length - 1 && <span className="text-gradient">{t('about.lead.highlight')}</span>}</span>
                 ))}
               </h2>
             </motion.div>
 
-            {/* Stat counters */}
-            <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
+            {/* Trust bar */}
+            <motion.div
+              className="flex flex-wrap items-center justify-center gap-12 md:gap-16 opacity-40 mt-16"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 0.4 }}
+              transition={{ duration: 1 }}
+              viewport={{ once: true }}
+            >
               {[
-                { num: '10+', label: lang === 'en' ? 'Partner Brands' : lang === 'zh-CN' ? '合作品牌' : '合作品牌' },
-                { num: '50+', label: lang === 'en' ? 'Events Held' : lang === 'zh-CN' ? '活动场次' : '活動場次' },
-                { num: '3+', label: lang === 'en' ? 'Owned Media Channels' : lang === 'zh-CN' ? '自有媒体通路' : '自有媒體通路' },
-              ].map((stat, idx) => (
-                <motion.div
-                  key={stat.label}
-                  className="text-center"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: idx * 0.15 }}
-                  viewport={{ once: true }}
-                >
-                  <motion.div
-                    className="text-5xl md:text-6xl font-bold text-gradient mb-2"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6, delay: idx * 0.15, type: 'spring', stiffness: 100 }}
-                    viewport={{ once: true }}
-                  >
-                    {stat.num}
-                  </motion.div>
-                  <div className="text-sm text-gray-400 tracking-wide">{stat.label}</div>
-                </motion.div>
+                { name: 'Bybit', text: 'Bybit' },
+                { name: 'OKX', text: 'OKX' },
+                { name: 'Bitget', text: 'Bitget' },
+                { name: 'Movement', text: 'Movement' },
+                { name: 'Sui', text: 'Sui' },
+              ].map((brand) => (
+                <span key={brand.name} className="text-xl md:text-2xl font-heading font-bold text-white/60 tracking-wide">
+                  {brand.text}
+                </span>
               ))}
-            </div>
+            </motion.div>
           </section>
 
           {/* ========== SERVICES ========== */}
@@ -382,7 +392,7 @@ export default function Home() {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
                 <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">What We Do</span>
               </div>
-              <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">{t('caps.title')}</h2>
+              <h2 className="text-4xl md:text-6xl font-heading font-bold tracking-tight mb-4">{t('caps.title')}</h2>
             </motion.div>
 
             {/* Horizontal timeline / process flow */}
@@ -420,7 +430,7 @@ export default function Home() {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
                 <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Brand Solutions</span>
               </div>
-              <h3 className="text-3xl md:text-4xl font-bold tracking-tight">
+              <h3 className="text-3xl md:text-4xl font-heading font-bold tracking-tight">
                 {lang === 'en' ? 'Brand Service Plans' : lang === 'zh-CN' ? '品牌服务方案' : '品牌服務方案'}
               </h3>
             </motion.div>
@@ -491,7 +501,7 @@ export default function Home() {
               <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
               <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Community & Partners</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-6">
               {lang === 'en' ? 'Your Brand, Our Channels' : lang === 'zh-CN' ? '品牌曝光通路' : '品牌曝光通路'}
             </h2>
             <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">
@@ -574,7 +584,7 @@ export default function Home() {
               <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
               <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Events</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('gal.title')}</h2>
+            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-6">{t('gal.title')}</h2>
             {/* Large immersive quote */}
             <motion.p
               className="text-lg md:text-xl text-gray-300 font-medium leading-relaxed max-w-4xl mb-16 italic"
@@ -618,7 +628,7 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-6xl font-bold tracking-tight mb-8">
+              <h2 className="text-3xl md:text-6xl font-heading font-bold tracking-tight mb-8">
                 {isEn ? <>Let&apos;s build your next<br /><span className="text-[#37a8ff]">brand moment</span></> : isCN ? <>打造你的下一个<br /><span className="text-[#37a8ff]">品牌时刻</span></> : <>打造你的下一個<br /><span className="text-[#37a8ff]">品牌時刻</span></>}
               </h2>
               <p className="text-base text-gray-400 mb-12">

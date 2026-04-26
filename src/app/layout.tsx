@@ -1,6 +1,6 @@
 // src/app/layout.tsx
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Inter, Space_Grotesk } from 'next/font/google'
 import { cookies } from 'next/headers'
 
 /* ➜ 加上這 2 行 (auth-helpers & 型別) */
@@ -10,7 +10,8 @@ import type { Database } from '@/utils/supabase/types'
 import Providers from './Providers'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-heading' })
 
 export default async function RootLayout({
   children,
@@ -23,7 +24,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-black text-white`}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans bg-black text-white`}>
         <BackgroundCanvas particleCount={180} blurAmount={3} particleColor="#37a8ff88" />
 
         {/* 將 session 傳進 Providers */}
