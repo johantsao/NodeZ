@@ -17,7 +17,7 @@ const socials = [
   {
     name : 'Telegram',
     href : 'https://t.me/+yP-Qdy7ohLA0MzRl',
-    icon : '/icons/telegram.svg',
+    icon : '/icons/telegram.png',
     desc : '搶先獲取社群公告 ‧ 空投資訊'
   },
   {

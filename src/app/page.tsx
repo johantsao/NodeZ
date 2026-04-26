@@ -432,7 +432,7 @@ export default function Home() {
                 { name: 'YouTube', handle: '@Node.Z', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.546 12 3.546 12 3.546s-7.505 0-9.377.504A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.504 9.376.504 9.376.504s7.505 0 9.377-.504a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>, href: 'https://www.youtube.com/@Node.Z' },
                 { name: 'Twitter / X', handle: '@Node_Z_', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>, href: 'https://x.com/Node_Z_' },
                 { name: 'Instagram', handle: '@node.z_', icon: <img src="/icons/instagram.svg" alt="Instagram" className="w-7 h-7" />, href: 'https://www.instagram.com/node.z_' },
-                { name: 'Telegram', handle: 'Join Group', icon: <img src="/icons/telegram.svg" alt="Telegram" className="w-7 h-7" />, href: 'https://t.me/+yP-Qdy7ohLA0MzRl' },
+                { name: 'Telegram', handle: 'Join Group', icon: <img src="/icons/telegram.png" alt="Telegram" className="w-7 h-7" />, href: 'https://t.me/+yP-Qdy7ohLA0MzRl' },
               ].map((s, idx) => (
                 <motion.a
                   key={s.name}
@@ -565,7 +565,7 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[#37a8ff] transition"
                 >
-                  <img src="/icons/telegram.svg" alt="Telegram" className="w-5 h-5" />
+                  <img src="/icons/telegram.png" alt="Telegram" className="w-5 h-5" />
                   Telegram
                 </a>
               </div>

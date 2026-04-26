@@ -12,7 +12,7 @@ interface Video { id: string; title: string; youtube_id: string; thumb_url: stri
 
 const socials = [
   { name: 'Instagram', handle: '@node.z_', icon: '/icons/instagram.svg', desc: '追蹤每日限動 · 活動花絮', href: 'https://www.instagram.com/node.z_' },
-  { name: 'Telegram', handle: 'NodeZ Group', icon: '/icons/telegram.svg', desc: '搶先獲取社群公告 · 空投資訊', href: 'https://t.me/+yP-Qdy7ohLA0MzRl' },
+  { name: 'Telegram', handle: 'NodeZ Group', icon: '/icons/telegram.png', desc: '搶先獲取社群公告 · 空投資訊', href: 'https://t.me/+yP-Qdy7ohLA0MzRl' },
   { name: 'LINE 社群', handle: '校園討論區', icon: '/icons/line.svg', desc: '校園同學討論區 · 問答互助', href: 'https://line.me/ti/g2/iJYYh0x-CJO2oLcCHMQOpJh1GNw--S5UtAmxDA' },
 ]
 
