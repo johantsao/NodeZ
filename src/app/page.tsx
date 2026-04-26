@@ -107,19 +107,22 @@ export default function Home() {
     try { localStorage.setItem('nodez.lang', l) } catch {}
   }
 
+  const isEn = lang === 'en'
+  const isCN = lang === 'zh-CN'
+
   const navAnchors = [
-    { label: '關於我們', href: '#about' },
-    { label: '服務項目', href: '#services' },
-    { label: '社群與夥伴', href: '#channels' },
-    { label: '活動', href: '#events' },
+    { label: isEn ? 'About' : isCN ? '关于我们' : '關於我們', href: '#about' },
+    { label: isEn ? 'Services' : isCN ? '服务项目' : '服務項目', href: '#services' },
+    { label: isEn ? 'Channels' : isCN ? '社群与伙伴' : '社群與夥伴', href: '#channels' },
+    { label: isEn ? 'Events' : isCN ? '活动' : '活動', href: '#events' },
   ]
 
   const [researchOpen, setResearchOpen] = useState(false)
   const researchLinks = [
     { label: 'NodeZ Research', href: '/content' },
-    { label: '教學文章', href: '/education' },
-    { label: '影音內容', href: '/video' },
-    { label: '社群專區', href: '/community' },
+    { label: isEn ? 'Articles' : isCN ? '教学文章' : '教學文章', href: '/education' },
+    { label: isEn ? 'Videos' : isCN ? '影音内容' : '影音內容', href: '/video' },
+    { label: isEn ? 'Community' : isCN ? '社群专区' : '社群專區', href: '/community' },
   ]
 
   return (
@@ -335,15 +338,24 @@ export default function Home() {
               {([
                 {
                   tag: t('svc.1.tag'), title: t('svc.1.title'),
-                  keywords: ['品牌週', 'Meetup', '新功能發布', 'KOL 分發', '亞洲跨城'],
+                  keywords: isEn
+                    ? ['Brand Week', 'Meetup', 'Launch Events', 'KOL Distribution', 'Asia Multi-city']
+                    : isCN ? ['品牌周', 'Meetup', '新功能发布', 'KOL 分发', '亚洲跨城']
+                    : ['品牌週', 'Meetup', '新功能發布', 'KOL 分發', '亞洲跨城'],
                 },
                 {
                   tag: t('svc.2.tag'), title: t('svc.2.title'),
-                  keywords: ['代幣 GTM', '上所 Campaign', 'Research × PR', 'AMA 系列', '生態牽線'],
+                  keywords: isEn
+                    ? ['Token GTM', 'Listing Campaign', 'Research × PR', 'AMA Series', 'Ecosystem Partnerships']
+                    : isCN ? ['代币 GTM', '上所 Campaign', 'Research × PR', 'AMA 系列', '生态牵线']
+                    : ['代幣 GTM', '上所 Campaign', 'Research × PR', 'AMA 系列', '生態牽線'],
                 },
                 {
                   tag: t('svc.3.tag'), title: t('svc.3.title'),
-                  keywords: ['品牌語言轉譯', '形象升級', '台港東南亞落地', 'Web3 Onboarding'],
+                  keywords: isEn
+                    ? ['Brand Translation', 'Image Upgrade', 'TW / HK / SEA Launch', 'Web3 Onboarding']
+                    : isCN ? ['品牌语言转译', '形象升级', '台港东南亚落地', 'Web3 Onboarding']
+                    : ['品牌語言轉譯', '形象升級', '台港東南亞落地', 'Web3 Onboarding'],
                 },
               ]).map((svc, idx) => (
                 <motion.div
@@ -421,10 +433,26 @@ export default function Home() {
             {/* Platform channels — left-accent cards, 2-column */}
             <div className="grid md:grid-cols-2 gap-5">
               {[
-                { title: 'YouTube 頻道', desc: '品牌合作影片、訪談與產品曝光的長效載體。', link: 'youtube.com/@Node.Z', href: 'https://www.youtube.com/@Node.Z' },
-                { title: 'Research 平台', desc: '為合作方提供深度研究曝光與 SEO 內容植入。', link: 'nodezblockchain.com', href: 'https://www.nodezblockchain.com/' },
-                { title: 'SaaS 矩陣號服務', desc: '自動化社群推播與 KOL 矩陣帳號代操，規模化觸及目標受眾。', link: '@Node_Z_', href: 'https://x.com/Node_Z_' },
-                { title: '線下活動能量', desc: '場地、講師、製作一站式支援，即時承接品牌活動需求。', link: t('pf.4.link'), href: '#events' },
+                {
+                  title: isEn ? 'YouTube Channel' : isCN ? 'YouTube 频道' : 'YouTube 頻道',
+                  desc: isEn ? 'Long-form brand collaborations, interviews, and product exposure.' : isCN ? '品牌合作影片、访谈与产品曝光的长效载体。' : '品牌合作影片、訪談與產品曝光的長效載體。',
+                  link: 'youtube.com/@Node.Z', href: 'https://www.youtube.com/@Node.Z',
+                },
+                {
+                  title: isEn ? 'Research Platform' : isCN ? 'Research 平台' : 'Research 平台',
+                  desc: isEn ? 'In-depth research exposure and SEO content placement for partners.' : isCN ? '为合作方提供深度研究曝光与 SEO 内容植入。' : '為合作方提供深度研究曝光與 SEO 內容植入。',
+                  link: 'nodezblockchain.com', href: 'https://www.nodezblockchain.com/',
+                },
+                {
+                  title: isEn ? 'SaaS KOL Network' : isCN ? 'SaaS 矩阵号服务' : 'SaaS 矩陣號服務',
+                  desc: isEn ? 'Automated social distribution and KOL account management at scale.' : isCN ? '自动化社群推播与 KOL 矩阵帐号代操，规模化触及目标受众。' : '自動化社群推播與 KOL 矩陣帳號代操，規模化觸及目標受眾。',
+                  link: '@Node_Z_', href: 'https://x.com/Node_Z_',
+                },
+                {
+                  title: isEn ? 'On-Ground Events' : isCN ? '线下活动能量' : '線下活動能量',
+                  desc: isEn ? 'Venue, speakers, production — one-stop brand event support.' : isCN ? '场地、讲师、制作一站式支援，即时承接品牌活动需求。' : '場地、講師、製作一站式支援，即時承接品牌活動需求。',
+                  link: isEn ? 'See events' : isCN ? '查看活动现场' : '查看活動現場', href: '#events',
+                },
               ].map((ch, idx) => (
                 <motion.div
                   key={idx}
