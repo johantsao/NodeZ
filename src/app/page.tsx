@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import ClientWrapper from '@/components/ClientWrapper'
 import PageLoader from '@/components/PageLoader'
@@ -213,16 +213,63 @@ export default function Home() {
               {t('nav.cta')}
             </a>
           </div>
-          {mobileMenuOpen && (
-            <div className="md:hidden bg-black/95 backdrop-blur-xl border-t border-white/10 px-6 py-6 space-y-4">
-              {navAnchors.map(n => (
-                <a key={n.href} href={n.href} onClick={() => setMobileMenuOpen(false)} className="block text-lg text-gray-300 hover:text-[#37a8ff] transition">{n.label}</a>
-              ))}
-              <Link href="/content" onClick={() => setMobileMenuOpen(false)} className="block text-lg text-[#37a8ff] font-semibold">NodeZ Research</Link>
-              <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block mt-4 text-center px-6 py-3 bg-[#37a8ff] text-white font-semibold rounded-xl">{t('nav.cta')}</a>
-            </div>
-          )}
+{/* Mobile menu is rendered outside nav via AnimatePresence below */}
         </nav>
+
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              className="fixed inset-0 z-[60] md:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="absolute inset-0 bg-black/95 backdrop-blur-xl" onClick={() => setMobileMenuOpen(false)} />
+              <div className="relative h-full flex flex-col px-8 pt-24 pb-12">
+                <div className="flex-1 space-y-6">
+                  {navAnchors.map((n, idx) => (
+                    <motion.a
+                      key={n.href}
+                      href={n.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-2xl font-semibold text-white/80 hover:text-[#37a8ff] transition"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                    >
+                      {n.label}
+                    </motion.a>
+                  ))}
+                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }}>
+                    <Link href="/content" onClick={() => setMobileMenuOpen(false)} className="block text-2xl font-semibold text-[#37a8ff]">
+                      NodeZ Research
+                    </Link>
+                  </motion.div>
+                </div>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
+                  <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block text-center px-8 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl text-lg mb-6">
+                    {t('nav.cta')}
+                  </a>
+                  <div className="flex items-center justify-center gap-6">
+                    <a href="https://www.youtube.com/@Node.Z" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#37a8ff]">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.546 12 3.546 12 3.546s-7.505 0-9.377.504A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.504 9.376.504 9.376.504s7.505 0 9.377-.504a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                    <a href="https://x.com/Node_Z_" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#37a8ff]">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/node.z_" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#37a8ff]">
+                      <img src="/icons/instagram.svg" alt="IG" className="w-5 h-5 opacity-50" />
+                    </a>
+                    <a href="https://t.me/+yP-Qdy7ohLA0MzRl" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#37a8ff]">
+                      <img src="/icons/telegram.png" alt="TG" className="w-5 h-5 opacity-50" />
+                    </a>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="max-w-[1240px] mx-auto px-6 relative z-10" id="top">
 
@@ -231,7 +278,7 @@ export default function Home() {
             <div className="grid md:grid-cols-[1.3fr_1fr] gap-16 items-center w-full">
               <div>
                 <motion.h1
-                  className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-9"
+                  className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-9"
                   initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
                   animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                   transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
@@ -261,7 +308,7 @@ export default function Home() {
                 </motion.div>
               </div>
               <motion.div
-                className="relative flex items-center justify-center aspect-square"
+                className="relative hidden md:flex items-center justify-center aspect-square"
                 initial={{ opacity: 0, scale: 0.6, rotate: -10 }}
                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
                 transition={{ duration: 1.2, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
@@ -539,7 +586,7 @@ export default function Home() {
               &ldquo;{t('gal.desc')}&rdquo;
             </motion.p>
             {/* Photo grid with hover zoom + overlay */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {eventPhotos.map((src, i) => {
                 const overlayLabels = ['Meetup', 'Workshop', 'Networking', 'Panel', 'Community', 'Brand Week']
                 return (
@@ -571,7 +618,7 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-8">
+              <h2 className="text-3xl md:text-6xl font-bold tracking-tight mb-8">
                 {isEn ? <>Let&apos;s build your next<br /><span className="text-[#37a8ff]">brand moment</span></> : isCN ? <>打造你的下一个<br /><span className="text-[#37a8ff]">品牌时刻</span></> : <>打造你的下一個<br /><span className="text-[#37a8ff]">品牌時刻</span></>}
               </h2>
               <p className="text-base text-gray-400 mb-12">
@@ -579,7 +626,7 @@ export default function Home() {
               </p>
               <a
                 href="mailto:nodezblockchain@gmail.com"
-                className="animate-breathe inline-flex items-center gap-3 px-10 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300 text-lg"
+                className="animate-breathe inline-flex items-center justify-center gap-3 w-full sm:w-auto px-10 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300 text-lg"
               >
                 {isEn ? 'Contact Us' : isCN ? '联系我们' : '聯繫我們'}
               </a>
@@ -591,7 +638,7 @@ export default function Home() {
         {/* ========== FOOTER ========== */}
         <footer className="border-t border-white/10 py-16 relative z-10">
           <div className="max-w-[1240px] mx-auto px-6">
-            <div className="grid md:grid-cols-3 gap-12 mb-12">
+            <div className="grid md:grid-cols-3 gap-8 md:gap-12 mb-12">
               {/* Brand */}
               <div>
                 <div className="flex items-center gap-2.5 mb-4">

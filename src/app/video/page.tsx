@@ -122,7 +122,7 @@ export default function VideoPage() {
           </nav>
 
           {/* HERO */}
-          <div className="pt-28 pb-4 px-4 md:px-12 max-w-6xl mx-auto relative z-10">
+          <div className="pt-28 pb-4 px-4 md:px-12 max-w-6xl mx-auto relative z-10 safe-bottom">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -150,7 +150,7 @@ export default function VideoPage() {
             )}
 
             {/* TAG FILTER BAR */}
-            <div className="flex items-center gap-3 mb-4 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex items-center gap-3 mb-4 overflow-x-auto hide-scrollbar pb-2">
               <button
                 onClick={() => setActiveTag(null)}
                 className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium border transition ${
