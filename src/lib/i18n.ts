@@ -11,7 +11,7 @@ export const i18n: Record<Lang, Record<string, string>> = {
     'about.title': '我們是 Web3 品牌背後的行銷夥伴',
     'about.title.highlight': 'Web3 品牌',
     'about.desc': 'NodeZ 以內容、社群、現場三種語言工作。從第一版 brief 到最後一則 post-event report，幫品牌在鏈上世代說一個能被記住的故事。',
-    'about.lead': '一支橫跨內容、社群、線下的 Web3 品牌行銷團隊。',
+    'about.lead': '一支橫跨內容、社群、線下的 Web3 品牌行銷團隊',
     'about.lead.highlight': '內容、社群、線下',
     'about.body1': 'NodeZ 起於 2025 年，團隊由長期深耕 Web3 內容與社群的成員組成。我們從打造 Gen Z 加密貨幣學習社群出發，累積了 YouTube 頻道、Research 網站、Twitter KOL 矩陣與穩定的線下活動能量。',
     'about.body2': '在 Web3 品牌預算快速成長的亞洲市場，我們把這套能力升級為對外的 B2B 服務——為交易所、協議方與企業客戶提供涵蓋策略、內容、社群、活動執行的完整行銷解決方案。',

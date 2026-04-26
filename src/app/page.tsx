@@ -446,7 +446,7 @@ export default function Home() {
                 {
                   title: isEn ? 'Research Platform' : isCN ? 'Research 平台' : 'Research 平台',
                   desc: isEn ? 'In-depth research exposure and SEO content placement for partners.' : isCN ? '为合作方提供深度研究曝光与 SEO 内容植入。' : '為合作方提供深度研究曝光與 SEO 內容植入。',
-                  link: 'nodezblockchain.com', href: 'https://www.nodezblockchain.com/',
+                  link: 'NodeZ Research', href: '/content',
                 },
                 {
                   title: isEn ? 'SaaS KOL Network' : isCN ? 'SaaS 矩阵号服务' : 'SaaS 矩陣號服務',
@@ -519,40 +519,32 @@ export default function Home() {
           </motion.section>
 
           {/* ========== CONTACT ========== */}
-          <section id="contact" className="py-32">
+          <section id="contact" className="py-40 text-center">
             <motion.div
-              className="max-w-3xl mx-auto"
+              className="max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
-                <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Get Started</span>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                {isEn ? <>Let&apos;s build your next <span className="text-[#37a8ff]">brand moment</span></> : isCN ? <>让我们为你打造下一个<span className="text-[#37a8ff]">品牌时刻</span></> : <>讓我們為你打造下一個<span className="text-[#37a8ff]">品牌時刻</span></>}
+              <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-8">
+                {isEn ? <>Let&apos;s build your next<br /><span className="text-[#37a8ff]">brand moment</span></> : isCN ? <>打造你的下一个<br /><span className="text-[#37a8ff]">品牌时刻</span></> : <>打造你的下一個<br /><span className="text-[#37a8ff]">品牌時刻</span></>}
               </h2>
-              <p className="text-lg text-gray-400 mb-4 leading-relaxed">
-                {isEn ? 'Tell us about your project — we\'ll design a tailored execution plan.' : isCN ? '告诉我们你的需求，我们量身打造执行方案。' : '告訴我們你的需求，我們量身打造執行方案。'}
+              <p className="text-base text-gray-500 mb-12">
+                {isEn ? 'Typically respond within 24 hours' : isCN ? '通常 24 小时内回复' : '通常 24 小時內回覆'}
               </p>
-              <p className="text-sm text-gray-500 mb-10">
-                {isEn ? 'Typically respond within 24 hours.' : isCN ? '通常 24 小时内回复。' : '通常 24 小時內回覆。'}
-              </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex items-center justify-center gap-5">
                 <a
                   href="mailto:nodezblockchain@gmail.com"
-                  className="animate-breathe inline-flex items-center gap-3 px-8 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300"
+                  className="animate-breathe inline-flex items-center gap-3 px-10 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300 text-lg"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
                   {isEn ? 'Get in Touch' : isCN ? '立即联系' : '立即聯繫'}
                 </a>
                 <a
                   href="https://t.me/+yP-Qdy7ohLA0MzRl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-8 py-4 border border-white/15 rounded-xl font-semibold text-gray-300 hover:border-[#37a8ff]/40 hover:text-white transition-all duration-300"
+                  className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[#37a8ff] transition"
                 >
                   <img src="/icons/telegram.svg" alt="Telegram" className="w-5 h-5" />
                   Telegram
