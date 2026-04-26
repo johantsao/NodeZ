@@ -62,26 +62,18 @@ export default function EducationPage() {
     return result
   }, [posts, activeTag, sortNewest])
 
-  if (loading)
-    return (
-      <>
-        <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
-        <div className="min-h-screen text-white pt-32 px-4 md:px-12 max-w-6xl mx-auto">
+  return (
+    <>
+      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
+      {loading ? (
+        <div className="min-h-screen text-white pt-32 px-4 md:px-12 max-w-6xl mx-auto relative z-10">
           <div className="mb-10">
             <div className="h-10 w-48 bg-white/5 rounded animate-pulse mb-4" />
             <div className="h-6 w-96 bg-white/5 rounded animate-pulse" />
           </div>
           <CardSkeleton count={6} />
         </div>
-      </>
-    )
-
-  return (
-    <>
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]"
-      />
+      ) : (
       <ClientWrapper>
         <div className="relative min-h-screen text-white font-sans overflow-hidden">
           {/* NAV */}
@@ -291,6 +283,7 @@ export default function EducationPage() {
           </div>
         </div>
       </ClientWrapper>
+      )}
     </>
   )
 }
