@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import ClientWrapper from '@/components/ClientWrapper'
-import BackgroundCanvas from '@/components/BackgroundCanvas'
 import { i18n, Lang } from '@/lib/i18n'
 
 const eventPhotos = [
@@ -38,12 +37,69 @@ const fadeUp = {
 export default function Home() {
   const [lang, setLang] = useState<Lang>('zh-TW')
   const t = (key: string) => i18n[lang]?.[key] ?? key
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem('nodez.lang') as Lang
       if (saved && i18n[saved]) setLang(saved)
     } catch {}
+  }, [])
+
+  // Particle background (same as /auth)
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const mouse = { x: -999, y: -999 }
+    const handleMouse = (e: MouseEvent) => { mouse.x = e.clientX; mouse.y = e.clientY }
+    window.addEventListener('mousemove', handleMouse)
+
+    const particles = Array.from({ length: 160 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2.5 + 1.5,
+      dx: Math.random() * 0.6 - 0.3,
+      dy: Math.random() * 0.6 - 0.3,
+    }))
+
+    let animId: number
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.fillStyle = '#37a8ff88'
+      particles.forEach(p => {
+        // Mouse repulsion
+        const mdx = mouse.x - p.x
+        const mdy = mouse.y - p.y
+        const dist = Math.sqrt(mdx * mdx + mdy * mdy)
+        if (dist < 200 && dist > 0) {
+          const force = (200 - dist) / 200 * 3
+          p.x -= (mdx / dist) * force
+          p.y -= (mdy / dist) * force
+        }
+        p.x += p.dx
+        p.y += p.dy
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fill()
+      })
+      animId = requestAnimationFrame(render)
+    }
+    render()
+
+    return () => {
+      cancelAnimationFrame(animId)
+      window.removeEventListener('resize', resize)
+      window.removeEventListener('mousemove', handleMouse)
+    }
   }, [])
 
   const switchLang = (l: Lang) => {
@@ -68,6 +124,9 @@ export default function Home() {
   return (
     <ClientWrapper>
       <div className="text-white min-h-screen font-sans relative overflow-x-hidden scroll-smooth">
+        {/* Inline particle canvas */}
+        <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
+
         {/* ========== NAV ========== */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
           <div className="max-w-[1240px] mx-auto px-6 py-4 flex items-center justify-between gap-4">
