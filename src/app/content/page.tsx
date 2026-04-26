@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { youtubeThumbUrl } from '@/utils/youtube'
 import ClientWrapper from '@/components/ClientWrapper'
@@ -135,7 +136,7 @@ export default function ContentPage() {
                           <Link href={`/education/post/${post.id}`} className="group block">
                             <div className="relative overflow-hidden rounded-xl aspect-[4/3]">
                               {post.image_url ? (
-                                <img src={post.image_url} alt={post.title} className="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+                                <Image src={post.image_url} alt={post.title} fill className="object-cover transition duration-500 group-hover:scale-105" sizes="280px" loading="lazy" />
                               ) : (
                                 <div className="w-full h-full bg-[#080c18] flex items-center justify-center text-gray-600 text-sm">No Image</div>
                               )}
@@ -174,7 +175,7 @@ export default function ContentPage() {
                           viewport={{ once: true }}
                         >
                           <div className="relative overflow-hidden rounded-xl aspect-video">
-                            <img src={v.thumb_url ?? youtubeThumbUrl(v.youtube_id)} alt={v.title} className="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+                            <Image src={v.thumb_url ?? youtubeThumbUrl(v.youtube_id)} alt={v.title} fill className="object-cover transition duration-500 group-hover:scale-105" sizes="(max-width: 640px) 100vw, 50vw" loading="lazy" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
                               <div className="w-14 h-14 rounded-full bg-[#37a8ff]/90 flex items-center justify-center shadow-[0_0_30px_rgba(55,168,255,0.4)]">

@@ -1,95 +1,88 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { supabase } from '@/utils/supabase/client'  // ✅ 重點！改成直接拿 supabase
+import { useState } from 'react'
+import { supabase } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { useParticleCanvas } from '@/hooks/useParticleCanvas'
 
 export default function AuthPage() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const canvasRef = useParticleCanvas()
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState<string | null>(null)
-
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : '')
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
-    const particles = Array.from({ length: 80 }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 2.5 + 2,
-      dx: Math.random() * 0.5 - 0.25,
-      dy: Math.random() * 0.5 - 0.25,
-    }))
-
-    const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.fillStyle = '#37a8ff88'
-      particles.forEach((p) => {
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fill()
-        p.x += p.dx
-        p.y += p.dy
-        if (p.x < 0 || p.x > canvas.width) p.dx *= -1
-        if (p.y < 0 || p.y > canvas.height) p.dy *= -1
-      })
-      requestAnimationFrame(render)
-    }
-
-    render()
-  }, [])
+  const [loading, setLoading] = useState(false)
 
   const handleLogin = async () => {
-    if (!email) {
-      setMessage('請輸入有效的 Email')
-      return
-    }
-
+    if (!email) { setMessage('請輸入有效的 Email'); return }
+    setLoading(true)
     setMessage('寄送登入連結中...')
+
+    const redirectTo = typeof window !== 'undefined' ? window.location.origin + '/education' : '/education'
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: {
-        emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : siteUrl}/education`
-      }
+      options: { emailRedirectTo: redirectTo }
     })
 
-    if (error) {
-      console.error(error)
-      setMessage('登入失敗，請重試')
-    } else {
-      setMessage('已發送登入連結，請到信箱確認')
-    }
+    setLoading(false)
+    if (error) { console.error(error); setMessage('登入失敗，請重試') }
+    else { setMessage('已發送登入連結，請到信箱確認') }
   }
 
   return (
-    <div className="relative h-screen flex items-center justify-center bg-black text-white overflow-hidden">
+    <>
       <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
-      <div className="z-10 w-full max-w-md mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-8">
-        <h1 className="text-2xl font-bold mb-4 text-center">登入 NodeZ 管理後台</h1>
-        <input
-          type="email"
-          placeholder="請輸入 Email"
-          className="w-full p-3 mb-4 rounded bg-white/10 text-white"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button
-          onClick={handleLogin}
-          className="w-full bg-[#37a8ff] text-black font-bold py-2 rounded hover:bg-[#1c7dc7]"
-        >
-          發送登入連結
-        </button>
-        {message && <p className="text-sm mt-4 text-center text-[#37a8ff]">{message}</p>}
+      <div className="relative min-h-screen text-white overflow-hidden">
+
+        {/* NAV — same as all pages */}
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
+          <div className="max-w-[1240px] mx-auto px-6 py-4 flex items-center justify-between gap-4">
+            <Link href="/" className="flex items-center gap-2.5">
+              <img src="/nodez-logo.png" alt="NodeZ" className="w-9 h-9 drop-shadow-[0_0_10px_rgba(55,168,255,0.4)]" />
+              <span className="font-bold text-xl tracking-tight">Node<span className="text-[#37a8ff]">Z</span></span>
+            </Link>
+            <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
+              <li><Link href="/content" className="hover:text-[#37a8ff] transition">NodeZ Research</Link></li>
+              <li><Link href="/education" className="hover:text-[#37a8ff] transition">教學文章</Link></li>
+              <li><Link href="/video" className="hover:text-[#37a8ff] transition">影音內容</Link></li>
+            </ul>
+          </div>
+        </nav>
+
+        {/* LOGIN FORM */}
+        <div className="flex items-center justify-center min-h-screen px-6">
+          <div className="relative z-10 w-full max-w-md">
+            <div className="text-center mb-8">
+              <img src="/nodez-logo.png" alt="NodeZ" className="w-16 h-16 mx-auto mb-4 drop-shadow-[0_0_20px_rgba(55,168,255,0.3)]" />
+              <h1 className="text-2xl font-bold tracking-tight">管理後台登入</h1>
+              <p className="text-sm text-gray-500 mt-2">NodeZ 內容管理系統</p>
+            </div>
+            <div className="bg-[#080c18]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
+              <input
+                type="email"
+                placeholder="請輸入 Email"
+                className="w-full p-3.5 mb-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:border-[#37a8ff]/50 focus:outline-none transition"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+              />
+              <button
+                onClick={handleLogin}
+                disabled={loading}
+                className="w-full py-3.5 rounded-xl bg-[#37a8ff] text-white font-semibold hover:bg-[#5bb8ff] disabled:opacity-50 transition-all duration-300"
+              >
+                {loading ? '發送中...' : '發送登入連結'}
+              </button>
+              {message && (
+                <p className={`text-sm mt-4 text-center ${message.includes('失敗') ? 'text-red-400' : 'text-[#37a8ff]'}`}>
+                  {message}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import ClientWrapper from '@/components/ClientWrapper'
@@ -109,14 +110,16 @@ export default function EducationPage() {
                 >
                   <Link href={`/education/post/${post.id}`}>
                     {post.image_url ? (
-                      <img
-                        src={post.image_url}
-                        alt={post.title}
-                        className="w-full h-48 object-cover bg-black"
-                        onError={e=>{
-                          (e.target as HTMLImageElement).src='/fallback.jpg'
-                        }}
-                      />
+                      <div className="relative w-full h-48 bg-black">
+                        <Image
+                          src={post.image_url}
+                          alt={post.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          loading="lazy"
+                        />
+                      </div>
                     ) : (
                       <div className="w-full h-48 flex items-center justify-center bg-black text-sm text-gray-500">
                         無圖片

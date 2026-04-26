@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
@@ -75,14 +76,16 @@ export default function VideoPage () {
               className="group bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden
                          border border-white/10 hover:border-[#37a8ff] transition">
               <Link href={`https://youtu.be/${v.youtube_id}`} target="_blank">
-                <img
-                  src={v.thumb_url ?? youtubeThumbUrl(v.youtube_id)}
-                  alt={v.title}
-                  className="w-full h-48 object-cover bg-black"
-                  onError={e=>{
-                    (e.target as HTMLImageElement).src='/fallback.jpg'
-                  }}
-                />
+                <div className="relative w-full h-48 bg-black">
+                  <Image
+                    src={v.thumb_url ?? youtubeThumbUrl(v.youtube_id)}
+                    alt={v.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    loading="lazy"
+                  />
+                </div>
               </Link>
               <div className="p-4">
                 <h2 className="text-lg font-semibold mb-1">{v.title}</h2>
