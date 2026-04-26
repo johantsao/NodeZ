@@ -367,15 +367,15 @@ export default function Home() {
                   viewport={{ once: true }}
                 >
                   {/* Content side */}
-                  <div className="w-full border-l-2 border-[#37a8ff] pl-8 py-8">
+                  <div className="flex-1 border-l-2 border-[#37a8ff] pl-8 py-8">
                     <span className="inline-block font-mono text-[10px] text-[#37a8ff] tracking-[0.15em] uppercase px-2.5 py-1 border border-[#37a8ff]/30 rounded-md mb-4">
                       {svc.tag}
                     </span>
                     <h3 className="text-2xl font-bold mb-5">{svc.title}</h3>
-                    {/* Visual keyword badges */}
-                    <div className="flex flex-wrap gap-2 mb-6">
+                    {/* Keyword badges — gradient border, glow on hover */}
+                    <div className="flex flex-wrap gap-2.5 mb-6">
                       {svc.keywords.map(kw => (
-                        <span key={kw} className="px-3 py-1.5 text-[13px] font-medium rounded-lg bg-[#37a8ff]/8 border border-[#37a8ff]/15 text-gray-300 hover:bg-[#37a8ff]/15 hover:text-white transition cursor-default">
+                        <span key={kw} className="group/badge relative px-4 py-2 text-[13px] font-medium rounded-lg bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 text-gray-300 hover:border-[#37a8ff]/40 hover:text-white hover:shadow-[0_0_20px_rgba(55,168,255,0.1)] transition-all duration-300 cursor-default">
                           {kw}
                         </span>
                       ))}
@@ -383,6 +383,10 @@ export default function Home() {
                     <a href="#contact" className="text-[13px] text-[#37a8ff] font-semibold inline-flex items-center gap-1.5 hover:gap-3 transition-all">
                       Contact Us <span>&rarr;</span>
                     </a>
+                  </div>
+                  {/* Number accent */}
+                  <div className="flex-1 hidden md:flex items-center justify-center">
+                    <span className="text-[120px] font-black text-[#37a8ff]/20 drop-shadow-[0_0_40px_rgba(55,168,255,0.12)] select-none">{String(idx + 1).padStart(2, '0')}</span>
                   </div>
                 </motion.div>
               ))}
