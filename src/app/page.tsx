@@ -366,9 +366,11 @@ export default function Home() {
               transition={{ duration: 1 }}
               viewport={{ once: true }}
             >
-              <p className="text-center text-[11px] text-gray-600 tracking-[0.2em] uppercase mb-8 font-mono">Partner</p>
-              <div className="flex items-center justify-center">
-                <img src="/brands/sui.svg" alt="Sui" className="h-10 md:h-12 opacity-50 hover:opacity-80 transition" />
+              <p className="text-center text-[11px] text-gray-600 tracking-[0.2em] uppercase mb-8 font-mono">Partners</p>
+              <div className="flex items-center justify-center gap-12 md:gap-16">
+                <img src="/brands/sui.svg" alt="Sui" className="h-9 md:h-11 opacity-40 hover:opacity-70 transition" />
+                <img src="/brands/flipster.png" alt="Flipster" className="h-8 md:h-10 opacity-40 hover:opacity-70 transition" />
+                <img src="/brands/haedal.png" alt="Haedal" className="h-9 md:h-11 opacity-40 hover:opacity-70 transition" />
               </div>
             </motion.div>
           </section>
