@@ -13,8 +13,8 @@ export default function CountUp({ target, suffix = '', duration = 2000, classNam
   const [display, setDisplay] = useState('0')
   const [started, setStarted] = useState(false)
   const ref = useRef<HTMLSpanElement>(null)
+  const digits = String(target).length // keep same digit count during animation
 
-  // Delay start by 2.5s (after PageLoader fades out) then observe
   useEffect(() => {
     const delay = setTimeout(() => {
       if (!ref.current) return
@@ -27,30 +27,24 @@ export default function CountUp({ target, suffix = '', duration = 2000, classNam
     return () => clearTimeout(delay)
   }, [started])
 
-  // Scramble + count up animation
   useEffect(() => {
     if (!started) return
 
     const startTime = Date.now()
-    const chars = '0123456789'
     let frame: number
+
+    // Easing function — ease out cubic for smooth deceleration
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)
 
     const animate = () => {
       const elapsed = Date.now() - startTime
-      const progress = Math.min(elapsed / duration, 1)
+      const rawProgress = Math.min(elapsed / duration, 1)
+      const progress = easeOut(rawProgress)
 
-      if (progress < 1) {
-        // Scramble phase: random numbers that gradually converge
-        const currentNum = Math.floor(progress * target)
-        const scrambleChance = 1 - progress // less scramble as we approach target
-
-        if (Math.random() < scrambleChance && progress < 0.8) {
-          // Show random number near the current value
-          const randomOffset = Math.floor(Math.random() * Math.max(target * 0.3, 5))
-          setDisplay(String(Math.abs(currentNum + randomOffset - Math.floor(randomOffset / 2))))
-        } else {
-          setDisplay(String(currentNum))
-        }
+      if (rawProgress < 1) {
+        const currentNum = Math.round(progress * target)
+        // Pad to same digit count as target so width doesn't jump
+        setDisplay(String(currentNum).padStart(digits, '0'))
         frame = requestAnimationFrame(animate)
       } else {
         setDisplay(String(target))
@@ -59,7 +53,7 @@ export default function CountUp({ target, suffix = '', duration = 2000, classNam
 
     frame = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(frame)
-  }, [started, target, duration])
+  }, [started, target, duration, digits])
 
   return (
     <span ref={ref} className={className}>
