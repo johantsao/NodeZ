@@ -200,9 +200,9 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                   transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
                 >
-                  {lang === 'zh-TW' && <>為 Web3 品牌打造<br /><span className="text-gradient">被記住</span>的每一刻</>}
-                  {lang === 'zh-CN' && <>为 Web3 品牌打造<br /><span className="text-gradient">被记住</span>的每一刻</>}
-                  {lang === 'en' && <>Building <span className="text-gradient">unforgettable</span><br />moments for Web3 brands</>}
+                  {lang === 'zh-TW' && <>為 <span className="text-gradient">Web3 品牌</span>打造<br />被記住的每一刻</>}
+                  {lang === 'zh-CN' && <>为 <span className="text-gradient">Web3 品牌</span>打造<br />被记住的每一刻</>}
+                  {lang === 'en' && <>Building moments<br />that <span className="text-gradient">Web3 brands</span> remember</>}
                 </motion.h1>
                 <motion.p
                   className="text-lg text-gray-400 leading-relaxed max-w-xl mb-10"
@@ -519,26 +519,45 @@ export default function Home() {
           </motion.section>
 
           {/* ========== CONTACT ========== */}
-          <section id="contact" className="py-32 text-center">
+          <section id="contact" className="py-32">
             <motion.div
+              className="max-w-3xl mx-auto"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                {t('contact.title').split(t('contact.title.highlight')).map((part, i, arr) => (
-                  <span key={i}>{part}{i < arr.length - 1 && <span className="text-[#37a8ff]">{t('contact.title.highlight')}</span>}</span>
-                ))}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
+                <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Get Started</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+                {isEn ? <>Let&apos;s build your next <span className="text-[#37a8ff]">brand moment</span></> : isCN ? <>让我们为你打造下一个<span className="text-[#37a8ff]">品牌时刻</span></> : <>讓我們為你打造下一個<span className="text-[#37a8ff]">品牌時刻</span></>}
               </h2>
-              <p className="text-base text-gray-400 mb-10">{t('contact.sub')}</p>
-              <a
-                href="mailto:nodezblockchain@gmail.com"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl shadow-[0_12px_32px_rgba(55,168,255,0.3)] hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-                Contact Us
-              </a>
+              <p className="text-lg text-gray-400 mb-4 leading-relaxed">
+                {isEn ? 'Tell us about your project — we\'ll design a tailored execution plan.' : isCN ? '告诉我们你的需求，我们量身打造执行方案。' : '告訴我們你的需求，我們量身打造執行方案。'}
+              </p>
+              <p className="text-sm text-gray-500 mb-10">
+                {isEn ? 'Typically respond within 24 hours.' : isCN ? '通常 24 小时内回复。' : '通常 24 小時內回覆。'}
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href="mailto:nodezblockchain@gmail.com"
+                  className="animate-breathe inline-flex items-center gap-3 px-8 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+                  {isEn ? 'Get in Touch' : isCN ? '立即联系' : '立即聯繫'}
+                </a>
+                <a
+                  href="https://t.me/+yP-Qdy7ohLA0MzRl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 px-8 py-4 border border-white/15 rounded-xl font-semibold text-gray-300 hover:border-[#37a8ff]/40 hover:text-white transition-all duration-300"
+                >
+                  <img src="/icons/telegram.svg" alt="Telegram" className="w-5 h-5" />
+                  Telegram
+                </a>
+              </div>
             </motion.div>
           </section>
 
