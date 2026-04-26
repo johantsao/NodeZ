@@ -331,30 +331,50 @@ export default function Home() {
             </motion.div>
 
             <div className="flex flex-col gap-6">
-              {[1, 2, 3].map((n, idx) => (
+              {([
+                {
+                  tag: t('svc.1.tag'), title: t('svc.1.title'),
+                  keywords: ['品牌週', 'Meetup', '新功能發布', 'KOL 分發', '亞洲跨城'],
+                },
+                {
+                  tag: t('svc.2.tag'), title: t('svc.2.title'),
+                  keywords: ['代幣 GTM', '上所 Campaign', 'Research × PR', 'AMA 系列', '生態牽線'],
+                },
+                {
+                  tag: t('svc.3.tag'), title: t('svc.3.title'),
+                  keywords: ['品牌語言轉譯', '形象升級', '台港東南亞落地', 'Web3 Onboarding'],
+                },
+              ]).map((svc, idx) => (
                 <motion.div
-                  key={n}
-                  className={`flex flex-col md:flex-row items-center gap-8 ${idx % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
+                  key={idx}
+                  className={`flex flex-col md:flex-row items-stretch gap-0 ${idx % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
                   initial={{ opacity: 0, x: idx % 2 === 0 ? -40 : 40 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.7, delay: 0.1 }}
                   viewport={{ once: true }}
                 >
                   {/* Content side */}
-                  <div className="flex-1 border-l-2 border-[#37a8ff] pl-8 py-6">
-                    <span className="inline-block font-mono text-[10px] text-[#37a8ff] tracking-[0.15em] uppercase px-2.5 py-1 border border-[#37a8ff]/30 rounded-md mb-3">
-                      {t(`svc.${n}.tag`)}
+                  <div className="flex-1 border-l-2 border-[#37a8ff] pl-8 py-8">
+                    <span className="inline-block font-mono text-[10px] text-[#37a8ff] tracking-[0.15em] uppercase px-2.5 py-1 border border-[#37a8ff]/30 rounded-md mb-4">
+                      {svc.tag}
                     </span>
-                    <h3 className="text-2xl font-bold mb-3">{t(`svc.${n}.title`)}</h3>
-                    <p className="text-sm text-gray-400 leading-relaxed mb-4 max-w-lg">{t(`svc.${n}.desc`)}</p>
-                    <a href="#contact" className="text-[13px] text-[#37a8ff] font-semibold inline-flex items-center gap-1.5 hover:gap-3 transition-all">
+                    <h3 className="text-2xl font-bold mb-5">{svc.title}</h3>
+                    {/* Visual keyword badges */}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {svc.keywords.map(kw => (
+                        <span key={kw} className="px-3 py-1.5 text-[13px] font-medium rounded-lg bg-[#37a8ff]/8 border border-[#37a8ff]/15 text-gray-200 hover:bg-[#37a8ff]/15 hover:text-white transition cursor-default">
+                          {kw}
+                        </span>
+                      ))}
+                    </div>
+                    <a href="#contact" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#37a8ff]/10 border border-[#37a8ff]/25 rounded-lg text-[13px] text-[#37a8ff] font-semibold hover:bg-[#37a8ff]/20 transition-all">
                       {t('svc.cta')} <span>&rarr;</span>
                     </a>
                   </div>
-                  {/* Decorative accent side */}
+                  {/* Number accent */}
                   <div className="flex-1 hidden md:flex items-center justify-center">
-                    <div className="w-full max-w-[280px] h-[160px] rounded-2xl bg-gradient-to-br from-[#37a8ff]/8 to-[#080c18] border border-[#37a8ff]/15 flex items-center justify-center relative overflow-hidden">
-                      <span className="text-8xl font-black text-[#37a8ff]/25 drop-shadow-[0_0_30px_rgba(55,168,255,0.15)]">{String(n).padStart(2, '0')}</span>
+                    <div className="w-full max-w-[280px] h-[180px] rounded-2xl bg-gradient-to-br from-[#37a8ff]/8 to-[#080c18] border border-[#37a8ff]/15 flex items-center justify-center relative overflow-hidden">
+                      <span className="text-8xl font-black text-[#37a8ff]/25 drop-shadow-[0_0_30px_rgba(55,168,255,0.15)]">{String(idx + 1).padStart(2, '0')}</span>
                       <div className="absolute inset-0 bg-gradient-to-t from-[#080c18] via-transparent to-transparent" />
                     </div>
                   </div>
