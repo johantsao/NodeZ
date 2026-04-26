@@ -371,12 +371,9 @@ export default function Home() {
                       {t('svc.cta')} <span>&rarr;</span>
                     </a>
                   </div>
-                  {/* Number accent */}
+                  {/* Number accent — no border, just floating number */}
                   <div className="flex-1 hidden md:flex items-center justify-center">
-                    <div className="w-full max-w-[280px] h-[180px] rounded-2xl bg-gradient-to-br from-[#37a8ff]/8 to-[#080c18] border border-[#37a8ff]/15 flex items-center justify-center relative overflow-hidden">
-                      <span className="text-8xl font-black text-[#37a8ff]/25 drop-shadow-[0_0_30px_rgba(55,168,255,0.15)]">{String(idx + 1).padStart(2, '0')}</span>
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#080c18] via-transparent to-transparent" />
-                    </div>
+                    <span className="text-[120px] font-black text-[#37a8ff]/10 select-none">{String(idx + 1).padStart(2, '0')}</span>
                   </div>
                 </motion.div>
               ))}
