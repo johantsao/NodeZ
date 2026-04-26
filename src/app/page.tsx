@@ -530,8 +530,8 @@ export default function Home() {
               <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-8">
                 {isEn ? <>Let&apos;s build your next<br /><span className="text-[#37a8ff]">brand moment</span></> : isCN ? <>打造你的下一个<br /><span className="text-[#37a8ff]">品牌时刻</span></> : <>打造你的下一個<br /><span className="text-[#37a8ff]">品牌時刻</span></>}
               </h2>
-              <p className="text-base text-gray-500 mb-12">
-                {isEn ? 'Typically respond within 24 hours' : isCN ? '通常 24 小时内回复' : '通常 24 小時內回覆'}
+              <p className="text-base text-gray-400 mb-12">
+                {isEn ? 'Tell us your needs — we\'ll craft your exclusive brand marketing alpha' : isCN ? '告诉我们你的需求，我们量身打造您专属的品牌行销 Alpha' : '告訴我們你的需求，我們量身打造您專屬的品牌行銷 Alpha'}
               </p>
               <div className="flex items-center justify-center gap-5">
                 <a
