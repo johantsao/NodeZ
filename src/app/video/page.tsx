@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { youtubeThumbUrl } from '@/utils/youtube'
 import ClientWrapper from '@/components/ClientWrapper'
+import CardSkeleton from '@/components/CardSkeleton'
 import { useParticleCanvas } from '@/hooks/useParticleCanvas'
 
 interface Video {
@@ -61,9 +62,16 @@ export default function VideoPage() {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center h-screen bg-black text-white">
-        載入中…
-      </div>
+      <>
+        <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
+        <div className="min-h-screen text-white pt-32 px-4 md:px-12 max-w-6xl mx-auto">
+          <div className="mb-10">
+            <div className="h-10 w-48 bg-white/5 rounded animate-pulse mb-4" />
+            <div className="h-6 w-96 bg-white/5 rounded animate-pulse" />
+          </div>
+          <CardSkeleton count={6} />
+        </div>
+      </>
     )
 
   return (

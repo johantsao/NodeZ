@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import ClientWrapper from '@/components/ClientWrapper'
+import PageLoader from '@/components/PageLoader'
 import { i18n, Lang } from '@/lib/i18n'
 
 const eventPhotos = [
@@ -40,6 +41,7 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
   const [langOpen, setLangOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     try {
@@ -134,6 +136,7 @@ export default function Home() {
 
   return (
     <>
+      <PageLoader />
       {/* Particle canvas — outside ClientWrapper to avoid z-index blocking */}
       <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
       <ClientWrapper>
@@ -201,10 +204,24 @@ export default function Home() {
                 )}
               </li>
             </ul>
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-gray-400 hover:text-white">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                {mobileMenuOpen ? <path d="M18 6L6 18M6 6l12 12"/> : <><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></>}
+              </svg>
+            </button>
             <a href="#contact" className="hidden md:inline-flex px-4 py-2 bg-[#37a8ff] text-white text-sm font-semibold rounded-lg hover:bg-[#5bb8ff] transition">
               {t('nav.cta')}
             </a>
           </div>
+          {mobileMenuOpen && (
+            <div className="md:hidden bg-black/95 backdrop-blur-xl border-t border-white/10 px-6 py-6 space-y-4">
+              {navAnchors.map(n => (
+                <a key={n.href} href={n.href} onClick={() => setMobileMenuOpen(false)} className="block text-lg text-gray-300 hover:text-[#37a8ff] transition">{n.label}</a>
+              ))}
+              <Link href="/content" onClick={() => setMobileMenuOpen(false)} className="block text-lg text-[#37a8ff] font-semibold">NodeZ Research</Link>
+              <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block mt-4 text-center px-6 py-3 bg-[#37a8ff] text-white font-semibold rounded-xl">{t('nav.cta')}</a>
+            </div>
+          )}
         </nav>
 
         <div className="max-w-[1240px] mx-auto px-6 relative z-10" id="top">
@@ -290,7 +307,15 @@ export default function Home() {
                   transition={{ duration: 0.6, delay: idx * 0.15 }}
                   viewport={{ once: true }}
                 >
-                  <div className="text-5xl md:text-6xl font-bold text-gradient mb-2">{stat.num}</div>
+                  <motion.div
+                    className="text-5xl md:text-6xl font-bold text-gradient mb-2"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.6, delay: idx * 0.15, type: 'spring', stiffness: 100 }}
+                    viewport={{ once: true }}
+                  >
+                    {stat.num}
+                  </motion.div>
                   <div className="text-sm text-gray-400 tracking-wide">{stat.label}</div>
                 </motion.div>
               ))}
@@ -564,12 +589,53 @@ export default function Home() {
         </div>
 
         {/* ========== FOOTER ========== */}
-        <footer className="border-t border-white/10 py-10 text-center text-[13px] text-gray-500">
-          <div className="flex items-center justify-center gap-2.5 mb-2">
-            <img src="/nodez-logo.png" alt="NodeZ" className="w-5 h-5 drop-shadow-[0_0_6px_rgba(55,168,255,0.3)]" />
-            <strong className="text-white font-bold">NodeZ</strong>
+        <footer className="border-t border-white/10 py-16 relative z-10">
+          <div className="max-w-[1240px] mx-auto px-6">
+            <div className="grid md:grid-cols-3 gap-12 mb-12">
+              {/* Brand */}
+              <div>
+                <div className="flex items-center gap-2.5 mb-4">
+                  <img src="/nodez-logo.png" alt="NodeZ" className="w-8 h-8" />
+                  <span className="font-bold text-lg">Node<span className="text-[#37a8ff]">Z</span></span>
+                </div>
+                <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                  Web3 品牌行銷解決方案<br/>內容 × 社群 × 線下活動
+                </p>
+                <a href="mailto:nodezblockchain@gmail.com" className="text-sm text-[#37a8ff] hover:underline">nodezblockchain@gmail.com</a>
+              </div>
+              {/* Quick Links */}
+              <div>
+                <h4 className="text-sm font-semibold text-white mb-4 tracking-wide">QUICK LINKS</h4>
+                <ul className="space-y-3">
+                  <li><a href="#about" className="text-sm text-gray-400 hover:text-[#37a8ff] transition">關於我們</a></li>
+                  <li><a href="#services" className="text-sm text-gray-400 hover:text-[#37a8ff] transition">服務項目</a></li>
+                  <li><a href="#channels" className="text-sm text-gray-400 hover:text-[#37a8ff] transition">品牌曝光通路</a></li>
+                  <li><Link href="/content" className="text-sm text-gray-400 hover:text-[#37a8ff] transition">NodeZ Research</Link></li>
+                </ul>
+              </div>
+              {/* Social */}
+              <div>
+                <h4 className="text-sm font-semibold text-white mb-4 tracking-wide">FOLLOW US</h4>
+                <div className="flex gap-4">
+                  <a href="https://www.youtube.com/@Node.Z" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#37a8ff] hover:border-[#37a8ff]/30 transition">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.546 12 3.546 12 3.546s-7.505 0-9.377.504A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.504 9.376.504 9.376.504s7.505 0 9.377-.504a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                  </a>
+                  <a href="https://x.com/Node_Z_" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#37a8ff] hover:border-[#37a8ff]/30 transition">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  </a>
+                  <a href="https://www.instagram.com/node.z_" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#37a8ff] hover:border-[#37a8ff]/30 transition">
+                    <img src="/icons/instagram.svg" alt="IG" className="w-4 h-4 opacity-60 hover:opacity-100" />
+                  </a>
+                  <a href="https://t.me/+yP-Qdy7ohLA0MzRl" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#37a8ff] hover:border-[#37a8ff]/30 transition">
+                    <img src="/icons/telegram.png" alt="TG" className="w-4 h-4 opacity-60 hover:opacity-100" />
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="border-t border-white/10 pt-6 text-center text-xs text-gray-600">
+              &copy; 2025 NodeZ. All rights reserved.
+            </div>
           </div>
-          <div>{t('footer.line')}</div>
         </footer>
       </div>
     </ClientWrapper>
