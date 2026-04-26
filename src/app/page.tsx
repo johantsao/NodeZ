@@ -191,17 +191,15 @@ export default function Home() {
             <div className="grid md:grid-cols-[1.3fr_1fr] gap-16 items-center w-full">
               <div>
                 <motion.h1
-                  className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.02] tracking-tight mb-9"
+                  className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-9"
                   initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
                   animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                   transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
                 >
-                  {t('hero.title').split(t('hero.title.highlight')).map((part, i, arr) => (
-                    <span key={i}>
-                      {part}
-                      {i < arr.length - 1 && <span className="text-gradient">{t('hero.title.highlight')}</span>}
-                    </span>
-                  ))}
+                  {lang === 'zh-TW' && <>為 Web3 品牌打造<br /><span className="text-gradient">被記住</span>的每一刻</>}
+                  {lang === 'zh-CN' && <>为 Web3 品牌打造<br /><span className="text-gradient">被记住</span>的每一刻</>}
+                  {lang === 'en' && <>Building <span className="text-gradient">unforgettable</span><br />moments for Web3 brands</>}
+                  {lang === 'ko' && <>Web3 브랜드를 위한<br /><span className="text-gradient">기억되는</span> 순간을 만듭니다</>}
                 </motion.h1>
                 <motion.p
                   className="text-lg text-gray-400 leading-relaxed max-w-xl mb-10"
@@ -243,10 +241,11 @@ export default function Home() {
               className="text-center max-w-3xl mx-auto mb-20"
             >
               <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4">01 — ABOUT</div>
-              <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-gradient">
-                {t('about.title').split(t('about.title.highlight')).map((part, i, arr) => (
-                  <span key={i}>{part}{i < arr.length - 1 && <span className="text-[#37a8ff]">{t('about.title.highlight')}</span>}</span>
-                ))}
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+                {lang === 'zh-TW' && <>我們是 <span className="text-[#37a8ff]">Web3 品牌</span>背後的行銷夥伴</>}
+                {lang === 'zh-CN' && <>我们是 <span className="text-[#37a8ff]">Web3 品牌</span>背后的营销伙伴</>}
+                {lang === 'en' && <>The marketing partner behind <span className="text-[#37a8ff]">Web3 brands</span></>}
+                {lang === 'ko' && <><span className="text-[#37a8ff]">Web3 브랜드</span> 뒤의 마케팅 파트너</>}
               </h2>
               <p className="text-lg text-gray-400 leading-relaxed">{t('about.desc')}</p>
             </motion.div>
@@ -266,7 +265,7 @@ export default function Home() {
                 </div>
               </motion.div>
               <motion.div
-                className="card-hover bg-white/[0.03] border border-white/10 rounded-2xl p-10"
+                className="card-hover bg-[#080c18]/85 backdrop-blur-xl border border-white/10 rounded-2xl p-10"
                 initial={{ opacity: 0, x: 40 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7, delay: 0.4 }}
@@ -296,7 +295,7 @@ export default function Home() {
               {capsData.map((cap, idx) => (
                 <motion.div
                   key={cap.key}
-                  className="card-hover group bg-white/[0.03] border border-white/10 rounded-2xl p-6"
+                  className="card-hover group bg-[#080c18]/85 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
                   initial={{ opacity: 0, y: 40, scale: 0.95 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.6, delay: idx * 0.12, ease: [0.4, 0, 0.2, 1] }}
@@ -329,7 +328,7 @@ export default function Home() {
                   transition={{ duration: 0.7, delay: idx * 0.15 }}
                   viewport={{ once: true }}
                 >
-                  <div className="bg-black/80 rounded-2xl p-7 h-full flex flex-col gap-4">
+                  <div className="bg-[#080c18]/90 backdrop-blur-xl rounded-2xl p-7 h-full flex flex-col gap-4">
                     <span className="self-start font-mono text-[10px] text-[#37a8ff] tracking-[0.15em] uppercase px-2.5 py-1 border border-[#37a8ff]/30 rounded-md">
                       {t(`svc.${n}.tag`)}
                     </span>
@@ -371,7 +370,7 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <div className="bg-black/80 rounded-2xl p-6 h-full flex flex-col items-center text-center gap-3 group-hover:bg-black/60 transition">
+                  <div className="bg-[#080c18]/90 backdrop-blur-xl rounded-2xl p-6 h-full flex flex-col items-center text-center gap-3 group-hover:bg-black/60 transition">
                     <div className="text-[#37a8ff] group-hover:scale-125 transition duration-300">{s.icon}</div>
                     <h4 className="font-bold text-sm">{s.name}</h4>
                     <span className="text-xs text-[#37a8ff] font-mono">{s.handle}</span>
@@ -392,7 +391,7 @@ export default function Home() {
                 { title: t('pf.3.title'), sub: t('pf.3.sub'), desc: t('pf.3.desc'), link: '@Node_Z_', href: 'https://x.com/Node_Z_' },
                 { title: t('pf.4.title'), sub: t('pf.4.sub'), desc: t('pf.4.desc'), link: t('pf.4.link'), href: '#events' },
               ].map((ch, idx) => (
-                <div key={idx} className="bg-white/[0.03] border border-white/10 rounded-2xl p-7 hover:border-[#37a8ff]/30 transition group">
+                <div key={idx} className="bg-[#080c18]/85 backdrop-blur-xl border border-white/10 rounded-2xl p-7 hover:border-[#37a8ff]/30 transition group">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-xl bg-[#37a8ff]/10 border border-[#37a8ff]/20 flex items-center justify-center text-[#37a8ff] font-mono text-xs font-bold">
                       {String(idx + 1).padStart(2, '0')}
