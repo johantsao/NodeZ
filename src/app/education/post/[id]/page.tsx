@@ -51,11 +51,14 @@ export default function PostDetailPage() {
             <img src="/nodez-logo.png" alt="NodeZ" className="w-9 h-9 drop-shadow-[0_0_10px_rgba(55,168,255,0.4)]" />
             <span className="font-bold text-xl tracking-tight">Node<span className="text-[#37a8ff]">Z</span></span>
           </a>
-          <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
-            <li><a href="/content" className="hover:text-[#37a8ff] transition">NodeZ Research</a></li>
+          <ul className="hidden md:flex items-center gap-7 ml-auto text-sm font-medium text-gray-400">
+            <li>
+              <a href="/content" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#37a8ff]/10 border border-[#37a8ff]/25 text-[#37a8ff] font-semibold text-sm hover:bg-[#37a8ff]/20 transition">
+                NodeZ Research
+              </a>
+            </li>
             <li><a href="/education" className="text-[#37a8ff] font-semibold">調研文章</a></li>
             <li><a href="/video" className="hover:text-[#37a8ff] transition">影音內容</a></li>
-            <li><a href="/community" className="hover:text-[#37a8ff] transition">社群專區</a></li>
           </ul>
           </div>
         </nav>

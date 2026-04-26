@@ -79,8 +79,12 @@ export default function ContentPage() {
                 <img src="/nodez-logo.png" alt="NodeZ" className="w-9 h-9 drop-shadow-[0_0_10px_rgba(55,168,255,0.4)]" />
                 <span className="font-bold text-xl tracking-tight">Node<span className="text-[#37a8ff]">Z</span></span>
               </Link>
-              <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
-                <li><span className="text-[#37a8ff] font-semibold">NodeZ Research</span></li>
+              <ul className="hidden md:flex items-center gap-7 ml-auto text-sm font-medium text-gray-400">
+                <li>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#37a8ff]/10 border border-[#37a8ff]/25 text-[#37a8ff] font-semibold text-sm">
+                    NodeZ Research
+                  </span>
+                </li>
                 <li><Link href="/education" className="hover:text-[#37a8ff] transition">調研文章</Link></li>
                 <li><Link href="/video" className="hover:text-[#37a8ff] transition">影音內容</Link></li>
               </ul>

@@ -89,27 +89,14 @@ export default function EducationPage() {
                   Node<span className="text-[#37a8ff]">Z</span>
                 </span>
               </Link>
-              <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
+              <ul className="hidden md:flex items-center gap-7 ml-auto text-sm font-medium text-gray-400">
                 <li>
-                  <Link href="/content" className="hover:text-[#37a8ff] transition">
+                  <Link href="/content" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#37a8ff]/10 border border-[#37a8ff]/25 text-[#37a8ff] font-semibold text-sm hover:bg-[#37a8ff]/20 transition">
                     NodeZ Research
                   </Link>
                 </li>
-                <li>
-                  <Link href="/education" className="text-[#37a8ff] font-semibold">
-                    調研文章
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/video" className="hover:text-[#37a8ff] transition">
-                    影音內容
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/community" className="hover:text-[#37a8ff] transition">
-                    社群專區
-                  </Link>
-                </li>
+                <li><Link href="/education" className="text-[#37a8ff] font-semibold">調研文章</Link></li>
+                <li><Link href="/video" className="hover:text-[#37a8ff] transition">影音內容</Link></li>
               </ul>
               {userEmail && (
                 <div className="text-xs text-[#37a8ff] ml-4 hidden md:flex gap-4 items-center">
