@@ -169,13 +169,13 @@ export default function Home() {
               </li>
             </ul>
             <div className="flex items-center gap-1 p-0.5 bg-white/5 border border-white/10 rounded-lg">
-              {(['zh-TW', 'zh-CN', 'en', 'ko'] as Lang[]).map(l => (
+              {(['zh-TW', 'zh-CN', 'en'] as Lang[]).map(l => (
                 <button
                   key={l}
                   onClick={() => switchLang(l)}
                   className={`px-2.5 py-1 text-xs font-medium rounded transition ${lang === l ? 'bg-[#37a8ff] text-white' : 'text-gray-400 hover:text-white'}`}
                 >
-                  {l === 'zh-TW' ? '繁' : l === 'zh-CN' ? '简' : l === 'en' ? 'EN' : '한'}
+                  {l === 'zh-TW' ? '繁' : l === 'zh-CN' ? '简' : 'EN'}
                 </button>
               ))}
             </div>
@@ -200,7 +200,6 @@ export default function Home() {
                   {lang === 'zh-TW' && <>為 Web3 品牌打造<br /><span className="text-gradient">被記住</span>的每一刻</>}
                   {lang === 'zh-CN' && <>为 Web3 品牌打造<br /><span className="text-gradient">被记住</span>的每一刻</>}
                   {lang === 'en' && <>Building <span className="text-gradient">unforgettable</span><br />moments for Web3 brands</>}
-                  {lang === 'ko' && <>Web3 브랜드를 위한<br /><span className="text-gradient">기억되는</span> 순간을 만듭니다</>}
                 </motion.h1>
                 <motion.p
                   className="text-lg text-gray-400 leading-relaxed max-w-xl mb-10"
@@ -208,7 +207,9 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
                 >
-                  {t('hero.lede')}
+                  {lang === 'zh-TW' && '內容 × 社群 × 線下活動——為 Web3 品牌交付完整行銷解決方案。'}
+                  {lang === 'zh-CN' && '内容 × 社群 × 线下活动——为 Web3 品牌交付完整营销解决方案。'}
+                  {lang === 'en' && 'Content × Community × Events — end-to-end marketing for Web3 brands.'}
                 </motion.p>
                 <motion.div
                   className="flex flex-wrap gap-4"
@@ -255,9 +256,9 @@ export default function Home() {
             {/* Stat counters */}
             <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
               {[
-                { num: '10+', label: lang === 'en' ? 'Partner Brands' : lang === 'ko' ? '파트너 브랜드' : lang === 'zh-CN' ? '合作品牌' : '合作品牌' },
-                { num: '50+', label: lang === 'en' ? 'Events Held' : lang === 'ko' ? '개최 이벤트' : lang === 'zh-CN' ? '活动场次' : '活動場次' },
-                { num: '3+', label: lang === 'en' ? 'Owned Media Channels' : lang === 'ko' ? '자체 미디어 채널' : lang === 'zh-CN' ? '自有媒体通路' : '自有媒體通路' },
+                { num: '10+', label: lang === 'en' ? 'Partner Brands' : lang === 'zh-CN' ? '合作品牌' : '合作品牌' },
+                { num: '50+', label: lang === 'en' ? 'Events Held' : lang === 'zh-CN' ? '活动场次' : '活動場次' },
+                { num: '3+', label: lang === 'en' ? 'Owned Media Channels' : lang === 'zh-CN' ? '自有媒体通路' : '自有媒體通路' },
               ].map((stat, idx) => (
                 <motion.div
                   key={stat.label}
@@ -326,7 +327,7 @@ export default function Home() {
                 <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Brand Solutions</span>
               </div>
               <h3 className="text-3xl md:text-4xl font-bold tracking-tight">
-                {lang === 'en' ? 'Brand Service Plans' : lang === 'ko' ? '브랜드 서비스' : lang === 'zh-CN' ? '品牌服务方案' : '品牌服務方案'}
+                {lang === 'en' ? 'Brand Service Plans' : lang === 'zh-CN' ? '品牌服务方案' : '品牌服務方案'}
               </h3>
             </motion.div>
 
@@ -334,24 +335,15 @@ export default function Home() {
               {([
                 {
                   tag: t('svc.1.tag'), title: t('svc.1.title'),
-                  keywords: [
-                    { icon: '🎪', text: '品牌週' }, { icon: '🤝', text: 'Meetup' },
-                    { icon: '🚀', text: '新功能發布' }, { icon: '📣', text: 'KOL 分發' }, { icon: '🌏', text: '亞洲跨城' },
-                  ],
+                  keywords: ['品牌週', 'Meetup', '新功能發布', 'KOL 分發', '亞洲跨城'],
                 },
                 {
                   tag: t('svc.2.tag'), title: t('svc.2.title'),
-                  keywords: [
-                    { icon: '🪙', text: '代幣 GTM' }, { icon: '📈', text: '上所 Campaign' },
-                    { icon: '📊', text: 'Research × PR' }, { icon: '🎙️', text: 'AMA 系列' }, { icon: '🔗', text: '生態牽線' },
-                  ],
+                  keywords: ['代幣 GTM', '上所 Campaign', 'Research × PR', 'AMA 系列', '生態牽線'],
                 },
                 {
                   tag: t('svc.3.tag'), title: t('svc.3.title'),
-                  keywords: [
-                    { icon: '💬', text: '品牌語言轉譯' }, { icon: '✨', text: '形象升級' },
-                    { icon: '🌏', text: '台港東南亞落地' }, { icon: '🔑', text: 'Web3 Onboarding' },
-                  ],
+                  keywords: ['品牌語言轉譯', '形象升級', '台港東南亞落地', 'Web3 Onboarding'],
                 },
               ]).map((svc, idx) => (
                 <motion.div
@@ -363,7 +355,7 @@ export default function Home() {
                   viewport={{ once: true }}
                 >
                   {/* Content side */}
-                  <div className="flex-1 border-l-2 border-[#37a8ff] pl-8 py-8">
+                  <div className="w-full border-l-2 border-[#37a8ff] pl-8 py-8">
                     <span className="inline-block font-mono text-[10px] text-[#37a8ff] tracking-[0.15em] uppercase px-2.5 py-1 border border-[#37a8ff]/30 rounded-md mb-4">
                       {svc.tag}
                     </span>
@@ -371,18 +363,14 @@ export default function Home() {
                     {/* Visual keyword badges */}
                     <div className="flex flex-wrap gap-2 mb-6">
                       {svc.keywords.map(kw => (
-                        <span key={kw.text} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-medium rounded-lg bg-[#37a8ff]/8 border border-[#37a8ff]/15 text-gray-200 hover:bg-[#37a8ff]/15 hover:text-white transition cursor-default">
-                          <span className="text-sm">{kw.icon}</span>{kw.text}
+                        <span key={kw} className="px-3 py-1.5 text-[13px] font-medium rounded-lg bg-[#37a8ff]/8 border border-[#37a8ff]/15 text-gray-300 hover:bg-[#37a8ff]/15 hover:text-white transition cursor-default">
+                          {kw}
                         </span>
                       ))}
                     </div>
                     <a href="#contact" className="text-[13px] text-[#37a8ff] font-semibold inline-flex items-center gap-1.5 hover:gap-3 transition-all">
                       Contact Us <span>&rarr;</span>
                     </a>
-                  </div>
-                  {/* Number accent — no border, just floating number */}
-                  <div className="flex-1 hidden md:flex items-center justify-center">
-                    <span className="text-[120px] font-black text-[#37a8ff]/20 drop-shadow-[0_0_40px_rgba(55,168,255,0.12)] select-none">{String(idx + 1).padStart(2, '0')}</span>
                   </div>
                 </motion.div>
               ))}
@@ -396,10 +384,10 @@ export default function Home() {
               <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Community & Partners</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-              {lang === 'en' ? 'Your Brand, Our Channels' : lang === 'ko' ? '브랜드 노출 채널' : lang === 'zh-CN' ? '品牌曝光通路' : '品牌曝光通路'}
+              {lang === 'en' ? 'Your Brand, Our Channels' : lang === 'zh-CN' ? '品牌曝光通路' : '品牌曝光通路'}
             </h2>
             <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">
-              {lang === 'en' ? 'Leverage our owned media assets to amplify your brand reach across Asia.' : lang === 'ko' ? '자체 미디어 자산을 활용해 아시아 전역에서 브랜드 리치를 확대하세요.' : lang === 'zh-CN' ? '借助我们的自有媒体资产，放大品牌在亚洲市场的触达。' : '借助我們的自有媒體資產，放大品牌在亞洲市場的觸達。'}
+              {lang === 'en' ? 'Leverage our owned media assets to amplify your brand reach across Asia.' : lang === 'zh-CN' ? '借助我们的自有媒体资产，放大品牌在亚洲市场的触达。' : '借助我們的自有媒體資產，放大品牌在亞洲市場的觸達。'}
             </p>
 
             {/* Social media — full-width grid */}
@@ -500,39 +488,24 @@ export default function Home() {
           {/* ========== CONTACT ========== */}
           <section id="contact" className="py-32 text-center">
             <motion.div
-              className="max-w-[920px] mx-auto p-16 md:p-20 bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/20 rounded-3xl relative overflow-hidden"
-              variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
             >
-              <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle_at_30%_20%,rgba(55,168,255,0.08),transparent_50%)] pointer-events-none" />
-              <div className="relative z-10">
-                <h2 className="text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-5">
-                  {t('contact.title').split(t('contact.title.highlight')).map((part, i, arr) => (
-                    <span key={i}>{part}{i < arr.length - 1 && <span className="text-[#37a8ff]">{t('contact.title.highlight')}</span>}</span>
-                  ))}
-                </h2>
-                <p className="text-base text-gray-400 mb-10 max-w-lg mx-auto">{t('contact.sub')}</p>
-                <a
-                  href="mailto:nodezblockchain@gmail.com"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl shadow-[0_12px_32px_rgba(55,168,255,0.3)] hover:bg-[#5bb8ff] transition mb-8"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-                  nodezblockchain@gmail.com
-                </a>
-                {/* Social links as inline text */}
-                <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-400">
-                  {[
-                    { label: 'YouTube', href: 'https://www.youtube.com/@Node.Z' },
-                    { label: 'Twitter / X', href: 'https://x.com/Node_Z_' },
-                    { label: 'Instagram', href: 'https://www.instagram.com/node.z_' },
-                    { label: 'Telegram', href: 'https://t.me/+yP-Qdy7ohLA0MzRl' },
-                  ].map((link, idx, arr) => (
-                    <span key={link.label} className="flex items-center gap-4">
-                      <a href={link.href} target="_blank" rel="noopener noreferrer" className="hover:text-[#37a8ff] transition">{link.label}</a>
-                      {idx < arr.length - 1 && <span className="text-white/20">|</span>}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+                {t('contact.title').split(t('contact.title.highlight')).map((part, i, arr) => (
+                  <span key={i}>{part}{i < arr.length - 1 && <span className="text-[#37a8ff]">{t('contact.title.highlight')}</span>}</span>
+                ))}
+              </h2>
+              <p className="text-base text-gray-400 mb-10">{t('contact.sub')}</p>
+              <a
+                href="mailto:nodezblockchain@gmail.com"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl shadow-[0_12px_32px_rgba(55,168,255,0.3)] hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+                Contact Us
+              </a>
             </motion.div>
           </section>
 
