@@ -552,23 +552,12 @@ export default function Home() {
               <p className="text-base text-gray-400 mb-12">
                 {isEn ? 'Tell us your needs — we\'ll craft your exclusive brand marketing alpha' : isCN ? '告诉我们你的需求，我们量身打造您专属的品牌行销 Alpha' : '告訴我們你的需求，我們量身打造您專屬的品牌行銷 Alpha'}
               </p>
-              <div className="flex items-center justify-center gap-5">
-                <a
-                  href="mailto:nodezblockchain@gmail.com"
-                  className="animate-breathe inline-flex items-center gap-3 px-10 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300 text-lg"
-                >
-                  {isEn ? 'Get in Touch' : isCN ? '立即联系' : '立即聯繫'}
-                </a>
-                <a
-                  href="https://t.me/+yP-Qdy7ohLA0MzRl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[#37a8ff] transition"
-                >
-                  <img src="/icons/telegram.png" alt="Telegram" className="w-5 h-5" />
-                  Telegram
-                </a>
-              </div>
+              <a
+                href="mailto:nodezblockchain@gmail.com"
+                className="animate-breathe inline-flex items-center gap-3 px-10 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300 text-lg"
+              >
+                {isEn ? 'Contact Us' : isCN ? '联系我们' : '聯繫我們'}
+              </a>
             </motion.div>
           </section>
 
