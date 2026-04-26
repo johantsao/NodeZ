@@ -95,7 +95,10 @@ export default function ContentPage() {
                 className="flex items-end justify-between border-b border-white/10 pb-8"
               >
                 <div>
-                  <div className="font-mono text-xs text-[#37a8ff]/40 tracking-[0.15em] uppercase mb-3">RESEARCH & MEDIA</div>
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
+                    <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Research & Media</span>
+                  </div>
                   <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
                     Node<span className="text-[#37a8ff]">Z</span> Research
                   </h1>

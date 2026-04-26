@@ -116,6 +116,7 @@ export default function Home() {
 
   const [researchOpen, setResearchOpen] = useState(false)
   const researchLinks = [
+    { label: 'NodeZ Research', href: '/content' },
     { label: '教學文章', href: '/education' },
     { label: '影音內容', href: '/video' },
     { label: '社群專區', href: '/community' },
@@ -240,7 +241,10 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-center max-w-4xl mx-auto mb-20"
             >
-              <div className="font-mono text-xs text-[#37a8ff]/40 tracking-[0.15em] uppercase mb-6">ABOUT US</div>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
+                <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">About Us</span>
+              </div>
               <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15]">
                 {t('about.lead').split(t('about.lead.highlight')).map((part, i, arr) => (
                   <span key={i}>{part}{i < arr.length - 1 && <span className="text-gradient">{t('about.lead.highlight')}</span>}</span>
@@ -279,7 +283,10 @@ export default function Home() {
               transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
               viewport={{ once: true }}
             >
-              <div className="font-mono text-xs text-[#37a8ff]/40 tracking-[0.15em] uppercase mb-4">WHAT WE DO</div>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-4">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
+                <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">What We Do</span>
+              </div>
               <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">{t('caps.title')}</h2>
             </motion.div>
 
@@ -314,7 +321,10 @@ export default function Home() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
-              <div className="font-mono text-xs text-[#37a8ff]/40 tracking-[0.15em] uppercase mb-4">BRAND SOLUTIONS</div>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-4">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
+                <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Brand Solutions</span>
+              </div>
               <h3 className="text-3xl md:text-4xl font-bold tracking-tight">
                 {lang === 'en' ? 'Brand Service Plans' : lang === 'ko' ? '브랜드 서비스' : lang === 'zh-CN' ? '品牌服务方案' : '品牌服務方案'}
               </h3>
@@ -355,7 +365,10 @@ export default function Home() {
 
           {/* ========== CHANNELS ========== */}
           <motion.section id="channels" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="font-mono text-xs text-[#37a8ff]/40 tracking-[0.15em] uppercase mb-4">COMMUNITY & PARTNERS</div>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
+              <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Community & Partners</span>
+            </div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('pf.title')}</h2>
             <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">{t('pf.desc')}</p>
 
@@ -415,8 +428,9 @@ export default function Home() {
 
           {/* ========== GALLERY ========== */}
           <motion.section id="events" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4 flex items-center gap-2.5">
-              <span className="w-6 h-px bg-[#37a8ff]" />{t('gal.label')}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
+              <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Events</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('gal.title')}</h2>
             {/* Large immersive quote */}
