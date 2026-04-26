@@ -58,7 +58,7 @@ export default function AuthPage() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${siteUrl}/education`
+        emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : siteUrl}/education`
       }
     })
 
