@@ -124,11 +124,11 @@ export default function EducationPage() {
               className="text-center mb-10"
             >
               <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-[#37a8ff]/15 text-[#37a8ff] border border-[#37a8ff]/30 mb-5">
-                Articles
+                Research
               </span>
               <h1 className="text-4xl md:text-5xl font-bold mb-3">調研文章</h1>
               <p className="text-gray-400 text-base max-w-lg mx-auto">
-                深入淺出的區塊鏈與加密貨幣教學，從入門到進階一應俱全
+                Web3 產業深度調研與市場分析，為品牌決策提供數據支撐
               </p>
             </motion.div>
 
