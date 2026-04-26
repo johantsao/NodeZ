@@ -359,23 +359,20 @@ export default function Home() {
 
             {/* Trust bar */}
             <motion.div
-              className="flex flex-wrap items-center justify-center gap-12 md:gap-16 opacity-40 mt-16"
+              className="mt-20 pt-12 border-t border-white/5"
               initial={{ opacity: 0 }}
-              whileInView={{ opacity: 0.4 }}
+              whileInView={{ opacity: 1 }}
               transition={{ duration: 1 }}
               viewport={{ once: true }}
             >
-              {[
-                { name: 'Bybit', text: 'Bybit' },
-                { name: 'OKX', text: 'OKX' },
-                { name: 'Bitget', text: 'Bitget' },
-                { name: 'Movement', text: 'Movement' },
-                { name: 'Sui', text: 'Sui' },
-              ].map((brand) => (
-                <span key={brand.name} className="text-xl md:text-2xl font-heading font-bold text-white/60 tracking-wide">
-                  {brand.text}
-                </span>
-              ))}
+              <p className="text-center text-[11px] text-gray-600 tracking-[0.2em] uppercase mb-8 font-mono">Trusted Partners</p>
+              <div className="flex flex-wrap items-center justify-center gap-10 md:gap-14">
+                <img src="/brands/sui.svg" alt="Sui" className="h-8 md:h-10 opacity-50 hover:opacity-80 transition" />
+                <span className="text-xl font-heading font-bold text-white/30 tracking-wide">Bybit</span>
+                <span className="text-xl font-heading font-bold text-white/30 tracking-wide">OKX</span>
+                <span className="text-xl font-heading font-bold text-white/30 tracking-wide">Bitget</span>
+                <span className="text-xl font-heading font-bold text-white/30 tracking-wide">Movement</span>
+              </div>
             </motion.div>
           </section>
 
