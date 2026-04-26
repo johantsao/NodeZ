@@ -372,11 +372,12 @@ export default function Home() {
                       {svc.tag}
                     </span>
                     <h3 className="text-2xl font-bold mb-5">{svc.title}</h3>
-                    {/* Keyword badges — gradient border, glow on hover */}
-                    <div className="flex flex-wrap gap-2.5 mb-6">
-                      {svc.keywords.map(kw => (
-                        <span key={kw} className="group/badge relative px-4 py-2 text-[13px] font-medium rounded-lg bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 text-gray-300 hover:border-[#37a8ff]/40 hover:text-white hover:shadow-[0_0_20px_rgba(55,168,255,0.1)] transition-all duration-300 cursor-default">
+                    {/* Keyword badges — bold text, no border, typographic emphasis */}
+                    <div className="flex flex-wrap gap-x-6 gap-y-3 mb-6">
+                      {svc.keywords.map((kw, ki) => (
+                        <span key={kw} className="text-[15px] md:text-base font-semibold text-white/80 hover:text-[#37a8ff] transition-colors duration-200 cursor-default tracking-wide">
                           {kw}
+                          {ki < svc.keywords.length - 1 && <span className="ml-6 text-[#37a8ff]/30 font-light select-none">/</span>}
                         </span>
                       ))}
                     </div>
