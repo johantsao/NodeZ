@@ -24,7 +24,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-black text-white`}>
-        <BackgroundCanvas particleColor="#2ea7ff55" />
+        <BackgroundCanvas particleCount={180} blurAmount={3} particleColor="#37a8ff88" />
 
         {/* 將 session 傳進 Providers */}
         <Providers initialSession={session}>
