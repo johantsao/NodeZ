@@ -91,7 +91,7 @@ export default function BackgroundCanvas({
   return (
     <canvas
       ref={canvasRef}
-      className={`fixed inset-0 w-full h-full z-0 pointer-events-none ${blurClass}`}
+      className={`fixed inset-0 w-full h-full z-[1] pointer-events-none ${blurClass}`}
     />
   )
 }
