@@ -39,8 +39,6 @@ export default function ContentPage() {
   return (
     <ClientWrapper>
       <div className="relative min-h-screen bg-black text-white overflow-hidden">
-        <BackgroundCanvas particleCount={180} blurAmount={3} particleColor="#37a8ff88" />
-
         {/* NAV */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
           <div className="max-w-[1240px] mx-auto px-6 py-4 flex items-center justify-between">
