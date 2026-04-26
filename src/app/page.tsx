@@ -369,8 +369,12 @@ export default function Home() {
               <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
               <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Community & Partners</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('pf.title')}</h2>
-            <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">{t('pf.desc')}</p>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+              {lang === 'en' ? 'Your Brand, Our Channels' : lang === 'ko' ? '브랜드 노출 채널' : lang === 'zh-CN' ? '品牌曝光通路' : '品牌曝光通路'}
+            </h2>
+            <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">
+              {lang === 'en' ? 'Leverage our owned media assets to amplify your brand reach across Asia.' : lang === 'ko' ? '자체 미디어 자산을 활용해 아시아 전역에서 브랜드 리치를 확대하세요.' : lang === 'zh-CN' ? '借助我们的自有媒体资产，放大品牌在亚洲市场的触达。' : '借助我們的自有媒體資產，放大品牌在亞洲市場的觸達。'}
+            </p>
 
             {/* Social media — full-width grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20">
@@ -403,10 +407,10 @@ export default function Home() {
             {/* Platform channels — left-accent cards, 2-column */}
             <div className="grid md:grid-cols-2 gap-5">
               {[
-                { title: t('pf.1.title'), desc: t('pf.1.desc'), link: 'youtube.com/@Node.Z', href: 'https://www.youtube.com/@Node.Z' },
-                { title: t('pf.2.title'), desc: t('pf.2.desc'), link: 'nodezblockchain.com', href: 'https://www.nodezblockchain.com/' },
-                { title: t('pf.3.title'), desc: t('pf.3.desc'), link: '@Node_Z_', href: 'https://x.com/Node_Z_' },
-                { title: t('pf.4.title'), desc: t('pf.4.desc'), link: t('pf.4.link'), href: '#events' },
+                { title: 'YouTube 頻道', desc: '品牌合作影片、訪談與產品曝光的長效載體。', link: 'youtube.com/@Node.Z', href: 'https://www.youtube.com/@Node.Z' },
+                { title: 'Research 平台', desc: '為合作方提供深度研究曝光與 SEO 內容植入。', link: 'nodezblockchain.com', href: 'https://www.nodezblockchain.com/' },
+                { title: 'SaaS 矩陣號服務', desc: '自動化社群推播與 KOL 矩陣帳號代操，規模化觸及目標受眾。', link: '@Node_Z_', href: 'https://x.com/Node_Z_' },
+                { title: '線下活動能量', desc: '場地、講師、製作一站式支援，即時承接品牌活動需求。', link: t('pf.4.link'), href: '#events' },
               ].map((ch, idx) => (
                 <motion.div
                   key={idx}
