@@ -14,14 +14,17 @@ export default function CountUp({ target, suffix = '', duration = 2000, classNam
   const [started, setStarted] = useState(false)
   const ref = useRef<HTMLSpanElement>(null)
 
-  // Trigger on scroll into view
+  // Delay start by 2.5s (after PageLoader fades out) then observe
   useEffect(() => {
-    if (!ref.current) return
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !started) setStarted(true)
-    }, { threshold: 0.5 })
-    observer.observe(ref.current)
-    return () => observer.disconnect()
+    const delay = setTimeout(() => {
+      if (!ref.current) return
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting && !started) setStarted(true)
+      }, { threshold: 0.3 })
+      observer.observe(ref.current)
+      return () => observer.disconnect()
+    }, 2500)
+    return () => clearTimeout(delay)
   }, [started])
 
   // Scramble + count up animation
