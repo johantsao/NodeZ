@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import ClientWrapper from '@/components/ClientWrapper'
 import PageLoader from '@/components/PageLoader'
+import CountUp from '@/components/CountUp'
 import { i18n, Lang } from '@/lib/i18n'
 
 const eventPhotos = [
@@ -306,21 +307,21 @@ export default function Home() {
                   <a href="#contact" className="animate-breathe px-7 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300">{t('hero.cta1')}</a>
                   <a href="#services" className="px-7 py-4 border border-white/20 rounded-xl font-semibold hover:border-[#37a8ff] hover:text-[#37a8ff] hover:bg-[#37a8ff]/5 hover:scale-105 transition-all duration-300">{t('hero.cta2')}</a>
                 </motion.div>
-                {/* Hero stats */}
+                {/* Hero stats — scramble count-up */}
                 <motion.div
-                  className="flex gap-8 mt-12 pt-8 border-t border-white/10"
+                  className="flex gap-10 md:gap-14 mt-12 pt-8 border-t border-white/10"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8, delay: 1 }}
                 >
                   {[
-                    { num: '10+', label: isEn ? 'Brands' : isCN ? '合作品牌' : '合作品牌' },
-                    { num: '50+', label: isEn ? 'Events' : isCN ? '活动' : '活動' },
-                    { num: '3+', label: isEn ? 'Media' : isCN ? '媒体' : '媒體' },
+                    { target: 10, suffix: '+', label: isEn ? 'Brands' : isCN ? '合作品牌' : '合作品牌' },
+                    { target: 50, suffix: '+', label: isEn ? 'Events' : isCN ? '活动' : '活動' },
+                    { target: 3, suffix: '+', label: isEn ? 'Media' : isCN ? '媒体' : '媒體' },
                   ].map((s, i) => (
-                    <div key={i} className="text-center">
-                      <div className="text-2xl font-heading font-bold text-[#37a8ff]">{s.num}</div>
-                      <div className="text-[11px] text-gray-500 tracking-wide mt-1">{s.label}</div>
+                    <div key={i}>
+                      <CountUp target={s.target} suffix={s.suffix} duration={1800} className="text-4xl md:text-5xl font-heading font-bold text-[#37a8ff] tabular-nums" />
+                      <div className="text-xs text-gray-500 tracking-wider mt-2 uppercase">{s.label}</div>
                     </div>
                   ))}
                 </motion.div>
