@@ -93,19 +93,17 @@ export default function ContentPage() {
                 initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 transition={{ duration: 0.8 }}
-                className="flex items-end justify-between border-b border-white/10 pb-8"
+                className="border-b border-white/10 pb-8"
               >
-                <div>
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
-                    <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Research & Media</span>
-                  </div>
-                  <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                    Node<span className="text-[#37a8ff]">Z</span> Research
-                  </h1>
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
+                  <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Research & Media</span>
                 </div>
-                <p className="hidden md:block text-sm text-gray-500 max-w-sm text-right leading-relaxed">
-                  業內專業的季度報告與分析文章<br />影片教學與採訪企劃
+                <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+                  Node<span className="text-[#37a8ff]">Z</span> Research
+                </h1>
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  業內專業的季度報告與分析文章，影片教學與採訪企劃
                 </p>
               </motion.div>
             </div>
