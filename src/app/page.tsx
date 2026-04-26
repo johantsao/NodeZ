@@ -334,15 +334,24 @@ export default function Home() {
               {([
                 {
                   tag: t('svc.1.tag'), title: t('svc.1.title'),
-                  keywords: ['品牌週', 'Meetup', '新功能發布', 'KOL 分發', '亞洲跨城'],
+                  keywords: [
+                    { icon: '🎪', text: '品牌週' }, { icon: '🤝', text: 'Meetup' },
+                    { icon: '🚀', text: '新功能發布' }, { icon: '📣', text: 'KOL 分發' }, { icon: '🌏', text: '亞洲跨城' },
+                  ],
                 },
                 {
                   tag: t('svc.2.tag'), title: t('svc.2.title'),
-                  keywords: ['代幣 GTM', '上所 Campaign', 'Research × PR', 'AMA 系列', '生態牽線'],
+                  keywords: [
+                    { icon: '🪙', text: '代幣 GTM' }, { icon: '📈', text: '上所 Campaign' },
+                    { icon: '📊', text: 'Research × PR' }, { icon: '🎙️', text: 'AMA 系列' }, { icon: '🔗', text: '生態牽線' },
+                  ],
                 },
                 {
                   tag: t('svc.3.tag'), title: t('svc.3.title'),
-                  keywords: ['品牌語言轉譯', '形象升級', '台港東南亞落地', 'Web3 Onboarding'],
+                  keywords: [
+                    { icon: '💬', text: '品牌語言轉譯' }, { icon: '✨', text: '形象升級' },
+                    { icon: '🌏', text: '台港東南亞落地' }, { icon: '🔑', text: 'Web3 Onboarding' },
+                  ],
                 },
               ]).map((svc, idx) => (
                 <motion.div
@@ -362,8 +371,8 @@ export default function Home() {
                     {/* Visual keyword badges */}
                     <div className="flex flex-wrap gap-2 mb-6">
                       {svc.keywords.map(kw => (
-                        <span key={kw} className="px-3 py-1.5 text-[13px] font-medium rounded-lg bg-[#37a8ff]/8 border border-[#37a8ff]/15 text-gray-200 hover:bg-[#37a8ff]/15 hover:text-white transition cursor-default">
-                          {kw}
+                        <span key={kw.text} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-medium rounded-lg bg-[#37a8ff]/8 border border-[#37a8ff]/15 text-gray-200 hover:bg-[#37a8ff]/15 hover:text-white transition cursor-default">
+                          <span className="text-sm">{kw.icon}</span>{kw.text}
                         </span>
                       ))}
                     </div>
@@ -373,7 +382,7 @@ export default function Home() {
                   </div>
                   {/* Number accent — no border, just floating number */}
                   <div className="flex-1 hidden md:flex items-center justify-center">
-                    <span className="text-[120px] font-black text-[#37a8ff]/10 select-none">{String(idx + 1).padStart(2, '0')}</span>
+                    <span className="text-[120px] font-black text-[#37a8ff]/20 drop-shadow-[0_0_40px_rgba(55,168,255,0.12)] select-none">{String(idx + 1).padStart(2, '0')}</span>
                   </div>
                 </motion.div>
               ))}

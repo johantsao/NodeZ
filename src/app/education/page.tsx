@@ -1,13 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import ClientWrapper from '@/components/ClientWrapper'
-import TopLogo from '@/components/TopLogo'
-import BackgroundCanvas from '@/components/BackgroundCanvas'
+import { useParticleCanvas } from '@/hooks/useParticleCanvas'
 
 interface Post {
   id: string
@@ -21,6 +20,7 @@ interface Post {
 export default function EducationPage() {
   const router = useRouter()
   const { supabase, userEmail, isAdmin, loading } = useSupabaseSession()
+  const canvasRef = useParticleCanvas()
   const [posts, setPosts] = useState<Post[]>([])
 
   /* 讀取貼文 */
@@ -49,9 +49,10 @@ export default function EducationPage() {
   )
 
   return (
-    <ClientWrapper>
-      <div className="relative min-h-screen bg-black text-white font-sans overflow-hidden">
-        <BackgroundCanvas particleCount={180} blurAmount={3} particleColor="#37a8ff88" />
+    <>
+      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
+      <ClientWrapper>
+      <div className="relative min-h-screen text-white font-sans overflow-hidden">
 
         {/* NAV */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
@@ -162,5 +163,6 @@ export default function EducationPage() {
         </div>
       </div>
     </ClientWrapper>
+    </>
   )
 }

@@ -4,8 +4,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import ClientWrapper from '@/components/ClientWrapper'
-import TopLogo from '@/components/TopLogo'
-import BackgroundCanvas from '@/components/BackgroundCanvas'
+import { useParticleCanvas } from '@/hooks/useParticleCanvas'
 
 /** --- 共用的社群資料 --- */
 const socials = [
@@ -30,11 +29,12 @@ const socials = [
 ]
 
 export default function CommunityPage () {
+  const canvasRef = useParticleCanvas()
   return (
-    <ClientWrapper>
-      <div className="relative min-h-screen bg-black text-white overflow-hidden">
-        {/* 粒子背景 & 全域霧化層 已在 app/layout.tsx 注入就不用重複 */}
-        <BackgroundCanvas particleColor="#2ea7ff55" />
+    <>
+      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
+      <ClientWrapper>
+      <div className="relative min-h-screen text-white overflow-hidden">
 
         {/* ---- NAV ---- */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
@@ -95,5 +95,6 @@ export default function CommunityPage () {
                         pointer-events-none" />
       </div>
     </ClientWrapper>
+    </>
   )
 }

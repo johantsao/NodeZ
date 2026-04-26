@@ -1,13 +1,12 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { youtubeThumbUrl } from '@/utils/youtube'
 import ClientWrapper from '@/components/ClientWrapper'
-import TopLogo from '@/components/TopLogo'
-import BackgroundCanvas from '@/components/BackgroundCanvas'
+import { useParticleCanvas } from '@/hooks/useParticleCanvas'
 
 interface Video {
   id: string; title: string; youtube_id: string; thumb_url: string | null;
@@ -17,6 +16,7 @@ interface Video {
 export default function VideoPage () {
   const router = useRouter()
   const { supabase, isAdmin, userEmail, loading } = useSupabaseSession()
+  const canvasRef = useParticleCanvas()
   const [videos, setVideos] = useState<Video[]>([])
 
   useEffect(()=>{
@@ -29,9 +29,10 @@ export default function VideoPage () {
   if (loading) return <p className="p-10 text-white">載入中…</p>
 
   return (
-    <ClientWrapper>
-      <div className="relative min-h-screen bg-black text-white">
-        <BackgroundCanvas />
+    <>
+      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
+      <ClientWrapper>
+      <div className="relative min-h-screen text-white">
         {/* Nav */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
           <div className="max-w-[1240px] mx-auto px-6 py-4 flex items-center justify-between gap-4">
@@ -105,5 +106,6 @@ export default function VideoPage () {
         </section>
       </div>
     </ClientWrapper>
+    </>
   )
 }
