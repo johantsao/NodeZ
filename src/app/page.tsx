@@ -376,8 +376,8 @@ export default function Home() {
                         </span>
                       ))}
                     </div>
-                    <a href="#contact" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#37a8ff]/10 border border-[#37a8ff]/25 rounded-lg text-[13px] text-[#37a8ff] font-semibold hover:bg-[#37a8ff]/20 transition-all">
-                      {t('svc.cta')} <span>&rarr;</span>
+                    <a href="#contact" className="text-[13px] text-[#37a8ff] font-semibold inline-flex items-center gap-1.5 hover:gap-3 transition-all">
+                      Contact Us <span>&rarr;</span>
                     </a>
                   </div>
                   {/* Number accent — no border, just floating number */}
@@ -465,7 +465,7 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('gal.title')}</h2>
             {/* Large immersive quote */}
             <motion.p
-              className="text-xl md:text-2xl text-gray-300 font-medium leading-relaxed max-w-3xl mb-16 italic"
+              className="text-lg md:text-xl text-gray-300 font-medium leading-relaxed max-w-4xl mb-16 italic"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}

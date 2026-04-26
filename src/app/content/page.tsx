@@ -79,7 +79,6 @@ export default function ContentPage() {
                 <span className="font-bold text-xl tracking-tight">Node<span className="text-[#37a8ff]">Z</span></span>
               </Link>
               <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
-                <li><Link href="/" className="hover:text-[#37a8ff] transition">首頁</Link></li>
                 <li><span className="text-[#37a8ff] font-semibold">NodeZ Research</span></li>
                 <li><Link href="/education" className="hover:text-[#37a8ff] transition">教學文章</Link></li>
                 <li><Link href="/video" className="hover:text-[#37a8ff] transition">影音內容</Link></li>
@@ -105,8 +104,8 @@ export default function ContentPage() {
                     Node<span className="text-[#37a8ff]">Z</span> Research
                   </h1>
                 </div>
-                <p className="hidden md:block text-sm text-gray-500 max-w-xs text-right">
-                  深度研究 · 教學 · 影音 · 社群
+                <p className="hidden md:block text-sm text-gray-500 max-w-sm text-right leading-relaxed">
+                  業內專業的季度報告與分析文章<br />影片教學與採訪企劃
                 </p>
               </motion.div>
             </div>
