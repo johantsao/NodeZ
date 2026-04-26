@@ -122,10 +122,11 @@ export default function Home() {
   ]
 
   return (
-    <ClientWrapper>
+    <>
+      {/* Particle canvas — outside ClientWrapper to avoid z-index blocking */}
+      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
+      <ClientWrapper>
       <div className="text-white min-h-screen font-sans relative overflow-x-hidden scroll-smooth">
-        {/* Inline particle canvas */}
-        <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
 
         {/* ========== NAV ========== */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
@@ -186,122 +187,162 @@ export default function Home() {
         <div className="max-w-[1240px] mx-auto px-6 relative z-10" id="top">
 
           {/* ========== HERO ========== */}
-          <section className="min-h-screen flex items-center pt-24 pb-20 border-b border-white/10">
+          <section className="min-h-screen flex items-center pt-24 pb-20 section-glow">
             <div className="grid md:grid-cols-[1.3fr_1fr] gap-16 items-center w-full">
-              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.02] tracking-tight mb-9">
+              <div>
+                <motion.h1
+                  className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.02] tracking-tight mb-9"
+                  initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
+                >
                   {t('hero.title').split(t('hero.title.highlight')).map((part, i, arr) => (
                     <span key={i}>
                       {part}
-                      {i < arr.length - 1 && <span className="text-[#37a8ff]">{t('hero.title.highlight')}</span>}
+                      {i < arr.length - 1 && <span className="text-gradient">{t('hero.title.highlight')}</span>}
                     </span>
                   ))}
-                </h1>
-                <p className="text-lg text-gray-400 leading-relaxed max-w-xl mb-10">{t('hero.lede')}</p>
-                <div className="flex flex-wrap gap-3">
-                  <a href="#contact" className="px-6 py-3.5 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] transition">{t('hero.cta1')}</a>
-                  <a href="#services" className="px-6 py-3.5 border border-white/20 rounded-xl font-semibold hover:border-[#37a8ff] hover:text-[#37a8ff] hover:bg-[#37a8ff]/5 transition">{t('hero.cta2')}</a>
-                </div>
-              </motion.div>
+                </motion.h1>
+                <motion.p
+                  className="text-lg text-gray-400 leading-relaxed max-w-xl mb-10"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  {t('hero.lede')}
+                </motion.p>
+                <motion.div
+                  className="flex flex-wrap gap-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.7 }}
+                >
+                  <a href="#contact" className="animate-breathe px-7 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] hover:scale-105 transition-all duration-300">{t('hero.cta1')}</a>
+                  <a href="#services" className="px-7 py-4 border border-white/20 rounded-xl font-semibold hover:border-[#37a8ff] hover:text-[#37a8ff] hover:bg-[#37a8ff]/5 hover:scale-105 transition-all duration-300">{t('hero.cta2')}</a>
+                </motion.div>
+              </div>
               <motion.div
                 className="relative flex items-center justify-center aspect-square"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.3 }}
+                initial={{ opacity: 0, scale: 0.6, rotate: -10 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 1.2, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
               >
-                <div className="absolute inset-[15%] bg-[radial-gradient(circle,rgba(55,168,255,0.18),transparent_65%)] blur-[40px]" />
-                <img src="/nodez-logo.png" alt="NodeZ" className="relative w-3/4 max-w-[360px] drop-shadow-[0_12px_40px_rgba(55,168,255,0.25)]" />
+                <div className="absolute inset-[10%] bg-[radial-gradient(circle,rgba(55,168,255,0.25),transparent_60%)] blur-[50px] animate-pulse" />
+                <img src="/nodez-logo.png" alt="NodeZ" className="relative w-3/4 max-w-[360px] drop-shadow-[0_12px_60px_rgba(55,168,255,0.35)] animate-float" />
               </motion.div>
             </div>
           </section>
 
           {/* ========== ABOUT ========== */}
-          <motion.section id="about" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4 flex items-center gap-2.5">
-              <span className="w-6 h-px bg-[#37a8ff]" />{t('about.label')}
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-6">
-              {t('about.title').split(t('about.title.highlight')).map((part, i, arr) => (
-                <span key={i}>{part}{i < arr.length - 1 && <span className="text-[#37a8ff]">{t('about.title.highlight')}</span>}</span>
-              ))}
-            </h2>
-            <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">{t('about.desc')}</p>
+          <section id="about" className="py-32 section-glow">
+            <motion.div
+              initial={{ opacity: 0, y: 60, filter: 'blur(8px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
+              viewport={{ once: true }}
+              className="text-center max-w-3xl mx-auto mb-20"
+            >
+              <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4">01 — ABOUT</div>
+              <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-gradient">
+                {t('about.title').split(t('about.title.highlight')).map((part, i, arr) => (
+                  <span key={i}>{part}{i < arr.length - 1 && <span className="text-[#37a8ff]">{t('about.title.highlight')}</span>}</span>
+                ))}
+              </h2>
+              <p className="text-lg text-gray-400 leading-relaxed">{t('about.desc')}</p>
+            </motion.div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Left — lead statement in a styled card */}
-              <div className="bg-gradient-to-br from-[#37a8ff]/10 to-transparent border border-[#37a8ff]/20 rounded-2xl p-10 flex items-center">
+            <div className="grid md:grid-cols-2 gap-6">
+              <motion.div
+                className="card-hover bg-gradient-to-br from-[#37a8ff]/10 to-transparent border border-[#37a8ff]/20 rounded-2xl p-10"
+                initial={{ opacity: 0, x: -40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
                 <div className="text-2xl md:text-3xl font-bold leading-snug">
                   {t('about.lead').split(t('about.lead.highlight')).map((part, i, arr) => (
                     <span key={i}>{part}{i < arr.length - 1 && <span className="text-[#37a8ff]">{t('about.lead.highlight')}</span>}</span>
                   ))}
                 </div>
-              </div>
-              {/* Right — body text in card */}
-              <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-10">
-                <div className="text-[15px] text-gray-300 leading-[1.9] space-y-5">
-                  <p>{t('about.body1')}</p>
-                  <p>{t('about.body2')}</p>
-                  <p className="text-white font-medium">{t('about.body3')}</p>
-                </div>
-              </div>
+              </motion.div>
+              <motion.div
+                className="card-hover bg-white/[0.03] border border-white/10 rounded-2xl p-10"
+                initial={{ opacity: 0, x: 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, delay: 0.4 }}
+                viewport={{ once: true }}
+              >
+                <p className="text-gray-300 leading-[1.9] mb-4">{t('about.body1')}</p>
+                <p className="text-white font-medium leading-[1.9]">{t('about.body3')}</p>
+              </motion.div>
             </div>
-          </motion.section>
+          </section>
 
-          {/* ========== SERVICES (merged Capabilities + Services) ========== */}
-          <motion.section id="services" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4 flex items-center gap-2.5">
-              <span className="w-6 h-px bg-[#37a8ff]" />{'02 — SERVICES'}
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('caps.title')}</h2>
-            <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">{t('caps.desc')}</p>
+          {/* ========== SERVICES ========== */}
+          <section id="services" className="py-32 section-glow">
+            <motion.div
+              className="text-center max-w-3xl mx-auto mb-20"
+              initial={{ opacity: 0, y: 60, filter: 'blur(8px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
+              viewport={{ once: true }}
+            >
+              <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4">02 — SERVICES</div>
+              <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">{t('caps.title')}</h2>
+            </motion.div>
 
-            {/* Capability cards — horizontal strip of 4 */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-20">
-              {capsData.map(cap => (
-                <div key={cap.key} className="group bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-[#37a8ff]/30 hover:bg-[#37a8ff]/[0.03] transition">
-                  <div className="w-10 h-10 rounded-xl bg-[#37a8ff]/10 border border-[#37a8ff]/20 flex items-center justify-center text-[#37a8ff] mb-4">{cap.icon}</div>
+            {/* Capability cards — staggered entrance */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-24">
+              {capsData.map((cap, idx) => (
+                <motion.div
+                  key={cap.key}
+                  className="card-hover group bg-white/[0.03] border border-white/10 rounded-2xl p-6"
+                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.6, delay: idx * 0.12, ease: [0.4, 0, 0.2, 1] }}
+                  viewport={{ once: true }}
+                >
+                  <div className="w-10 h-10 rounded-xl bg-[#37a8ff]/10 border border-[#37a8ff]/20 flex items-center justify-center text-[#37a8ff] mb-4 group-hover:scale-110 transition">{cap.icon}</div>
                   <h3 className="text-base font-bold mb-2 group-hover:text-[#37a8ff] transition">{t(`caps.${cap.key}.title`)}</h3>
-                  <p className="text-[13px] text-gray-400 leading-relaxed mb-4">{t(`caps.${cap.key}.desc`)}</p>
-                  <ul className="space-y-1.5">
-                    {[1, 2, 3, 4].map(i => (
-                      <li key={i} className="text-[12px] text-gray-500 pl-4 relative before:absolute before:left-0 before:top-[7px] before:w-2 before:h-px before:bg-[#37a8ff]/50">
-                        {t(`caps.${cap.key}.i${i}`)}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  <p className="text-[13px] text-gray-400 leading-relaxed">{t(`caps.${cap.key}.desc`)}</p>
+                </motion.div>
               ))}
             </div>
 
-            {/* Service tracks — 3 prominent cards */}
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-xl bg-[#37a8ff]/10 border border-[#37a8ff]/20 flex items-center justify-center text-[#37a8ff]">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold">{'三條服務線'}</h3>
-                <p className="text-sm text-gray-500">{t('svc.desc')}</p>
-              </div>
-            </div>
+            {/* Service tracks */}
+            <motion.h3
+              className="text-2xl md:text-3xl font-bold text-center mb-12"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+            >
+              {'三條服務線'}
+            </motion.h3>
 
             <div className="grid md:grid-cols-3 gap-5">
-              {[1, 2, 3].map(n => (
-                <div key={n} className="group p-[1px] rounded-2xl bg-gradient-to-b from-white/10 to-transparent hover:from-[#37a8ff]/30 transition">
+              {[1, 2, 3].map((n, idx) => (
+                <motion.div
+                  key={n}
+                  className="card-hover group p-[1px] rounded-2xl bg-gradient-to-b from-white/10 to-transparent"
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: idx * 0.15 }}
+                  viewport={{ once: true }}
+                >
                   <div className="bg-black/80 rounded-2xl p-7 h-full flex flex-col gap-4">
                     <span className="self-start font-mono text-[10px] text-[#37a8ff] tracking-[0.15em] uppercase px-2.5 py-1 border border-[#37a8ff]/30 rounded-md">
                       {t(`svc.${n}.tag`)}
                     </span>
                     <h3 className="text-xl font-bold group-hover:text-[#37a8ff] transition">{t(`svc.${n}.title`)}</h3>
-                    <p className="text-[13px] text-gray-500 pb-3 border-b border-white/10">{t(`svc.${n}.for`)}</p>
                     <p className="text-sm text-gray-400 leading-relaxed flex-grow">{t(`svc.${n}.desc`)}</p>
                     <a href="#contact" className="text-[13px] text-[#37a8ff] font-semibold inline-flex items-center gap-1.5 hover:gap-3 transition-all mt-auto pt-3 border-t border-white/10">
                       {t('svc.cta')} <span>&rarr;</span>
                     </a>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </motion.section>
+          </section>
 
           {/* ========== CHANNELS (社群與夥伴) ========== */}
           <motion.section id="channels" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -323,14 +364,19 @@ export default function Home() {
                 { name: 'Instagram', icon: <img src="/icons/instagram.svg" alt="Instagram" className="w-7 h-7" />, href: 'https://www.instagram.com/node.z_', handle: '@node.z_' },
                 { name: 'Telegram', icon: <img src="/icons/telegram.svg" alt="Telegram" className="w-7 h-7" />, href: 'https://t.me/+yP-Qdy7ohLA0MzRl', handle: 'Join Group' },
               ].map((s, idx) => (
-                <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer"
-                  className="group p-[1px] rounded-2xl bg-gradient-to-br from-[#37a8ff]/20 to-transparent hover:from-[#37a8ff]/40 transition">
+                <motion.a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer"
+                  className="card-hover group p-[1px] rounded-2xl bg-gradient-to-br from-[#37a8ff]/20 to-transparent hover:from-[#37a8ff]/40"
+                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  viewport={{ once: true }}
+                >
                   <div className="bg-black/80 rounded-2xl p-6 h-full flex flex-col items-center text-center gap-3 group-hover:bg-black/60 transition">
-                    <div className="text-[#37a8ff] group-hover:scale-110 transition">{s.icon}</div>
+                    <div className="text-[#37a8ff] group-hover:scale-125 transition duration-300">{s.icon}</div>
                     <h4 className="font-bold text-sm">{s.name}</h4>
                     <span className="text-xs text-[#37a8ff] font-mono">{s.handle}</span>
                   </div>
-                </a>
+                </motion.a>
               ))}
             </div>
 
@@ -433,5 +479,6 @@ export default function Home() {
         </footer>
       </div>
     </ClientWrapper>
+    </>
   )
 }
