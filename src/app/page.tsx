@@ -238,42 +238,35 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
               viewport={{ once: true }}
-              className="text-center max-w-3xl mx-auto mb-20"
+              className="text-center max-w-4xl mx-auto mb-20"
             >
-              <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4">01 — ABOUT</div>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                {lang === 'zh-TW' && <>我們是 <span className="text-[#37a8ff]">Web3 品牌</span>背後的行銷夥伴</>}
-                {lang === 'zh-CN' && <>我们是 <span className="text-[#37a8ff]">Web3 品牌</span>背后的营销伙伴</>}
-                {lang === 'en' && <>The marketing partner behind <span className="text-[#37a8ff]">Web3 brands</span></>}
-                {lang === 'ko' && <><span className="text-[#37a8ff]">Web3 브랜드</span> 뒤의 마케팅 파트너</>}
+              <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-6">01 — ABOUT</div>
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15]">
+                {t('about.lead').split(t('about.lead.highlight')).map((part, i, arr) => (
+                  <span key={i}>{part}{i < arr.length - 1 && <span className="text-gradient">{t('about.lead.highlight')}</span>}</span>
+                ))}
               </h2>
-              <p className="text-lg text-gray-400 leading-relaxed">{t('about.desc')}</p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <motion.div
-                className="card-hover bg-gradient-to-br from-[#37a8ff]/10 to-transparent border border-[#37a8ff]/20 rounded-2xl p-10"
-                initial={{ opacity: 0, x: -40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
-                <div className="text-2xl md:text-3xl font-bold leading-snug">
-                  {t('about.lead').split(t('about.lead.highlight')).map((part, i, arr) => (
-                    <span key={i}>{part}{i < arr.length - 1 && <span className="text-[#37a8ff]">{t('about.lead.highlight')}</span>}</span>
-                  ))}
-                </div>
-              </motion.div>
-              <motion.div
-                className="card-hover bg-[#080c18]/85 backdrop-blur-xl border border-white/10 rounded-2xl p-10"
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
-                <p className="text-gray-300 leading-[1.9] mb-4">{t('about.body1')}</p>
-                <p className="text-white font-medium leading-[1.9]">{t('about.body3')}</p>
-              </motion.div>
+            {/* Stat counters */}
+            <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
+              {[
+                { num: '10+', label: lang === 'en' ? 'Partner Brands' : lang === 'ko' ? '파트너 브랜드' : lang === 'zh-CN' ? '合作品牌' : '合作品牌' },
+                { num: '50+', label: lang === 'en' ? 'Events Held' : lang === 'ko' ? '개최 이벤트' : lang === 'zh-CN' ? '活动场次' : '活動場次' },
+                { num: '3+', label: lang === 'en' ? 'Owned Media Channels' : lang === 'ko' ? '자체 미디어 채널' : lang === 'zh-CN' ? '自有媒体通路' : '自有媒體通路' },
+              ].map((stat, idx) => (
+                <motion.div
+                  key={stat.label}
+                  className="text-center"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: idx * 0.15 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="text-5xl md:text-6xl font-bold text-gradient mb-2">{stat.num}</div>
+                  <div className="text-sm text-gray-400 tracking-wide">{stat.label}</div>
+                </motion.div>
+              ))}
             </div>
           </section>
 
@@ -286,126 +279,136 @@ export default function Home() {
               transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
               viewport={{ once: true }}
             >
-              <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4">02 — SERVICES</div>
+              <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4">02 — CAPABILITIES</div>
               <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">{t('caps.title')}</h2>
             </motion.div>
 
-            {/* Capability cards — staggered entrance */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-24">
-              {capsData.map((cap, idx) => (
-                <motion.div
-                  key={cap.key}
-                  className="card-hover group bg-[#080c18]/85 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
-                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.6, delay: idx * 0.12, ease: [0.4, 0, 0.2, 1] }}
-                  viewport={{ once: true }}
-                >
-                  <div className="w-10 h-10 rounded-xl bg-[#37a8ff]/10 border border-[#37a8ff]/20 flex items-center justify-center text-[#37a8ff] mb-4 group-hover:scale-110 transition">{cap.icon}</div>
-                  <h3 className="text-base font-bold mb-2 group-hover:text-[#37a8ff] transition">{t(`caps.${cap.key}.title`)}</h3>
-                  <p className="text-[13px] text-gray-400 leading-relaxed">{t(`caps.${cap.key}.desc`)}</p>
-                </motion.div>
-              ))}
+            {/* Horizontal timeline / process flow */}
+            <div className="relative mb-28">
+              {/* Connecting gradient line */}
+              <div className="hidden md:block absolute top-6 left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-[#37a8ff]/0 via-[#37a8ff]/60 to-[#37a8ff]/0" />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0">
+                {capsData.map((cap, idx) => (
+                  <motion.div
+                    key={cap.key}
+                    className="flex flex-col items-center text-center px-4"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: idx * 0.12 }}
+                    viewport={{ once: true }}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-[#080c18] border-2 border-[#37a8ff] flex items-center justify-center text-[#37a8ff] font-mono text-sm font-bold mb-5 relative z-10 shadow-[0_0_20px_rgba(55,168,255,0.25)]">
+                      {String(idx + 1).padStart(2, '0')}
+                    </div>
+                    <h3 className="text-base font-bold mb-2">{t(`caps.${cap.key}.title`)}</h3>
+                    <p className="text-[13px] text-gray-500 leading-relaxed max-w-[200px]">{t(`caps.${cap.key}.desc`)}</p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
 
-            {/* Service tracks */}
-            <motion.h3
-              className="text-2xl md:text-3xl font-bold text-center mb-12"
+            {/* Service tracks — alternating left/right */}
+            <motion.div
+              className="text-center mb-14"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
-              {'三條服務線'}
-            </motion.h3>
+              <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4">03 — SERVICES</div>
+              <h3 className="text-3xl md:text-4xl font-bold tracking-tight">{t('svc.title')}</h3>
+            </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-5">
+            <div className="flex flex-col gap-6">
               {[1, 2, 3].map((n, idx) => (
                 <motion.div
                   key={n}
-                  className="card-hover group p-[1px] rounded-2xl bg-gradient-to-b from-white/10 to-transparent"
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: idx * 0.15 }}
+                  className={`flex flex-col md:flex-row items-center gap-8 ${idx % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
+                  initial={{ opacity: 0, x: idx % 2 === 0 ? -40 : 40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.7, delay: 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <div className="bg-[#080c18]/90 backdrop-blur-xl rounded-2xl p-7 h-full flex flex-col gap-4">
-                    <span className="self-start font-mono text-[10px] text-[#37a8ff] tracking-[0.15em] uppercase px-2.5 py-1 border border-[#37a8ff]/30 rounded-md">
+                  {/* Content side */}
+                  <div className="flex-1 border-l-2 border-[#37a8ff] pl-8 py-6">
+                    <span className="inline-block font-mono text-[10px] text-[#37a8ff] tracking-[0.15em] uppercase px-2.5 py-1 border border-[#37a8ff]/30 rounded-md mb-3">
                       {t(`svc.${n}.tag`)}
                     </span>
-                    <h3 className="text-xl font-bold group-hover:text-[#37a8ff] transition">{t(`svc.${n}.title`)}</h3>
-                    <p className="text-sm text-gray-400 leading-relaxed flex-grow">{t(`svc.${n}.desc`)}</p>
-                    <a href="#contact" className="text-[13px] text-[#37a8ff] font-semibold inline-flex items-center gap-1.5 hover:gap-3 transition-all mt-auto pt-3 border-t border-white/10">
+                    <h3 className="text-2xl font-bold mb-3">{t(`svc.${n}.title`)}</h3>
+                    <p className="text-sm text-gray-400 leading-relaxed mb-4 max-w-lg">{t(`svc.${n}.desc`)}</p>
+                    <a href="#contact" className="text-[13px] text-[#37a8ff] font-semibold inline-flex items-center gap-1.5 hover:gap-3 transition-all">
                       {t('svc.cta')} <span>&rarr;</span>
                     </a>
+                  </div>
+                  {/* Decorative accent side */}
+                  <div className="flex-1 hidden md:flex items-center justify-center">
+                    <div className="w-full max-w-[280px] h-[140px] rounded-2xl bg-gradient-to-br from-[#37a8ff]/5 to-transparent border border-white/5 flex items-center justify-center">
+                      <span className="text-6xl font-bold text-[#37a8ff]/10">{String(n).padStart(2, '0')}</span>
+                    </div>
                   </div>
                 </motion.div>
               ))}
             </div>
           </section>
 
-          {/* ========== CHANNELS (社群與夥伴) ========== */}
+          {/* ========== CHANNELS ========== */}
           <motion.section id="channels" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4 flex items-center gap-2.5">
               <span className="w-6 h-px bg-[#37a8ff]" />{'04 — COMMUNITY & PARTNERS'}
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{'社群與夥伴'}</h2>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('pf.title')}</h2>
             <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">{t('pf.desc')}</p>
 
-            {/* Official Social Media */}
-            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-              官方社群媒體
-            </h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+            {/* Social media — inline horizontal strip */}
+            <motion.div
+              className="flex flex-wrap items-center justify-center gap-0 mb-20 py-6 border-y border-white/10"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
               {[
-                { name: 'YouTube', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.546 12 3.546 12 3.546s-7.505 0-9.377.504A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.504 9.376.504 9.376.504s7.505 0 9.377-.504a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>, href: 'https://www.youtube.com/@Node.Z', handle: '@Node.Z' },
-                { name: 'Twitter / X', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>, href: 'https://x.com/Node_Z_', handle: '@Node_Z_' },
-                { name: 'Instagram', icon: <img src="/icons/instagram.svg" alt="Instagram" className="w-7 h-7" />, href: 'https://www.instagram.com/node.z_', handle: '@node.z_' },
-                { name: 'Telegram', icon: <img src="/icons/telegram.svg" alt="Telegram" className="w-7 h-7" />, href: 'https://t.me/+yP-Qdy7ohLA0MzRl', handle: 'Join Group' },
-              ].map((s, idx) => (
-                <motion.a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer"
-                  className="card-hover group p-[1px] rounded-2xl bg-gradient-to-br from-[#37a8ff]/20 to-transparent hover:from-[#37a8ff]/40"
-                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                { name: 'YouTube', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-[#37a8ff]"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.546 12 3.546 12 3.546s-7.505 0-9.377.504A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.504 9.376.504 9.376.504s7.505 0 9.377-.504a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>, href: 'https://www.youtube.com/@Node.Z' },
+                { name: 'Twitter / X', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-[#37a8ff]"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>, href: 'https://x.com/Node_Z_' },
+                { name: 'Instagram', icon: <img src="/icons/instagram.svg" alt="Instagram" className="w-5 h-5" />, href: 'https://www.instagram.com/node.z_' },
+                { name: 'Telegram', icon: <img src="/icons/telegram.svg" alt="Telegram" className="w-5 h-5" />, href: 'https://t.me/+yP-Qdy7ohLA0MzRl' },
+              ].map((s, idx, arr) => (
+                <div key={s.name} className="flex items-center">
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 px-6 py-2 text-gray-300 hover:text-[#37a8ff] transition group"
+                  >
+                    <span className="group-hover:scale-110 transition">{s.icon}</span>
+                    <span className="text-sm font-medium">{s.name}</span>
+                  </a>
+                  {idx < arr.length - 1 && <div className="w-px h-5 bg-white/15" />}
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Platform channels — left-accent cards, 2-column */}
+            <div className="grid md:grid-cols-2 gap-5">
+              {[
+                { title: t('pf.1.title'), desc: t('pf.1.desc'), link: 'youtube.com/@Node.Z', href: 'https://www.youtube.com/@Node.Z' },
+                { title: t('pf.2.title'), desc: t('pf.2.desc'), link: 'nodezblockchain.com', href: 'https://www.nodezblockchain.com/' },
+                { title: t('pf.3.title'), desc: t('pf.3.desc'), link: '@Node_Z_', href: 'https://x.com/Node_Z_' },
+                { title: t('pf.4.title'), desc: t('pf.4.desc'), link: t('pf.4.link'), href: '#events' },
+              ].map((ch, idx) => (
+                <motion.div
+                  key={idx}
+                  className="border-l-4 border-[#37a8ff] bg-white/[0.02] rounded-r-xl pl-6 pr-6 py-6 hover:bg-white/[0.04] transition"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <div className="bg-[#080c18]/90 backdrop-blur-xl rounded-2xl p-6 h-full flex flex-col items-center text-center gap-3 group-hover:bg-black/60 transition">
-                    <div className="text-[#37a8ff] group-hover:scale-125 transition duration-300">{s.icon}</div>
-                    <h4 className="font-bold text-sm">{s.name}</h4>
-                    <span className="text-xs text-[#37a8ff] font-mono">{s.handle}</span>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-
-            {/* Channel cards */}
-            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-              官方平台與合作通路
-            </h3>
-            <div className="grid md:grid-cols-2 gap-5">
-              {[
-                { title: t('pf.1.title'), sub: t('pf.1.sub'), desc: t('pf.1.desc'), link: 'youtube.com/@Node.Z', href: 'https://www.youtube.com/@Node.Z' },
-                { title: t('pf.2.title'), sub: t('pf.2.sub'), desc: t('pf.2.desc'), link: 'nodezblockchain.com', href: 'https://www.nodezblockchain.com/' },
-                { title: t('pf.3.title'), sub: t('pf.3.sub'), desc: t('pf.3.desc'), link: '@Node_Z_', href: 'https://x.com/Node_Z_' },
-                { title: t('pf.4.title'), sub: t('pf.4.sub'), desc: t('pf.4.desc'), link: t('pf.4.link'), href: '#events' },
-              ].map((ch, idx) => (
-                <div key={idx} className="bg-[#080c18]/85 backdrop-blur-xl border border-white/10 rounded-2xl p-7 hover:border-[#37a8ff]/30 transition group">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#37a8ff]/10 border border-[#37a8ff]/20 flex items-center justify-center text-[#37a8ff] font-mono text-xs font-bold">
-                      {String(idx + 1).padStart(2, '0')}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-[15px]">{ch.title}</h4>
-                      <p className="text-[11px] text-gray-500">{ch.sub}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-400 leading-relaxed mb-5">{ch.desc}</p>
+                  <h4 className="font-bold text-[15px] mb-2">{ch.title}</h4>
+                  <p className="text-sm text-gray-400 leading-relaxed mb-3">{ch.desc}</p>
                   <a href={ch.href} target={idx < 3 ? '_blank' : undefined} className="text-[13px] text-[#37a8ff] font-semibold inline-flex items-center gap-1.5 hover:gap-3 transition-all">
                     {ch.link} <span>&rarr;</span>
                   </a>
-                </div>
+                </motion.div>
               ))}
             </div>
           </motion.section>
@@ -416,14 +419,37 @@ export default function Home() {
               <span className="w-6 h-px bg-[#37a8ff]" />{t('gal.label')}
             </div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('gal.title')}</h2>
-            <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">{t('gal.desc')}</p>
+            {/* Large immersive quote */}
+            <motion.p
+              className="text-xl md:text-2xl text-gray-300 font-medium leading-relaxed max-w-3xl mb-16 italic"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              &ldquo;{t('gal.desc')}&rdquo;
+            </motion.p>
+            {/* Photo grid with hover zoom + overlay */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {eventPhotos.map((src, i) => (
-                <div key={i} className="relative overflow-hidden rounded-2xl border border-white/10 aspect-[4/3] group">
-                  <img src={src} alt="NodeZ event" className="w-full h-full object-cover transition duration-500 saturate-[0.85] group-hover:scale-105 group-hover:saturate-100" />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60 pointer-events-none" />
-                </div>
-              ))}
+              {eventPhotos.map((src, i) => {
+                const overlayLabels = ['Meetup', 'Workshop', 'Networking', 'Panel', 'Community', 'Brand Week']
+                return (
+                  <motion.div
+                    key={i}
+                    className="relative overflow-hidden rounded-2xl border border-white/10 aspect-[4/3] group cursor-pointer"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: i * 0.08 }}
+                    viewport={{ once: true }}
+                  >
+                    <img src={src} alt="NodeZ event" className="w-full h-full object-cover transition duration-700 saturate-[0.85] group-hover:scale-110 group-hover:saturate-100" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70 pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                      <span className="text-xs font-mono text-[#37a8ff] tracking-wider uppercase">{overlayLabels[i] || 'Event'}</span>
+                    </div>
+                  </motion.div>
+                )
+              })}
             </div>
           </motion.section>
 
@@ -443,23 +469,23 @@ export default function Home() {
                 <p className="text-base text-gray-400 mb-10 max-w-lg mx-auto">{t('contact.sub')}</p>
                 <a
                   href="mailto:nodezblockchain@gmail.com"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl shadow-[0_12px_32px_rgba(55,168,255,0.3)] hover:bg-[#5bb8ff] transition mb-12"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-[#37a8ff] text-white font-semibold rounded-xl shadow-[0_12px_32px_rgba(55,168,255,0.3)] hover:bg-[#5bb8ff] transition mb-8"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
                   nodezblockchain@gmail.com
                 </a>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto">
+                {/* Social links as inline text */}
+                <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-400">
                   {[
-                    { label: 'Website', value: 'nodezblockchain.com', href: 'https://www.nodezblockchain.com/' },
-                    { label: 'YouTube', value: '@Node.Z', href: 'https://www.youtube.com/@Node.Z' },
-                    { label: 'Twitter / X', value: '@Node_Z_', href: 'https://x.com/Node_Z_' },
-                    { label: 'Telegram', value: t('contact.tg'), href: 'https://t.me/+W8LGh2xB5ygwN' },
-                  ].map(item => (
-                    <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer"
-                      className="p-5 bg-black/50 border border-white/10 rounded-xl text-left hover:border-[#37a8ff] hover:bg-[#37a8ff]/5 transition">
-                      <div className="font-mono text-[10px] text-gray-500 tracking-[0.15em] uppercase mb-1">{item.label}</div>
-                      <div className="text-sm font-semibold text-[#37a8ff] break-all">{item.value}</div>
-                    </a>
+                    { label: 'YouTube', href: 'https://www.youtube.com/@Node.Z' },
+                    { label: 'Twitter / X', href: 'https://x.com/Node_Z_' },
+                    { label: 'Instagram', href: 'https://www.instagram.com/node.z_' },
+                    { label: 'Telegram', href: 'https://t.me/+yP-Qdy7ohLA0MzRl' },
+                  ].map((link, idx, arr) => (
+                    <span key={link.label} className="flex items-center gap-4">
+                      <a href={link.href} target="_blank" rel="noopener noreferrer" className="hover:text-[#37a8ff] transition">{link.label}</a>
+                      {idx < arr.length - 1 && <span className="text-white/20">|</span>}
+                    </span>
                   ))}
                 </div>
               </div>
