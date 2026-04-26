@@ -47,12 +47,12 @@ export default function PostDetailPage() {
 
         <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 z-50">
           <TopLogo />
-          <ul className="hidden md:flex gap-6 text-white font-medium">
-            <li className="hover:text-[#37a8ff] transition"><a href="/">首頁</a></li>
-            <li className="hover:text-[#37a8ff] transition"><a href="/content">內容中心</a></li>
-            <li className="hover:text-[#37a8ff] transition"><a href="/education">教學專區</a></li>
-            <li className="hover:text-[#37a8ff] transition"><a href="/video">影音專區</a></li>
-            <li className="hover:text-[#37a8ff] transition"><a href="/community">社群專區</a></li>
+          <ul className="hidden md:flex gap-7 text-sm font-medium text-gray-400">
+            <li><a href="/" className="hover:text-[#37a8ff] transition">首頁</a></li>
+            <li><a href="/content" className="hover:text-[#37a8ff] transition">NodeZ Research</a></li>
+            <li><a href="/education" className="text-[#37a8ff] font-semibold">教學文章</a></li>
+            <li><a href="/video" className="hover:text-[#37a8ff] transition">影音內容</a></li>
+            <li><a href="/community" className="hover:text-[#37a8ff] transition">社群專區</a></li>
           </ul>
         </nav>
 

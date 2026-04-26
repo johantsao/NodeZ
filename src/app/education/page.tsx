@@ -56,12 +56,12 @@ export default function EducationPage() {
         {/* NAV */}
         <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 z-50">
           <TopLogo />
-          <ul className="hidden md:flex gap-6 text-white font-medium">
-            <li className="hover:text-[#37a8ff] transition"><Link href="/">首頁</Link></li>
-            <li className="hover:text-[#37a8ff] transition"><Link href="/content">內容中心</Link></li>
-            <li className="hover:text-[#37a8ff] transition"><Link href="/education">教學專區</Link></li>
-            <li className="hover:text-[#37a8ff] transition"><Link href="/video">影音專區</Link></li>
-            <li className="hover:text-[#37a8ff] transition"><Link href="/community">社群專區</Link></li>
+          <ul className="hidden md:flex gap-7 text-sm font-medium text-gray-400">
+            <li><Link href="/" className="hover:text-[#37a8ff] transition">首頁</Link></li>
+            <li><Link href="/content" className="hover:text-[#37a8ff] transition">NodeZ Research</Link></li>
+            <li><Link href="/education" className="text-[#37a8ff] font-semibold">教學文章</Link></li>
+            <li><Link href="/video" className="hover:text-[#37a8ff] transition">影音內容</Link></li>
+            <li><Link href="/community" className="hover:text-[#37a8ff] transition">社群專區</Link></li>
           </ul>
           {userEmail && (
             <div className="text-xs text-[#37a8ff] ml-4 hidden md:flex gap-4 items-center">

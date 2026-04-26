@@ -52,11 +52,17 @@ export default function Home() {
   }
 
   const navAnchors = [
-    { key: 'nav.about', href: '#about' },
-    { key: 'nav.capabilities', href: '#capabilities' },
-    { key: 'nav.services', href: '#services' },
-    { key: 'nav.channels', href: '#channels' },
-    { key: 'nav.events', href: '#events' },
+    { label: '關於我們', href: '#about' },
+    { label: '服務項目', href: '#services' },
+    { label: '社群與夥伴', href: '#channels' },
+    { label: '活動', href: '#events' },
+  ]
+
+  const [researchOpen, setResearchOpen] = useState(false)
+  const researchLinks = [
+    { label: '教學文章', href: '/education' },
+    { label: '影音內容', href: '/video' },
+    { label: '社群專區', href: '/community' },
   ]
 
   return (
@@ -72,11 +78,33 @@ export default function Home() {
             <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
               {navAnchors.map(n => (
                 <li key={n.href}>
-                  <a href={n.href} className="hover:text-[#37a8ff] transition">{t(n.key)}</a>
+                  <a href={n.href} className="hover:text-[#37a8ff] transition">{n.label}</a>
                 </li>
               ))}
-              <li>
-                <Link href="/content" className="hover:text-[#37a8ff] transition">{t('nav.content')}</Link>
+              <li
+                className="relative"
+                onMouseEnter={() => setResearchOpen(true)}
+                onMouseLeave={() => setResearchOpen(false)}
+              >
+                <span className="hover:text-[#37a8ff] transition cursor-pointer inline-flex items-center gap-1">
+                  NodeZ Research
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${researchOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+                {researchOpen && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50">
+                    <div className="bg-black/90 backdrop-blur border border-white/10 rounded-xl p-2 min-w-[160px] shadow-xl">
+                      {researchLinks.map(link => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="block px-4 py-2.5 text-sm text-gray-300 hover:text-[#37a8ff] hover:bg-white/5 rounded-lg transition"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </li>
             </ul>
             <div className="flex items-center gap-1 p-0.5 bg-white/5 border border-white/10 rounded-lg">
@@ -113,7 +141,7 @@ export default function Home() {
                 <p className="text-lg text-gray-400 leading-relaxed max-w-xl mb-10">{t('hero.lede')}</p>
                 <div className="flex flex-wrap gap-3">
                   <a href="#contact" className="px-6 py-3.5 bg-[#37a8ff] text-white font-semibold rounded-xl hover:bg-[#5bb8ff] transition">{t('hero.cta1')}</a>
-                  <a href="#capabilities" className="px-6 py-3.5 border border-white/20 rounded-xl font-semibold hover:border-[#37a8ff] hover:text-[#37a8ff] hover:bg-[#37a8ff]/5 transition">{t('hero.cta2')}</a>
+                  <a href="#services" className="px-6 py-3.5 border border-white/20 rounded-xl font-semibold hover:border-[#37a8ff] hover:text-[#37a8ff] hover:bg-[#37a8ff]/5 transition">{t('hero.cta2')}</a>
                 </div>
               </motion.div>
               <motion.div
@@ -153,14 +181,16 @@ export default function Home() {
             </div>
           </motion.section>
 
-          {/* ========== CAPABILITIES ========== */}
-          <motion.section id="capabilities" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          {/* ========== SERVICES (merged Capabilities + Services) ========== */}
+          <motion.section id="services" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4 flex items-center gap-2.5">
-              <span className="w-6 h-px bg-[#37a8ff]" />{t('caps.label')}
+              <span className="w-6 h-px bg-[#37a8ff]" />{'服務項目'}
             </div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('caps.title')}</h2>
             <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">{t('caps.desc')}</p>
-            <div className="grid md:grid-cols-2 gap-5">
+
+            {/* Capability cards — 2x2 grid */}
+            <div className="grid md:grid-cols-2 gap-5 mb-20">
               {capsData.map(cap => (
                 <div key={cap.key} className="bg-white/[0.03] border border-white/10 rounded-2xl p-9 hover:border-white/20 transition group">
                   <div className="w-11 h-11 rounded-xl bg-[#37a8ff]/10 border border-[#37a8ff]/20 flex items-center justify-center text-[#37a8ff] mb-6">{cap.icon}</div>
@@ -177,15 +207,12 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </motion.section>
 
-          {/* ========== SERVICES ========== */}
-          <motion.section id="services" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4 flex items-center gap-2.5">
-              <span className="w-6 h-px bg-[#37a8ff]" />{t('svc.label')}
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('svc.title')}</h2>
-            <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">{t('svc.desc')}</p>
+            {/* Sub-heading: 三條服務線 */}
+            <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">{'三條服務線'}</h3>
+            <p className="text-base text-gray-400 max-w-2xl mb-12 leading-relaxed">{t('svc.desc')}</p>
+
+            {/* Service cards — 3 columns */}
             <div className="grid md:grid-cols-3 gap-5">
               {[1, 2, 3].map(n => (
                 <div key={n} className="bg-white/[0.03] border border-white/10 rounded-2xl p-8 flex flex-col gap-4 hover:border-white/20 hover:bg-white/[0.05] transition">
@@ -205,12 +232,12 @@ export default function Home() {
             </div>
           </motion.section>
 
-          {/* ========== CHANNELS ========== */}
+          {/* ========== CHANNELS (社群與夥伴) ========== */}
           <motion.section id="channels" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4 flex items-center gap-2.5">
-              <span className="w-6 h-px bg-[#37a8ff]" />{t('pf.label')}
+              <span className="w-6 h-px bg-[#37a8ff]" />{'社群與夥伴'}
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('pf.title')}</h2>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{'社群與夥伴'}</h2>
             <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">{t('pf.desc')}</p>
             <div className="grid md:grid-cols-2 gap-5">
               {[1, 2, 3, 4].map(n => (
