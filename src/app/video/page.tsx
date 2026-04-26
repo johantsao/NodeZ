@@ -95,7 +95,7 @@ export default function VideoPage() {
                 </li>
                 <li>
                   <Link href="/education" className="hover:text-[#37a8ff] transition">
-                    教學文章
+                    調研文章
                   </Link>
                 </li>
                 <li>

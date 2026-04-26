@@ -53,7 +53,7 @@ export default function PostDetailPage() {
           </a>
           <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
             <li><a href="/content" className="hover:text-[#37a8ff] transition">NodeZ Research</a></li>
-            <li><a href="/education" className="text-[#37a8ff] font-semibold">教學文章</a></li>
+            <li><a href="/education" className="text-[#37a8ff] font-semibold">調研文章</a></li>
             <li><a href="/video" className="hover:text-[#37a8ff] transition">影音內容</a></li>
             <li><a href="/community" className="hover:text-[#37a8ff] transition">社群專區</a></li>
           </ul>

@@ -44,7 +44,7 @@ export default function AuthPage() {
             </Link>
             <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
               <li><Link href="/content" className="hover:text-[#37a8ff] transition">NodeZ Research</Link></li>
-              <li><Link href="/education" className="hover:text-[#37a8ff] transition">教學文章</Link></li>
+              <li><Link href="/education" className="hover:text-[#37a8ff] transition">調研文章</Link></li>
               <li><Link href="/video" className="hover:text-[#37a8ff] transition">影音內容</Link></li>
             </ul>
           </div>

@@ -97,7 +97,7 @@ export default function EducationPage() {
                 </li>
                 <li>
                   <Link href="/education" className="text-[#37a8ff] font-semibold">
-                    教學文章
+                    調研文章
                   </Link>
                 </li>
                 <li>
@@ -139,7 +139,7 @@ export default function EducationPage() {
               <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-[#37a8ff]/15 text-[#37a8ff] border border-[#37a8ff]/30 mb-5">
                 Articles
               </span>
-              <h1 className="text-4xl md:text-5xl font-bold mb-3">教學文章</h1>
+              <h1 className="text-4xl md:text-5xl font-bold mb-3">調研文章</h1>
               <p className="text-gray-400 text-base max-w-lg mx-auto">
                 深入淺出的區塊鏈與加密貨幣教學，從入門到進階一應俱全
               </p>

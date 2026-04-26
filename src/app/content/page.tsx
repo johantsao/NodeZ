@@ -81,7 +81,7 @@ export default function ContentPage() {
               </Link>
               <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
                 <li><span className="text-[#37a8ff] font-semibold">NodeZ Research</span></li>
-                <li><Link href="/education" className="hover:text-[#37a8ff] transition">教學文章</Link></li>
+                <li><Link href="/education" className="hover:text-[#37a8ff] transition">調研文章</Link></li>
                 <li><Link href="/video" className="hover:text-[#37a8ff] transition">影音內容</Link></li>
               </ul>
             </div>
