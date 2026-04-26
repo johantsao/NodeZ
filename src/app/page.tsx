@@ -39,11 +39,18 @@ export default function Home() {
   const t = (key: string) => i18n[lang]?.[key] ?? key
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
+  const [langOpen, setLangOpen] = useState(false)
+
   useEffect(() => {
     try {
       const saved = localStorage.getItem('nodez.lang') as Lang
-      if (saved && i18n[saved]) setLang(saved)
+      if (saved && i18n[saved]) { setLang(saved); return }
     } catch {}
+    // Auto-detect from browser language
+    const browserLang = navigator.language || ''
+    if (browserLang.startsWith('zh-CN') || browserLang === 'zh-Hans') setLang('zh-CN')
+    else if (browserLang.startsWith('en')) setLang('en')
+    // default zh-TW
   }, [])
 
   // Particle background (same as /auth)
@@ -139,21 +146,22 @@ export default function Home() {
               <img src="/nodez-logo.png" alt="NodeZ" className="w-9 h-9 drop-shadow-[0_0_10px_rgba(55,168,255,0.4)]" />
               <span className="font-bold text-xl tracking-tight">Node<span className="text-[#37a8ff]">Z</span></span>
             </a>
-            <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
+            <ul className="hidden md:flex items-center gap-7 ml-auto text-sm font-medium text-gray-400">
               {navAnchors.map(n => (
                 <li key={n.href}>
-                  <a href={n.href} className="hover:text-[#37a8ff] transition">{n.label}</a>
+                  <a href={n.href} className="hover:text-white transition">{n.label}</a>
                 </li>
               ))}
+              {/* NodeZ Research — prominent with accent */}
               <li
                 className="relative"
                 onMouseEnter={() => setResearchOpen(true)}
                 onMouseLeave={() => setResearchOpen(false)}
               >
-                <span className="hover:text-[#37a8ff] transition cursor-pointer inline-flex items-center gap-1">
+                <Link href="/content" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#37a8ff]/10 border border-[#37a8ff]/25 text-[#37a8ff] font-semibold text-sm hover:bg-[#37a8ff]/20 transition">
                   NodeZ Research
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${researchOpen ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6"/></svg>
-                </span>
+                </Link>
                 {researchOpen && (
                   <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50">
                     <div className="bg-black/90 backdrop-blur border border-white/10 rounded-xl p-2 min-w-[160px] shadow-xl">
@@ -170,18 +178,29 @@ export default function Home() {
                   </div>
                 )}
               </li>
-            </ul>
-            <div className="flex items-center gap-1 p-0.5 bg-white/5 border border-white/10 rounded-lg">
-              {(['zh-TW', 'zh-CN', 'en'] as Lang[]).map(l => (
-                <button
-                  key={l}
-                  onClick={() => switchLang(l)}
-                  className={`px-2.5 py-1 text-xs font-medium rounded transition ${lang === l ? 'bg-[#37a8ff] text-white' : 'text-gray-400 hover:text-white'}`}
-                >
-                  {l === 'zh-TW' ? '繁' : l === 'zh-CN' ? '简' : 'EN'}
+              {/* Globe language selector */}
+              <li className="relative" onMouseEnter={() => setLangOpen(true)} onMouseLeave={() => setLangOpen(false)}>
+                <button className="flex items-center gap-1 text-gray-400 hover:text-white transition">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                  <span className="text-xs">{lang === 'zh-TW' ? '繁' : lang === 'zh-CN' ? '简' : 'EN'}</span>
                 </button>
-              ))}
-            </div>
+                {langOpen && (
+                  <div className="absolute top-full right-0 pt-2 z-50">
+                    <div className="bg-black/90 backdrop-blur border border-white/10 rounded-xl p-1.5 min-w-[120px] shadow-xl">
+                      {([['zh-TW', '繁體中文'], ['zh-CN', '简体中文'], ['en', 'English']] as [Lang, string][]).map(([code, label]) => (
+                        <button
+                          key={code}
+                          onClick={() => switchLang(code)}
+                          className={`block w-full text-left px-3 py-2 text-sm rounded-lg transition ${lang === code ? 'text-[#37a8ff] bg-[#37a8ff]/10' : 'text-gray-300 hover:text-white hover:bg-white/5'}`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </li>
+            </ul>
             <a href="#contact" className="hidden md:inline-flex px-4 py-2 bg-[#37a8ff] text-white text-sm font-semibold rounded-lg hover:bg-[#5bb8ff] transition">
               {t('nav.cta')}
             </a>
