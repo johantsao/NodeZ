@@ -18,7 +18,7 @@ export default function AuthPage() {
     setLoading(true)
     setMessage('寄送登入連結中...')
 
-    const redirectTo = typeof window !== 'undefined' ? window.location.origin + '/education' : '/education'
+    const redirectTo = typeof window !== 'undefined' ? window.location.origin + '/auth/callback' : '/auth/callback'
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
