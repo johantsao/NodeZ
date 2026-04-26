@@ -240,7 +240,7 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-center max-w-4xl mx-auto mb-20"
             >
-              <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-6">01 — ABOUT</div>
+              <div className="font-mono text-xs text-[#37a8ff]/40 tracking-[0.15em] uppercase mb-6">ABOUT US</div>
               <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15]">
                 {t('about.lead').split(t('about.lead.highlight')).map((part, i, arr) => (
                   <span key={i}>{part}{i < arr.length - 1 && <span className="text-gradient">{t('about.lead.highlight')}</span>}</span>
@@ -279,7 +279,7 @@ export default function Home() {
               transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
               viewport={{ once: true }}
             >
-              <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4">02 — CAPABILITIES</div>
+              <div className="font-mono text-xs text-[#37a8ff]/40 tracking-[0.15em] uppercase mb-4">WHAT WE DO</div>
               <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">{t('caps.title')}</h2>
             </motion.div>
 
@@ -314,8 +314,10 @@ export default function Home() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
-              <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4">03 — SERVICES</div>
-              <h3 className="text-3xl md:text-4xl font-bold tracking-tight">{t('svc.title')}</h3>
+              <div className="font-mono text-xs text-[#37a8ff]/40 tracking-[0.15em] uppercase mb-4">BRAND SOLUTIONS</div>
+              <h3 className="text-3xl md:text-4xl font-bold tracking-tight">
+                {lang === 'en' ? 'Brand Service Plans' : lang === 'ko' ? '브랜드 서비스' : lang === 'zh-CN' ? '品牌服务方案' : '品牌服務方案'}
+              </h3>
             </motion.div>
 
             <div className="flex flex-col gap-6">
@@ -341,8 +343,9 @@ export default function Home() {
                   </div>
                   {/* Decorative accent side */}
                   <div className="flex-1 hidden md:flex items-center justify-center">
-                    <div className="w-full max-w-[280px] h-[140px] rounded-2xl bg-gradient-to-br from-[#37a8ff]/5 to-transparent border border-white/5 flex items-center justify-center">
-                      <span className="text-6xl font-bold text-[#37a8ff]/10">{String(n).padStart(2, '0')}</span>
+                    <div className="w-full max-w-[280px] h-[160px] rounded-2xl bg-gradient-to-br from-[#37a8ff]/8 to-[#080c18] border border-[#37a8ff]/15 flex items-center justify-center relative overflow-hidden">
+                      <span className="text-8xl font-black text-[#37a8ff]/25 drop-shadow-[0_0_30px_rgba(55,168,255,0.15)]">{String(n).padStart(2, '0')}</span>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#080c18] via-transparent to-transparent" />
                     </div>
                   </div>
                 </motion.div>
@@ -352,40 +355,37 @@ export default function Home() {
 
           {/* ========== CHANNELS ========== */}
           <motion.section id="channels" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="font-mono text-xs text-[#37a8ff] tracking-[0.15em] uppercase mb-4 flex items-center gap-2.5">
-              <span className="w-6 h-px bg-[#37a8ff]" />{'04 — COMMUNITY & PARTNERS'}
-            </div>
+            <div className="font-mono text-xs text-[#37a8ff]/40 tracking-[0.15em] uppercase mb-4">COMMUNITY & PARTNERS</div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t('pf.title')}</h2>
             <p className="text-base text-gray-400 max-w-2xl mb-16 leading-relaxed">{t('pf.desc')}</p>
 
-            {/* Social media — inline horizontal strip */}
-            <motion.div
-              className="flex flex-wrap items-center justify-center gap-0 mb-20 py-6 border-y border-white/10"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
+            {/* Social media — full-width grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20">
               {[
-                { name: 'YouTube', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-[#37a8ff]"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.546 12 3.546 12 3.546s-7.505 0-9.377.504A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.504 9.376.504 9.376.504s7.505 0 9.377-.504a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>, href: 'https://www.youtube.com/@Node.Z' },
-                { name: 'Twitter / X', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-[#37a8ff]"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>, href: 'https://x.com/Node_Z_' },
-                { name: 'Instagram', icon: <img src="/icons/instagram.svg" alt="Instagram" className="w-5 h-5" />, href: 'https://www.instagram.com/node.z_' },
-                { name: 'Telegram', icon: <img src="/icons/telegram.svg" alt="Telegram" className="w-5 h-5" />, href: 'https://t.me/+yP-Qdy7ohLA0MzRl' },
-              ].map((s, idx, arr) => (
-                <div key={s.name} className="flex items-center">
-                  <a
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2.5 px-6 py-2 text-gray-300 hover:text-[#37a8ff] transition group"
-                  >
-                    <span className="group-hover:scale-110 transition">{s.icon}</span>
-                    <span className="text-sm font-medium">{s.name}</span>
-                  </a>
-                  {idx < arr.length - 1 && <div className="w-px h-5 bg-white/15" />}
-                </div>
+                { name: 'YouTube', handle: '@Node.Z', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.546 12 3.546 12 3.546s-7.505 0-9.377.504A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.504 9.376.504 9.376.504s7.505 0 9.377-.504a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>, href: 'https://www.youtube.com/@Node.Z' },
+                { name: 'Twitter / X', handle: '@Node_Z_', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>, href: 'https://x.com/Node_Z_' },
+                { name: 'Instagram', handle: '@node.z_', icon: <img src="/icons/instagram.svg" alt="Instagram" className="w-7 h-7" />, href: 'https://www.instagram.com/node.z_' },
+                { name: 'Telegram', handle: 'Join Group', icon: <img src="/icons/telegram.svg" alt="Telegram" className="w-7 h-7" />, href: 'https://t.me/+yP-Qdy7ohLA0MzRl' },
+              ].map((s, idx) => (
+                <motion.a
+                  key={s.name}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-4 p-5 rounded-xl border border-white/8 hover:border-[#37a8ff]/30 bg-white/[0.02] hover:bg-[#37a8ff]/5 transition-all"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: idx * 0.08 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="text-[#37a8ff] group-hover:scale-110 transition shrink-0">{s.icon}</div>
+                  <div>
+                    <div className="text-sm font-semibold group-hover:text-[#37a8ff] transition">{s.name}</div>
+                    <div className="text-xs text-gray-500 font-mono">{s.handle}</div>
+                  </div>
+                </motion.a>
               ))}
-            </motion.div>
+            </div>
 
             {/* Platform channels — left-accent cards, 2-column */}
             <div className="grid md:grid-cols-2 gap-5">
