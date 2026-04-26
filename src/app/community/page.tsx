@@ -37,16 +37,20 @@ export default function CommunityPage () {
         <BackgroundCanvas particleColor="#2ea7ff55" />
 
         {/* ---- NAV ---- */}
-        <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl
-                         flex justify-between items-center px-6 py-4 z-50">
-          <TopLogo />
-          <ul className="hidden md:flex gap-7 text-sm font-medium text-gray-400">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
+          <div className="max-w-[1240px] mx-auto px-6 py-4 flex items-center justify-between gap-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <img src="/nodez-logo.png" alt="NodeZ" className="w-7 h-7 drop-shadow-[0_0_8px_rgba(55,168,255,0.4)]" />
+            <span className="font-bold text-lg tracking-tight">Node<span className="text-[#37a8ff]">Z</span></span>
+          </Link>
+          <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
             <li><Link href="/" className="hover:text-[#37a8ff] transition">首頁</Link></li>
             <li><Link href="/content" className="hover:text-[#37a8ff] transition">NodeZ Research</Link></li>
             <li><Link href="/education" className="hover:text-[#37a8ff] transition">教學文章</Link></li>
             <li><Link href="/video" className="hover:text-[#37a8ff] transition">影音內容</Link></li>
             <li><Link href="/community" className="text-[#37a8ff] font-semibold">社群專區</Link></li>
           </ul>
+          </div>
         </nav>
 
         {/* ---- HERO ---- */}
