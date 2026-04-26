@@ -22,11 +22,11 @@ export default function NewsPage() {
         <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 z-50">
           <TopLogo />
           <ul className="hidden md:flex gap-6 text-white font-medium">
-            {navItems.map((item) => (
-              <li key={item.path} className="hover:text-[#37a8ff] transition">
-                <Link href={item.path}>{item.name}</Link>
-              </li>
-            ))}
+            <li className="hover:text-[#37a8ff] transition"><Link href="/">首頁</Link></li>
+            <li className="hover:text-[#37a8ff] transition"><Link href="/content">內容中心</Link></li>
+            <li className="hover:text-[#37a8ff] transition"><Link href="/education">教學專區</Link></li>
+            <li className="hover:text-[#37a8ff] transition"><Link href="/video">影音專區</Link></li>
+            <li className="hover:text-[#37a8ff] transition"><Link href="/community">社群專區</Link></li>
           </ul>
         </nav>
 

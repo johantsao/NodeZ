@@ -41,16 +41,11 @@ export default function CommunityPage () {
                          flex justify-between items-center px-6 py-4 z-50">
           <TopLogo />
           <ul className="hidden md:flex gap-6 text-white font-medium">
-            {[
-              { name:'教學專區', path:'/education' },
-              { name:'影音專區', path:'/video'      },
-              { name:'社群專區', path:'/community' }
-            ].map(i=>(
-              <li key={i.path}
-                  className="hover:text-[#37a8ff] transition">
-                <Link href={i.path}>{i.name}</Link>
-              </li>
-            ))}
+            <li className="hover:text-[#37a8ff] transition"><Link href="/">首頁</Link></li>
+            <li className="hover:text-[#37a8ff] transition"><Link href="/content">內容中心</Link></li>
+            <li className="hover:text-[#37a8ff] transition"><Link href="/education">教學專區</Link></li>
+            <li className="hover:text-[#37a8ff] transition"><Link href="/video">影音專區</Link></li>
+            <li className="hover:text-[#37a8ff] transition"><Link href="/community">社群專區</Link></li>
           </ul>
         </nav>
 

@@ -48,15 +48,11 @@ export default function PostDetailPage() {
         <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl flex justify-between items-center px-6 py-4 z-50">
           <TopLogo />
           <ul className="hidden md:flex gap-6 text-white font-medium">
-            {[
-              { name:'教學專區', path:'/education' },
-              { name:'影音專區', path:'/video' },
-              { name:'社群專區', path:'/community' }
-            ].map(i=>(
-              <li key={i.path} className="hover:text-[#37a8ff] transition">
-                <a href={i.path}>{i.name}</a>
-              </li>
-            ))}
+            <li className="hover:text-[#37a8ff] transition"><a href="/">首頁</a></li>
+            <li className="hover:text-[#37a8ff] transition"><a href="/content">內容中心</a></li>
+            <li className="hover:text-[#37a8ff] transition"><a href="/education">教學專區</a></li>
+            <li className="hover:text-[#37a8ff] transition"><a href="/video">影音專區</a></li>
+            <li className="hover:text-[#37a8ff] transition"><a href="/community">社群專區</a></li>
           </ul>
         </nav>
 
