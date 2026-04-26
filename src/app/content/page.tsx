@@ -1,309 +1,229 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { youtubeThumbUrl } from '@/utils/youtube'
 import ClientWrapper from '@/components/ClientWrapper'
-import BackgroundCanvas from '@/components/BackgroundCanvas'
 
-/* ─── Types ─── */
-interface Post {
-  id: string
-  title: string
-  content: string
-  image_url: string
-  tags: string[]
-  created_at: string
-}
-
-interface Video {
-  id: string
-  title: string
-  youtube_id: string
-  thumb_url: string | null
-  tags: string[]
-  created_at: string
-}
-
-/* ─── Community Data ─── */
-const socials = [
-  {
-    name: 'Instagram',
-    href: 'https://www.instagram.com/node.z_?igsh=MThvaXJlc25jNjI5bg%3D%3D&utm_source=qr',
-    icon: '/icons/instagram.svg',
-    desc: '追蹤每日限動 / 活動花絮',
-  },
-  {
-    name: 'Telegram',
-    href: 'https://t.me/+yP-Qdy7ohLA0MzRl',
-    icon: '/icons/telegram.svg',
-    desc: '搶先獲取社群公告 / 空投資訊',
-  },
-  {
-    name: 'LINE 社群',
-    href: 'https://line.me/ti/g2/iJYYh0x-CJO2oLcCHMQOpJh1GNw--S5UtAmxDA?utm_source=invitation&utm_medium=link_copy&utm_campaign=default',
-    icon: '/icons/line.svg',
-    desc: '校園同學討論區 / 問答互助',
-  },
-]
-
-/* ─── Nav anchors (match homepage) ─── */
-const navAnchors = [
-  { label: '關於我們', href: '/#about' },
-  { label: '服務項目', href: '/#services' },
-  { label: '社群與夥伴', href: '/#channels' },
-  { label: '活動', href: '/#events' },
-]
+interface Post { id: string; title: string; image_url: string; tags: string[]; created_at: string }
+interface Video { id: string; title: string; youtube_id: string; thumb_url: string | null; tags: string[]; created_at: string }
 
 export default function ContentPage() {
   const { supabase, loading } = useSupabaseSession()
   const [posts, setPosts] = useState<Post[]>([])
   const [videos, setVideos] = useState<Video[]>([])
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
-  /* Fetch posts + videos */
   useEffect(() => {
     if (loading) return
     ;(async () => {
-      const [postsRes, videosRes] = await Promise.all([
+      const [p, v] = await Promise.all([
         supabase.from('posts').select('*').order('created_at', { ascending: false }),
         supabase.from('videos').select('*').order('created_at', { ascending: false }),
       ])
-      if (postsRes.data) setPosts(postsRes.data as Post[])
-      if (videosRes.data) setVideos(videosRes.data as Video[])
+      if (p.data) setPosts(p.data as Post[])
+      if (v.data) setVideos(v.data as Video[])
     })()
   }, [loading])
 
-  if (loading)
-    return (
-      <div className="flex items-center justify-center h-screen bg-black text-white">
-        Loading...
-      </div>
-    )
+  // Particle canvas
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+    resize()
+    window.addEventListener('resize', resize)
+    const mouse = { x: -999, y: -999 }
+    window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY })
+    const particles = Array.from({ length: 120 }, () => ({
+      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+      r: Math.random() * 2 + 1.5, dx: Math.random() * 0.5 - 0.25, dy: Math.random() * 0.5 - 0.25,
+    }))
+    let id: number
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.fillStyle = '#37a8ff88'
+      particles.forEach(p => {
+        const mdx = mouse.x - p.x, mdy = mouse.y - p.y, dist = Math.sqrt(mdx*mdx+mdy*mdy)
+        if (dist < 180 && dist > 0) { p.x -= (mdx/dist) * (180-dist)/180 * 2.5; p.y -= (mdy/dist) * (180-dist)/180 * 2.5 }
+        p.x += p.dx; p.y += p.dy
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill()
+      })
+      id = requestAnimationFrame(render)
+    }
+    render()
+    return () => { cancelAnimationFrame(id) }
+  }, [])
+
+  if (loading) return <div className="flex items-center justify-center h-screen bg-black text-white">Loading...</div>
 
   return (
-    <ClientWrapper>
-      <div className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden scroll-smooth">
-        <BackgroundCanvas particleCount={180} blurAmount={3} particleColor="#37a8ff88" />
+    <>
+      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none blur-[3px]" />
+      <ClientWrapper>
+        <div className="relative min-h-screen text-white font-sans overflow-x-hidden">
 
-        {/* ========== NAV (match homepage style) ========== */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
-          <div className="max-w-[1240px] mx-auto px-6 py-4 flex items-center justify-between gap-4">
-            <Link href="/" className="flex items-center gap-2.5">
-              <img
-                src="/nodez-logo.png"
-                alt="NodeZ"
-                className="w-7 h-7 drop-shadow-[0_0_8px_rgba(55,168,255,0.4)]"
-              />
-              <span className="font-bold text-lg tracking-tight">
-                Node<span className="text-[#37a8ff]">Z</span>
-              </span>
-            </Link>
-
-            <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
-              {navAnchors.map((n) => (
-                <li key={n.href}>
-                  <Link href={n.href} className="hover:text-[#37a8ff] transition">
-                    {n.label}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <span className="text-[#37a8ff] font-semibold cursor-default">
-                  NodeZ Research
-                </span>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
-        {/* ========== HERO ========== */}
-        <header className="pt-32 pb-6 text-center relative z-10">
-          <motion.h1
-            className="text-5xl md:text-6xl font-extrabold mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Node<span className="text-[#37a8ff]">Z</span> Research
-          </motion.h1>
-          <motion.p
-            className="text-gray-400 max-w-xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            深度研究 / 教學文章 / 影音內容 / 社群連結 -- 一站式區塊鏈知識庫
-          </motion.p>
-        </header>
-
-        {/* ========== ARTICLES (horizontal scroll) ========== */}
-        <section className="relative z-10 px-6 md:px-12 max-w-[1240px] mx-auto mt-12">
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-            教學文章
-          </h2>
-
-          {posts.length === 0 ? (
-            <p className="text-gray-500">目前沒有文章，敬請期待！</p>
-          ) : (
-            <div
-              className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
-              style={{ WebkitOverflowScrolling: 'touch' }}
-            >
-              {posts.map((post, idx) => (
-                <motion.div
-                  key={post.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05, duration: 0.4 }}
-                  className="snap-start shrink-0"
-                  style={{ minWidth: 300, maxWidth: 340 }}
-                >
-                  <Link href={`/education/post/${post.id}`} className="block group">
-                    <div className="bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 hover:border-[#37a8ff] transition h-full">
-                      {post.image_url ? (
-                        <img
-                          src={post.image_url}
-                          alt={post.title}
-                          className="w-full h-44 object-cover bg-black"
-                          onError={(e) => {
-                            ;(e.target as HTMLImageElement).src = '/fallback.jpg'
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-44 flex items-center justify-center bg-black/50 text-sm text-gray-600">
-                          No Image
-                        </div>
-                      )}
-                      <div className="p-4">
-                        <h3 className="text-lg font-semibold mb-1 group-hover:text-[#37a8ff] transition line-clamp-2">
-                          {post.title}
-                        </h3>
-                        <p className="text-xs text-gray-400 mb-2">
-                          {new Date(post.created_at).toLocaleDateString()}
-                        </p>
-                        {post.tags?.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5">
-                            {post.tags.map((tag, i) => (
-                              <span
-                                key={i}
-                                className="text-xs px-2 py-0.5 rounded-full bg-[#37a8ff]/20 text-[#37a8ff]"
-                              >
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
+          {/* NAV */}
+          <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
+            <div className="max-w-[1240px] mx-auto px-6 py-4 flex items-center justify-between gap-4">
+              <Link href="/" className="flex items-center gap-2.5">
+                <img src="/nodez-logo.png" alt="NodeZ" className="w-7 h-7 drop-shadow-[0_0_8px_rgba(55,168,255,0.4)]" />
+                <span className="font-bold text-lg tracking-tight">Node<span className="text-[#37a8ff]">Z</span></span>
+              </Link>
+              <ul className="hidden md:flex gap-7 ml-auto text-sm font-medium text-gray-400">
+                <li><Link href="/" className="hover:text-[#37a8ff] transition">首頁</Link></li>
+                <li><span className="text-[#37a8ff] font-semibold">NodeZ Research</span></li>
+                <li><Link href="/education" className="hover:text-[#37a8ff] transition">教學文章</Link></li>
+                <li><Link href="/video" className="hover:text-[#37a8ff] transition">影音內容</Link></li>
+              </ul>
             </div>
-          )}
-        </section>
+          </nav>
 
-        {/* ========== VIDEOS (3-col grid) ========== */}
-        <section className="relative z-10 px-6 md:px-12 max-w-[1240px] mx-auto mt-16">
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            影音內容
-          </h2>
+          {/* HERO — minimal */}
+          <header className="pt-28 pb-4 relative z-10">
+            <div className="max-w-[1240px] mx-auto px-6">
+              <motion.div
+                initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 0.8 }}
+                className="flex items-end justify-between border-b border-white/10 pb-8"
+              >
+                <div>
+                  <div className="font-mono text-xs text-[#37a8ff]/40 tracking-[0.15em] uppercase mb-3">RESEARCH & MEDIA</div>
+                  <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+                    Node<span className="text-[#37a8ff]">Z</span> Research
+                  </h1>
+                </div>
+                <p className="hidden md:block text-sm text-gray-500 max-w-xs text-right">
+                  深度研究 · 教學 · 影音 · 社群
+                </p>
+              </motion.div>
+            </div>
+          </header>
 
-          {videos.length === 0 ? (
-            <p className="text-gray-500">目前沒有影片，敬請期待！</p>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {videos.map((v, idx) => (
-                <motion.div
-                  key={v.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05, duration: 0.4 }}
-                >
-                  <a
+          {/* ARTICLES */}
+          <section className="relative z-10 max-w-[1240px] mx-auto px-6 mt-12">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-xl font-bold tracking-tight">最新文章</h2>
+              <Link href="/education" className="text-sm text-[#37a8ff] hover:underline">查看全部 &rarr;</Link>
+            </div>
+
+            {posts.length === 0 ? (
+              <p className="text-gray-500 text-sm">目前沒有文章</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {posts.slice(0, 6).map((post, idx) => (
+                  <motion.div
+                    key={post.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: idx * 0.08 }}
+                    viewport={{ once: true }}
+                  >
+                    <Link href={`/education/post/${post.id}`} className="group block">
+                      <div className="relative overflow-hidden rounded-xl aspect-[16/10]">
+                        {post.image_url ? (
+                          <img src={post.image_url} alt={post.title} className="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+                        ) : (
+                          <div className="w-full h-full bg-[#080c18] flex items-center justify-center text-gray-600 text-sm">No Image</div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                          <h3 className="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-[#37a8ff] transition">{post.title}</h3>
+                          <p className="text-[11px] text-gray-400 mt-1">{new Date(post.created_at).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* VIDEOS */}
+          <section className="relative z-10 max-w-[1240px] mx-auto px-6 mt-20">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-xl font-bold tracking-tight">影音內容</h2>
+              <Link href="/video" className="text-sm text-[#37a8ff] hover:underline">查看全部 &rarr;</Link>
+            </div>
+
+            {videos.length === 0 ? (
+              <p className="text-gray-500 text-sm">目前沒有影片</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {videos.slice(0, 6).map((v, idx) => (
+                  <motion.a
+                    key={v.id}
                     href={`https://youtu.be/${v.youtube_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group block"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: idx * 0.08 }}
+                    viewport={{ once: true }}
                   >
-                    <div className="bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 hover:border-[#37a8ff] transition">
+                    <div className="relative overflow-hidden rounded-xl aspect-video">
                       <img
                         src={v.thumb_url ?? youtubeThumbUrl(v.youtube_id)}
                         alt={v.title}
-                        className="w-full h-48 object-cover bg-black"
-                        onError={(e) => {
-                          ;(e.target as HTMLImageElement).src = '/fallback.jpg'
-                        }}
+                        className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
                       />
-                      <div className="p-4">
-                        <h3 className="text-lg font-semibold mb-1 group-hover:text-[#37a8ff] transition line-clamp-2">
-                          {v.title}
-                        </h3>
-                        <p className="text-xs text-gray-400 mb-2">
-                          {new Date(v.created_at).toLocaleDateString()}
-                        </p>
-                        {v.tags?.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5">
-                            {v.tags.map((tag) => (
-                              <span
-                                key={tag}
-                                className="text-xs px-2 py-0.5 rounded-full bg-[#37a8ff]/20 text-[#37a8ff]"
-                              >
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                      {/* Play icon */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <div className="w-14 h-14 rounded-full bg-[#37a8ff]/90 flex items-center justify-center shadow-[0_0_30px_rgba(55,168,255,0.4)]">
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="8 5 20 12 8 19"/></svg>
+                        </div>
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <h3 className="text-sm font-semibold leading-snug line-clamp-2">{v.title}</h3>
                       </div>
                     </div>
-                  </a>
-                </motion.div>
+                  </motion.a>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* COMMUNITY — minimal strip */}
+          <section className="relative z-10 max-w-[1240px] mx-auto px-6 mt-20 pb-20">
+            <h2 className="text-xl font-bold tracking-tight mb-8">社群</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { name: 'Instagram', handle: '@node.z_', icon: '/icons/instagram.svg', href: 'https://www.instagram.com/node.z_' },
+                { name: 'Telegram', handle: 'NodeZ Group', icon: '/icons/telegram.svg', href: 'https://t.me/+yP-Qdy7ohLA0MzRl' },
+                { name: 'LINE', handle: '校園討論區', icon: '/icons/line.svg', href: 'https://line.me/ti/g2/iJYYh0x-CJO2oLcCHMQOpJh1GNw--S5UtAmxDA' },
+              ].map((s, idx) => (
+                <motion.a
+                  key={s.name}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-4 p-5 rounded-xl border border-white/8 hover:border-[#37a8ff]/30 bg-white/[0.02] hover:bg-[#37a8ff]/5 transition-all"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: idx * 0.08 }}
+                  viewport={{ once: true }}
+                >
+                  <img src={s.icon} alt={s.name} className="w-8 h-8 group-hover:scale-110 transition shrink-0" />
+                  <div>
+                    <div className="text-sm font-semibold group-hover:text-[#37a8ff] transition">{s.name}</div>
+                    <div className="text-xs text-gray-500">{s.handle}</div>
+                  </div>
+                </motion.a>
               ))}
             </div>
-          )}
-        </section>
+          </section>
 
-        {/* ========== COMMUNITY LINKS ========== */}
-        <section className="relative z-10 px-6 md:px-12 max-w-[1240px] mx-auto mt-16 pb-24">
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-            社群連結
-          </h2>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {socials.map((s, idx) => (
-              <motion.a
-                key={s.name}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 0.1 * idx, duration: 0.5 }}
-                className="group block"
-              >
-                <div className="bg-white/5 backdrop-blur-lg rounded-xl border border-white/10 hover:border-[#37a8ff] transition p-8 flex flex-col items-center text-center group-hover:bg-white/[0.08]">
-                  <img
-                    src={s.icon}
-                    alt={s.name}
-                    className="w-14 h-14 mb-5 drop-shadow-lg group-hover:scale-110 transition"
-                  />
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-[#37a8ff] transition">
-                    {s.name}
-                  </h3>
-                  <p className="text-sm text-gray-400">{s.desc}</p>
-                </div>
-              </motion.a>
-            ))}
-          </div>
-        </section>
-
-        {/* Bottom gradient */}
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent via-black/80 to-black pointer-events-none" />
-      </div>
-    </ClientWrapper>
+        </div>
+      </ClientWrapper>
+    </>
   )
 }
