@@ -347,9 +347,9 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-center max-w-4xl mx-auto mb-20"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
-                <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">About Us</span>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-px bg-[#37a8ff]" />
+                <span className="text-xs font-medium text-[#37a8ff]/70 tracking-[0.2em] uppercase">About Us</span>
               </div>
               <h2 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold tracking-tight leading-[1.15]">
                 {t('about.lead').split(t('about.lead.highlight')).map((part, i, arr) => (
@@ -384,9 +384,9 @@ export default function Home() {
               transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
               viewport={{ once: true }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-4">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
-                <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">What We Do</span>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-px bg-[#37a8ff]" />
+                <span className="text-xs font-medium text-[#37a8ff]/70 tracking-[0.2em] uppercase">What We Do</span>
               </div>
               <h2 className="text-4xl md:text-6xl font-heading font-bold tracking-tight mb-4">{t('caps.title')}</h2>
             </motion.div>
@@ -422,9 +422,9 @@ export default function Home() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-4">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
-                <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Brand Solutions</span>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-px bg-[#37a8ff]" />
+                <span className="text-xs font-medium text-[#37a8ff]/70 tracking-[0.2em] uppercase">Brand Solutions</span>
               </div>
               <h3 className="text-3xl md:text-4xl font-heading font-bold tracking-tight">
                 {lang === 'en' ? 'Brand Service Plans' : lang === 'zh-CN' ? '品牌服务方案' : '品牌服務方案'}
@@ -504,9 +504,10 @@ export default function Home() {
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-6">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
-                  <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Coming Soon</span>
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <div className="w-8 h-px bg-[#37a8ff]" />
+                  <span className="text-xs font-medium text-[#37a8ff]/70 tracking-[0.2em] uppercase">Coming Soon</span>
+                  <div className="w-8 h-px bg-[#37a8ff]" />
                 </div>
                 <h2 className="text-4xl md:text-6xl font-heading font-bold tracking-tight mb-6">
                   Matrix <span className="text-gradient">Engine</span>
@@ -645,9 +646,9 @@ export default function Home() {
 
           {/* ========== CHANNELS ========== */}
           <motion.section id="channels" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
-              <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Community & Partners</span>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-px bg-[#37a8ff]" />
+              <span className="text-xs font-medium text-[#37a8ff]/70 tracking-[0.2em] uppercase">Community & Partners</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-6">
               {lang === 'en' ? 'Your Brand, Our Channels' : lang === 'zh-CN' ? '品牌曝光通路' : '品牌曝光通路'}
@@ -728,9 +729,9 @@ export default function Home() {
 
           {/* ========== GALLERY ========== */}
           <motion.section id="events" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
-              <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Events</span>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-px bg-[#37a8ff]" />
+              <span className="text-xs font-medium text-[#37a8ff]/70 tracking-[0.2em] uppercase">Events</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-6">{t('gal.title')}</h2>
             {/* Large immersive quote */}

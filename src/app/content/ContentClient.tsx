@@ -88,9 +88,9 @@ export default function ContentClient({ initialPosts, initialVideos }: { initial
                 transition={{ duration: 0.8 }}
                 className="border-b border-white/10 pb-8"
               >
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
-                  <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Research & Media</span>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-px bg-[#37a8ff]" />
+                  <span className="text-xs font-medium text-[#37a8ff]/70 tracking-[0.2em] uppercase">Research & Media</span>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
                   Node<span className="text-[#37a8ff]">Z</span> Research
