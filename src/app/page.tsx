@@ -491,6 +491,158 @@ export default function Home() {
             </div>
           </section>
 
+          {/* ========== MATRIX ENGINE (SaaS) ========== */}
+          <section className="py-32 relative overflow-hidden">
+            {/* Background glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(55,168,255,0.08),transparent_70%)] blur-[60px] pointer-events-none" />
+
+            <div className="relative z-10">
+              <motion.div
+                className="text-center max-w-3xl mx-auto mb-16"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-6">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#37a8ff] animate-pulse" />
+                  <span className="font-mono text-[11px] text-[#37a8ff] tracking-[0.15em] uppercase">Coming Soon</span>
+                </div>
+                <h2 className="text-4xl md:text-6xl font-heading font-bold tracking-tight mb-6">
+                  Matrix <span className="text-gradient">Engine</span>
+                </h2>
+                <p className="text-lg text-gray-400 leading-relaxed">
+                  {isEn ? 'The social matrix management system built for Web3 brands' : isCN ? '专为 Web3 品牌打造的社群矩阵管理系统' : '專為 Web3 品牌打造的社群矩陣管理系統'}
+                </p>
+              </motion.div>
+
+              {/* Dashboard mockup */}
+              <motion.div
+                className="max-w-4xl mx-auto mb-20"
+                initial={{ opacity: 0, y: 60, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
+                viewport={{ once: true }}
+              >
+                <div className="relative rounded-2xl border border-white/10 bg-[#080c18]/90 backdrop-blur-xl p-1 shadow-[0_20px_80px_rgba(55,168,255,0.08)]">
+                  {/* Mock browser bar */}
+                  <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                    </div>
+                    <div className="flex-1 mx-8">
+                      <div className="h-5 rounded-md bg-white/5 max-w-[240px] mx-auto flex items-center justify-center">
+                        <span className="text-[10px] text-gray-600 font-mono">matrix.nodezblockchain.com</span>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Mock dashboard content */}
+                  <div className="p-6 grid grid-cols-12 gap-4 min-h-[320px]">
+                    {/* Sidebar */}
+                    <div className="col-span-2 space-y-3">
+                      <div className="h-8 rounded bg-[#37a8ff]/10 flex items-center px-2">
+                        <div className="w-4 h-4 rounded bg-[#37a8ff]/30" />
+                      </div>
+                      {[1,2,3,4].map(i => (
+                        <div key={i} className="h-6 rounded bg-white/3 flex items-center px-2">
+                          <div className="w-3 h-3 rounded bg-white/8" />
+                        </div>
+                      ))}
+                    </div>
+                    {/* Main area */}
+                    <div className="col-span-10 space-y-4">
+                      {/* Stats row */}
+                      <div className="grid grid-cols-4 gap-3">
+                        {[
+                          { label: 'Active Accounts', val: '127' },
+                          { label: 'Posts Today', val: '342' },
+                          { label: 'Engagement', val: '12.4%' },
+                          { label: 'Reach', val: '2.1M' },
+                        ].map(s => (
+                          <div key={s.label} className="p-3 rounded-lg bg-white/[0.03] border border-white/5">
+                            <div className="text-[9px] text-gray-500 mb-1">{s.label}</div>
+                            <div className="text-sm font-bold text-[#37a8ff]">{s.val}</div>
+                          </div>
+                        ))}
+                      </div>
+                      {/* Chart area */}
+                      <div className="h-32 rounded-lg bg-white/[0.02] border border-white/5 p-3 flex items-end gap-1">
+                        {[40,65,45,80,60,90,75,85,50,70,95,88,72,68,82,90,78,85].map((h, i) => (
+                          <div key={i} className="flex-1 rounded-t bg-gradient-to-t from-[#37a8ff]/40 to-[#37a8ff]/10 transition-all" style={{ height: `${h}%` }} />
+                        ))}
+                      </div>
+                      {/* Account list */}
+                      <div className="grid grid-cols-3 gap-2">
+                        {['@nodez_1', '@nodez_2', '@nodez_3', '@brand_tw', '@brand_hk', '@kol_asia'].map(acc => (
+                          <div key={acc} className="flex items-center gap-2 p-2 rounded bg-white/[0.02] border border-white/5">
+                            <div className="w-5 h-5 rounded-full bg-[#37a8ff]/20" />
+                            <span className="text-[10px] text-gray-400 font-mono">{acc}</span>
+                            <span className="ml-auto w-1.5 h-1.5 rounded-full bg-green-400/60" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Feature highlights */}
+              <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16">
+                {[
+                  {
+                    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>,
+                    title: isEn ? 'Multi-Account Control' : isCN ? '多帐号统一管理' : '多帳號統一管理',
+                    desc: isEn ? '50+ accounts, one dashboard' : isCN ? '50+ 帐号，一个后台' : '50+ 帳號，一個後台',
+                  },
+                  {
+                    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>,
+                    title: isEn ? 'AI Content Engine' : isCN ? 'AI 内容引擎' : 'AI 內容引擎',
+                    desc: isEn ? 'Crypto-native content generation' : isCN ? '币圈语境内容生成' : '幣圈語境內容生成',
+                  },
+                  {
+                    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-2-2-4 4"/></svg>,
+                    title: isEn ? 'On-Chain Analytics' : isCN ? '链上数据整合' : '鏈上數據整合',
+                    desc: isEn ? 'Token price × social correlation' : isCN ? 'Token 价格 × 社群相关性' : 'Token 價格 × 社群相關性',
+                  },
+                ].map((f, i) => (
+                  <motion.div
+                    key={i}
+                    className="text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#37a8ff]/10 border border-[#37a8ff]/20 flex items-center justify-center text-[#37a8ff]">
+                      {f.icon}
+                    </div>
+                    <h4 className="font-heading font-bold mb-1">{f.title}</h4>
+                    <p className="text-sm text-gray-500">{f.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <motion.div
+                className="text-center"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: true }}
+              >
+                <a
+                  href="mailto:nodezblockchain@gmail.com?subject=Matrix Engine Early Access"
+                  className="inline-flex items-center gap-3 px-8 py-4 border border-[#37a8ff]/30 rounded-xl text-[#37a8ff] font-semibold hover:bg-[#37a8ff]/10 transition-all duration-300"
+                >
+                  {isEn ? 'Request Early Access' : isCN ? '申请早期体验' : '申請早期體驗'}
+                  <span>&rarr;</span>
+                </a>
+              </motion.div>
+            </div>
+          </section>
+
           {/* ========== CHANNELS ========== */}
           <motion.section id="channels" className="py-28 border-b border-white/10" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#37a8ff]/20 bg-[#37a8ff]/5 mb-4">
