@@ -29,12 +29,15 @@ export default function VideoPage() {
   const [sortNewest, setSortNewest] = useState(true)
 
   useEffect(() => {
-    supabase
-      .from('videos')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .then(({ data }) => setVideos((data as Video[]) ?? []))
-      .catch(e => console.error('Failed to fetch videos:', e))
+    ;(async () => {
+      try {
+        const { data } = await supabase
+          .from('videos')
+          .select('*')
+          .order('created_at', { ascending: false })
+        setVideos((data as Video[]) ?? [])
+      } catch (e) { console.error('Failed to fetch videos:', e) }
+    })()
   }, [])
 
   /* 刪除 */
