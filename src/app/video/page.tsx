@@ -29,13 +29,13 @@ export default function VideoPage() {
   const [sortNewest, setSortNewest] = useState(true)
 
   useEffect(() => {
-    if (loading) return
     supabase
       .from('videos')
       .select('*')
       .order('created_at', { ascending: false })
       .then(({ data }) => setVideos((data as Video[]) ?? []))
-  }, [loading])
+      .catch(e => console.error('Failed to fetch videos:', e))
+  }, [])
 
   /* 刪除 */
   const handleDelete = async (id: string) => {

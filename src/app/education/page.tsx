@@ -27,17 +27,20 @@ export default function EducationPage() {
   const [activeTag, setActiveTag] = useState<string | null>(null)
   const [sortNewest, setSortNewest] = useState(true)
 
-  /* 讀取貼文 */
+  /* 讀取貼文 — 不等 session，直接拉 */
   useEffect(() => {
-    if (loading) return
     ;(async () => {
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .order('created_at', { ascending: false })
-      if (!error && data) setPosts(data as Post[])
+      try {
+        const { data, error } = await supabase
+          .from('posts')
+          .select('*')
+          .order('created_at', { ascending: false })
+        if (!error && data) setPosts(data as Post[])
+      } catch (e) {
+        console.error('Failed to fetch posts:', e)
+      }
     })()
-  }, [loading])
+  }, [])
 
   /* 刪除 */
   const handleDelete = async (id: string) => {

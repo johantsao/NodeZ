@@ -24,16 +24,17 @@ export default function ContentPage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
   useEffect(() => {
-    if (loading) return
     ;(async () => {
-      const [p, v] = await Promise.all([
-        supabase.from('posts').select('*').order('created_at', { ascending: false }),
-        supabase.from('videos').select('*').order('created_at', { ascending: false }),
-      ])
-      if (p.data) setPosts(p.data as Post[])
+      try {
+        const [p, v] = await Promise.all([
+          supabase.from('posts').select('*').order('created_at', { ascending: false }),
+          supabase.from('videos').select('*').order('created_at', { ascending: false }),
+        ])
+        if (p.data) setPosts(p.data as Post[])
       if (v.data) setVideos(v.data as Video[])
+      } catch (e) { console.error('Failed to fetch:', e) }
     })()
-  }, [loading])
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -64,7 +65,7 @@ export default function ContentPage() {
     return () => { cancelAnimationFrame(id) }
   }, [])
 
-  if (loading) return <div className="flex items-center justify-center h-screen bg-black text-white">Loading...</div>
+  // Don't block on loading — data fetches independently now
 
   return (
     <>
