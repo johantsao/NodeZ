@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import { v4 as uuidv4 } from 'uuid'
 import { supabase } from '@/utils/supabase/client'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
+import { revalidateContent } from '@/app/actions'
 import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
@@ -79,6 +80,7 @@ export default function NewPostPage() {
       })
 
       if (error) throw error
+      await revalidateContent()
       router.push('/education')
     } catch (err) {
       console.error(err)

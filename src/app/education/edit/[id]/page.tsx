@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { supabase } from '@/utils/supabase/client'
+import { revalidateContent } from '@/app/actions'
 import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
@@ -92,6 +93,7 @@ export default function EditPostPage() {
       const { error } = await supabase.from('posts').update(updateData).eq('id', id)
 
       if (error) throw error
+      await revalidateContent(id as string)
       router.push('/education')
     } catch (error) {
       console.error(error)

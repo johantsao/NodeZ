@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { useSupabaseSession } from '@/utils/supabase/useSupabaseSession'
 import { supabase } from '@/utils/supabase/client'
 import { getYoutubeId, youtubeThumbUrl } from '@/utils/youtube'
+import { revalidateContent } from '@/app/actions'
 import ClientWrapper from '@/components/ClientWrapper'
 import TopLogo from '@/components/TopLogo'
 import BackgroundCanvas from '@/components/BackgroundCanvas'
@@ -39,6 +40,7 @@ export default function NewVideoPage () {
         tags
       })
       if (error) throw error
+      await revalidateContent()
       alert('新增影片成功！')
       router.push('/video')
     } catch(err){ console.error(err); alert('新增失敗') }
