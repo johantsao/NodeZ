@@ -2,21 +2,157 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* -- Dark palette -- */
+  --dark-bg: #08080c;
+  --dark-bg-elevated: #111116;
+  --dark-text: #f2f2f4;
+  --dark-text-secondary: #9a9aaa;
+  --dark-text-muted: #555566;
+  --dark-border: rgba(255, 255, 255, 0.06);
+
+  /* -- Light palette -- */
+  --light-bg: #fafaf8;
+  --light-bg-elevated: #ffffff;
+  --light-text: #111114;
+  --light-text-secondary: #666672;
+  --light-text-muted: #aaaaB4;
+  --light-border: rgba(0, 0, 0, 0.08);
+
+  /* -- Accent -- */
+  --accent: #3aa9f3;
+  --accent-hover: #2d8fd0;
+  --accent-glow: rgba(58, 169, 243, 0.12);
+
+  /* -- Motion -- */
+  --ease: cubic-bezier(0.51, 0, 0.08, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: 0.5s;
+  --duration-slow: 0.8s;
+}
+
+/* === Base === */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar { display: none; }
+
 body {
   @apply bg-black text-white;
+  font-family: var(--font-plex-sans), "IBM Plex Sans", "Noto Sans TC", "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: #000;
+}
+
+/* === Section base classes === */
+.section-dark {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+.section-light {
+  background: var(--light-bg);
+  color: var(--light-text);
+}
+
+/* === Text gradient === */
+.text-gradient-blue {
+  background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === Glass card (dark context) === */
+.glass-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--dark-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* === Light card === */
+.card-light {
+  background: var(--light-bg-elevated);
+  border: 1px solid var(--light-border);
+}
+
+/* === Noise texture === */
+.noise::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* === Marquee === */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* === Orbit === */
+@keyframes orbit {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-orbit { animation: orbit 45s linear infinite; }
+.animate-orbit-reverse { animation: orbit 60s linear infinite reverse; }
+
+/* === Hover arrow === */
+.hover-arrow .arr {
+  transition: transform var(--duration) var(--ease-out);
+}
+.hover-arrow:hover .arr {
+  transform: translateX(4px);
+}
+
+/* === Service tag pills (light context) === */
+.tag-pill {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--light-border);
+  color: var(--light-text-secondary);
+  transition: all var(--duration) var(--ease-out);
+}
+.tag-pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* ===================== */
-/* ✅ Logo 特效樣式區塊 */
+/* Legacy styles kept    */
 /* ===================== */
 
 .shadow-logo {
   filter: drop-shadow(0 0 8px rgba(0, 180, 255, 0.3))
           drop-shadow(0 0 12px rgba(0, 180, 255, 0.2));
-  mix-blend-mode: screen; /* 讓它跟背景自然融合 */
+  mix-blend-mode: screen;
 }
 
-/* Logo 閃光掃描線動畫 */
 .logo-glint::after {
   content: '';
   position: absolute;
@@ -37,21 +173,18 @@ body {
   100% { left: 125%; }
 }
 
-/* Floating animation for hero elements */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-16px); }
 }
 .animate-float { animation: float 4s ease-in-out infinite; }
 
-/* Breathing pulse for CTA buttons */
 @keyframes breathe {
   0%, 100% { box-shadow: 0 0 20px rgba(55, 168, 255, 0.2); }
   50% { box-shadow: 0 0 40px rgba(55, 168, 255, 0.5), 0 0 80px rgba(55, 168, 255, 0.15); }
 }
 .animate-breathe { animation: breathe 3s ease-in-out infinite; }
 
-/* Card hover lift */
 .card-hover {
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s, background 0.35s;
   background: rgba(8, 12, 24, 0.85);
@@ -64,7 +197,6 @@ body {
   border-color: rgba(55, 168, 255, 0.3) !important;
 }
 
-/* Section glow background */
 .section-glow {
   position: relative;
 }
@@ -87,7 +219,7 @@ body {
   .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 }
 
-/* Gradient text */
+/* Gradient text (legacy) */
 .text-gradient {
   background: linear-gradient(135deg, #fff 0%, #37a8ff 100%);
   -webkit-background-clip: text;
