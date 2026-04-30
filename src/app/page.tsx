@@ -416,21 +416,24 @@ function Navbar() {
             </a>
           ))}
 
-          <div ref={dropdownRef} className="relative ml-1">
+          <div ref={dropdownRef} className="relative ml-2">
             <button
               onClick={() => setResearchOpen(!researchOpen)}
-              className={`flex items-center gap-1.5 px-4 py-1.5 text-[13px] rounded-full border transition-all duration-300 ${
+              className={`flex items-center gap-2 px-4 py-[6px] text-[13px] font-medium rounded-lg transition-all duration-300 ${
                 researchOpen
-                  ? "border-white/20 text-white bg-white/[0.06]"
-                  : "border-white/10 text-white/50 hover:text-white hover:border-white/20"
+                  ? "bg-[#f97316]/12 text-[#f97316] border border-[#f97316]/30"
+                  : "bg-white/[0.04] text-white/60 border border-white/[0.08] hover:bg-[#f97316]/10 hover:text-[#f97316] hover:border-[#f97316]/25"
               }`}
             >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" className="opacity-80">
+                <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" /><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
+              </svg>
               {t("nav.research")}
               <svg
                 width="10"
                 height="10"
                 viewBox="0 0 10 10"
-                className={`transition-transform duration-300 ${researchOpen ? "rotate-180" : ""}`}
+                className={`transition-transform duration-300 opacity-50 ${researchOpen ? "rotate-180" : ""}`}
               >
                 <path d="M2.5 4 L5 6.5 L7.5 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -438,18 +441,28 @@ function Navbar() {
 
             {researchOpen && (
               <motion.div
-                className="absolute top-full mt-2 right-0 bg-[#161619] border border-white/[0.08] rounded-xl py-1.5 min-w-[200px] shadow-2xl shadow-black/40"
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
+                className="absolute top-full mt-2 right-0 bg-[#111116] border border-white/[0.08] rounded-xl py-2 min-w-[220px] shadow-2xl shadow-black/50 backdrop-blur-xl"
+                initial={{ opacity: 0, y: -6, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               >
-                <Link href="/content" className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.04] transition-all duration-200">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="opacity-50"><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="10" x2="16" y2="10" /><line x1="8" y1="14" x2="12" y2="14" /></svg>
-                  {t("nav.research.articles")}
+                <Link href="/content" className="flex items-center gap-3 px-4 py-3 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.05] transition-all duration-200 mx-1.5 rounded-lg">
+                  <div className="w-8 h-8 rounded-lg bg-[#3aa9f3]/10 flex items-center justify-center shrink-0">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3aa9f3" strokeWidth="1.5"><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="10" x2="16" y2="10" /><line x1="8" y1="14" x2="12" y2="14" /></svg>
+                  </div>
+                  <div>
+                    <div className="font-medium text-white/80">{t("nav.research.articles")}</div>
+                    <div className="text-[11px] text-white/30 mt-0.5">深度調研與分析</div>
+                  </div>
                 </Link>
-                <Link href="/video" className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.04] transition-all duration-200">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="opacity-50"><polygon points="5 3 19 12 5 21 5 3" /></svg>
-                  {t("nav.research.videos")}
+                <Link href="/video" className="flex items-center gap-3 px-4 py-3 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.05] transition-all duration-200 mx-1.5 rounded-lg">
+                  <div className="w-8 h-8 rounded-lg bg-[#3aa9f3]/10 flex items-center justify-center shrink-0">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3aa9f3" strokeWidth="1.5"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                  </div>
+                  <div>
+                    <div className="font-medium text-white/80">{t("nav.research.videos")}</div>
+                    <div className="text-[11px] text-white/30 mt-0.5">影片教學與訪談</div>
+                  </div>
                 </Link>
               </motion.div>
             )}
