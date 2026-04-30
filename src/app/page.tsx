@@ -114,6 +114,7 @@ const I18N: Record<Lang, Record<string, string>> = {
   "zh-Hant": {
     "nav.about": "\u95dc\u65bc\u6211\u5011", "nav.services": "\u670d\u52d9\u9805\u76ee", "nav.community": "\u793e\u7fa4\u8207\u5925\u4f34", "nav.events": "\u6d3b\u52d5",
     "nav.research": "NodeZ Research", "nav.research.articles": "\u8abf\u7814\u6587\u7ae0", "nav.research.videos": "\u5f71\u97f3\u5167\u5bb9",
+    "nav.research.articlesDesc": "\u6df1\u5ea6\u8abf\u7814\u8207\u5206\u6790", "nav.research.videosDesc": "\u5f71\u7247\u6559\u5b78\u8207\u8a2a\u8ac7",
     "contact.btn": "\u806f\u7d61\u6211\u5011",
     "hero.tag": "Web3 Brand Marketing \u00b7 Asia",
     "hero.t1": "Web3 \u54c1\u724c", "hero.t2": "\u5728\u4e9e\u6d32\u843d\u5730", "hero.t3": "\u7531\u6211\u5011\u627f\u63a5",
@@ -127,7 +128,7 @@ const I18N: Record<Lang, Record<string, string>> = {
     "get.1": "\u4e00\u4efd\u80fd\u76f4\u63a5\u57f7\u884c\u7684\u4e9e\u6d32\u5e02\u5834\u884c\u92b7\u85cd\u5716", "get.2": "\u6d3b\u52d5\u73fe\u5834\u3001\u5a92\u9ad4\u66dd\u5149\u8207\u793e\u7fa4\u89f8\u53ca\u7684\u5b8c\u6574\u6578\u64da",
     "get.3": "\u53ef\u91cd\u8907\u5229\u7528\u7684\u54c1\u724c\u6558\u4e8b\u8207\u7d20\u6750\u5eab", "get.4": "\u5728\u5730\u901a\u8def\u3001KOL \u8207\u5834\u5730\u7684\u9577\u671f\u5408\u4f5c\u9023\u7d50",
     "is.1": "Meetup \u8207\u54c1\u724c\u9031", "is.2": "Workshop \u8207\u6559\u80b2\u8ab2\u7a0b", "is.3": "\u65b0\u529f\u80fd\u767c\u5e03\u8207\u7522\u54c1\u9ad4\u9a57", "is.4": "\u8de8\u57ce\u843d\u5730\u6d3b\u52d5\u7d71\u7c4c",
-    "stmt.l0": "\u628a\u4e00\u5834\u6d3b\u52d5\uff0c", "stmt.do": "\u505a\u6210", "stmt.1": "\u503c\u5f97\u8a18\u4f4f\u7684\u73fe\u5834", "stmt.2": "\u80fd\u50b3\u958b\u7684\u6545\u4e8b", "stmt.3": "\u6703\u5ef6\u7e8c\u7684\u95dc\u4fc2",
+    "stmt.l0": "\u628a\u4e00\u5834\u6d3b\u52d5\uff0c\u505a\u6210", "stmt.do": "", "stmt.1": "\u503c\u5f97\u8a18\u4f4f\u7684\u73fe\u5834\u3001", "stmt.2": "\u80fd\u50b3\u958b\u7684\u6545\u4e8b\u3001", "stmt.3": "\u6703\u5ef6\u7e8c\u7684\u95dc\u4fc2\u3002",
     "ev.tag": "Selected events", "ev.title": "\u6211\u5011\u8fa6\u904e\u7684\u6d3b\u52d5\u3002",
     "ev.1": "Sui \u00d7 NodeZ \u54c1\u724c\u9031 \u00b7 \u53f0\u5317", "ev.2": "Sui \u751f\u614b Meetup \u00b7 80+ \u53c3\u8207\u8005", "ev.3": "Haedal \u00d7 Sui \u751f\u614b\u5206\u4eab\u6703", "ev.4": "Web3 \u958b\u767c\u8005 Workshop \u00b7 \u653f\u5927", "ev.5": "NodeZ \u793e\u7fa4\u4ea4\u6d41\u6703 \u00b7 \u53f0\u5317",
     "svc.tag": "Services", "svc.title1": "\u4e09\u689d\u670d\u52d9\u7dda\uff0c", "svc.title2": "\u4e00\u689d\u50b3\u64ad\u93c8\u3002",
@@ -149,6 +150,7 @@ const I18N: Record<Lang, Record<string, string>> = {
   "zh-Hans": {
     "nav.about": "\u5173\u4e8e\u6211\u4eec", "nav.services": "\u670d\u52a1\u9879\u76ee", "nav.community": "\u793e\u7fa4\u4e0e\u4f19\u4f34", "nav.events": "\u6d3b\u52a8",
     "nav.research": "NodeZ Research", "nav.research.articles": "\u8c03\u7814\u6587\u7ae0", "nav.research.videos": "\u5f71\u97f3\u5185\u5bb9",
+    "nav.research.articlesDesc": "\u6df1\u5ea6\u8c03\u7814\u4e0e\u5206\u6790", "nav.research.videosDesc": "\u5f71\u7247\u6559\u5b66\u4e0e\u8bbf\u8c08",
     "contact.btn": "\u8054\u7edc\u6211\u4eec",
     "hero.tag": "Web3 Brand Marketing \u00b7 Asia",
     "hero.t1": "Web3 \u54c1\u724c", "hero.t2": "\u5728\u4e9a\u6d32\u843d\u5730", "hero.t3": "\u7531\u6211\u4eec\u627f\u63a5",
@@ -162,7 +164,7 @@ const I18N: Record<Lang, Record<string, string>> = {
     "get.1": "\u4e00\u4efd\u80fd\u76f4\u63a5\u6267\u884c\u7684\u4e9a\u6d32\u5e02\u573a\u884c\u9500\u84dd\u56fe", "get.2": "\u6d3b\u52a8\u73b0\u573a\u3001\u5a92\u4f53\u66dd\u5149\u4e0e\u793e\u7fa4\u89e6\u53ca\u7684\u5b8c\u6574\u6570\u636e",
     "get.3": "\u53ef\u91cd\u590d\u5229\u7528\u7684\u54c1\u724c\u53d9\u4e8b\u4e0e\u7d20\u6750\u5e93", "get.4": "\u5728\u5730\u901a\u8def\u3001KOL \u4e0e\u573a\u5730\u7684\u957f\u671f\u5408\u4f5c\u8fde\u7ed3",
     "is.1": "Meetup \u4e0e\u54c1\u724c\u5468", "is.2": "Workshop \u4e0e\u6559\u80b2\u8bfe\u7a0b", "is.3": "\u65b0\u529f\u80fd\u53d1\u5e03\u4e0e\u4ea7\u54c1\u4f53\u9a8c", "is.4": "\u8de8\u57ce\u843d\u5730\u6d3b\u52a8\u7edf\u7b79",
-    "stmt.l0": "\u628a\u4e00\u573a\u6d3b\u52a8\uff0c", "stmt.do": "\u505a\u6210", "stmt.1": "\u503c\u5f97\u8bb0\u4f4f\u7684\u73b0\u573a", "stmt.2": "\u80fd\u4f20\u5f00\u7684\u6545\u4e8b", "stmt.3": "\u4f1a\u5ef6\u7eed\u7684\u5173\u7cfb",
+    "stmt.l0": "\u628a\u4e00\u573a\u6d3b\u52a8\uff0c\u505a\u6210", "stmt.do": "", "stmt.1": "\u503c\u5f97\u8bb0\u4f4f\u7684\u73b0\u573a\u3001", "stmt.2": "\u80fd\u4f20\u5f00\u7684\u6545\u4e8b\u3001", "stmt.3": "\u4f1a\u5ef6\u7eed\u7684\u5173\u7cfb\u3002",
     "ev.tag": "Selected events", "ev.title": "\u6211\u4eec\u529e\u8fc7\u7684\u6d3b\u52a8\u3002",
     "ev.1": "Sui \u00d7 NodeZ \u54c1\u724c\u5468 \u00b7 \u53f0\u5317", "ev.2": "Sui \u751f\u6001 Meetup \u00b7 80+ \u53c2\u4e0e\u8005", "ev.3": "Haedal \u00d7 Sui \u751f\u6001\u5206\u4eab\u4f1a", "ev.4": "Web3 \u5f00\u53d1\u8005 Workshop \u00b7 \u653f\u5927", "ev.5": "NodeZ \u793e\u7fa4\u4ea4\u6d41\u4f1a \u00b7 \u53f0\u5317",
     "svc.tag": "Services", "svc.title1": "\u4e09\u6761\u670d\u52a1\u7ebf\uff0c", "svc.title2": "\u4e00\u6761\u4f20\u64ad\u94fe\u3002",
@@ -183,7 +185,8 @@ const I18N: Record<Lang, Record<string, string>> = {
   },
   "en": {
     "nav.about": "About", "nav.services": "Services", "nav.community": "Community", "nav.events": "Events",
-    "nav.research": "NodeZ Research", "nav.research.articles": "Research articles", "nav.research.videos": "Video content",
+    "nav.research": "NodeZ Research", "nav.research.articles": "Research Articles", "nav.research.videos": "Video Content",
+    "nav.research.articlesDesc": "In-depth research & analysis", "nav.research.videosDesc": "Tutorials & interviews",
     "contact.btn": "Contact us",
     "hero.tag": "Web3 Brand Marketing \u00b7 Asia",
     "hero.t1": "Web3 brands", "hero.t2": "land in Asia.", "hero.t3": "We make it happen.",
@@ -297,8 +300,8 @@ function IconGrid() {
 }
 function IconScreen() {
   return (
-    <div className="w-7 h-7 bg-[#3aa9f3] rounded-md flex items-center justify-center shrink-0">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
+    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#3aa9f3] rounded-lg flex items-center justify-center shrink-0">
+      <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
         <rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" />
       </svg>
     </div>
@@ -306,8 +309,8 @@ function IconScreen() {
 }
 function IconLines() {
   return (
-    <div className="w-7 h-7 bg-[#3aa9f3] rounded-md flex items-center justify-center shrink-0">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
+    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#3aa9f3] rounded-lg flex items-center justify-center shrink-0">
+      <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
         <line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="18" x2="14" y2="18" />
       </svg>
     </div>
@@ -315,8 +318,8 @@ function IconLines() {
 }
 function IconPulse() {
   return (
-    <div className="w-7 h-7 bg-[#3aa9f3] rounded-md flex items-center justify-center shrink-0">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#3aa9f3] rounded-lg flex items-center justify-center shrink-0">
+      <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
       </svg>
     </div>
@@ -446,22 +449,22 @@ function Navbar() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               >
-                <Link href="/content" className="flex items-center gap-3 px-4 py-3 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.05] transition-all duration-200 mx-1.5 rounded-lg">
-                  <div className="w-8 h-8 rounded-lg bg-[#3aa9f3]/10 flex items-center justify-center shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3aa9f3" strokeWidth="1.5"><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="10" x2="16" y2="10" /><line x1="8" y1="14" x2="12" y2="14" /></svg>
+                <Link href="/content" className="flex items-center gap-3.5 px-4 py-3 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.05] transition-all duration-200 mx-1.5 rounded-lg">
+                  <div className="w-9 h-9 rounded-lg bg-[#3aa9f3]/10 flex items-center justify-center shrink-0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3aa9f3" strokeWidth="1.5"><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="10" x2="16" y2="10" /><line x1="8" y1="14" x2="12" y2="14" /></svg>
                   </div>
                   <div>
                     <div className="font-medium text-white/80">{t("nav.research.articles")}</div>
-                    <div className="text-[11px] text-white/30 mt-0.5">深度調研與分析</div>
+                    <div className="text-[11px] text-white/30 mt-0.5">{t("nav.research.articlesDesc")}</div>
                   </div>
                 </Link>
-                <Link href="/video" className="flex items-center gap-3 px-4 py-3 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.05] transition-all duration-200 mx-1.5 rounded-lg">
-                  <div className="w-8 h-8 rounded-lg bg-[#3aa9f3]/10 flex items-center justify-center shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3aa9f3" strokeWidth="1.5"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                <Link href="/video" className="flex items-center gap-3.5 px-4 py-3 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.05] transition-all duration-200 mx-1.5 rounded-lg">
+                  <div className="w-9 h-9 rounded-lg bg-[#3aa9f3]/10 flex items-center justify-center shrink-0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3aa9f3" strokeWidth="1.5"><polygon points="5 3 19 12 5 21 5 3" /></svg>
                   </div>
                   <div>
                     <div className="font-medium text-white/80">{t("nav.research.videos")}</div>
-                    <div className="text-[11px] text-white/30 mt-0.5">影片教學與訪談</div>
+                    <div className="text-[11px] text-white/30 mt-0.5">{t("nav.research.videosDesc")}</div>
                   </div>
                 </Link>
               </motion.div>
@@ -790,14 +793,12 @@ function NodezIs() {
 
 /* ===================== STATEMENT (LIGHT) ===================== */
 function Statement() {
-  const { lang, t } = useT();
+  const { t } = useT();
   const lines = [
     { icon: <IconScreen />, text: t("stmt.1") },
     { icon: <IconLines />, text: t("stmt.2") },
     { icon: <IconPulse />, text: t("stmt.3") },
   ];
-  const doText = t("stmt.do");
-  const isChinese = lang !== "en";
 
   return (
     <div className="bg-[#eeeee8]">
@@ -806,12 +807,10 @@ function Statement() {
           <p>{t("stmt.l0")}</p>
           {lines.map((l, i) => (
             <p key={i} className="flex flex-wrap items-center gap-2 sm:gap-3 mt-1">
-              {isChinese && doText && <span>{doText}</span>}
               {l.icon}
               <span className="inline-flex items-center bg-[#111] text-white px-3 sm:px-5 py-1 rounded-sm">
                 {l.text}
               </span>
-              {isChinese && <span className="text-[#111]">{i < 2 ? "\u3001" : "\u3002"}</span>}
             </p>
           ))}
         </motion.div>

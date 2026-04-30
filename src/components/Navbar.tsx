@@ -13,16 +13,19 @@ const labels: Record<Lang, Record<string, string>> = {
   'zh-Hant': {
     about: '關於我們', services: '服務項目', community: '社群與夥伴', events: '活動',
     research: 'NodeZ Research', articles: '調研文章', videos: '影音內容',
+    articlesDesc: '深度調研與分析', videosDesc: '影片教學與訪談',
     contact: '聯絡我們',
   },
   'zh-Hans': {
     about: '关于我们', services: '服务项目', community: '社群与伙伴', events: '活动',
     research: 'NodeZ Research', articles: '调研文章', videos: '影音内容',
+    articlesDesc: '深度调研与分析', videosDesc: '影片教学与访谈',
     contact: '联络我们',
   },
   'en': {
     about: 'About', services: 'Services', community: 'Community', events: 'Events',
-    research: 'NodeZ Research', articles: 'Research articles', videos: 'Video content',
+    research: 'NodeZ Research', articles: 'Research Articles', videos: 'Video Content',
+    articlesDesc: 'In-depth research & analysis', videosDesc: 'Tutorials & interviews',
     contact: 'Contact us',
   },
 }
@@ -142,22 +145,22 @@ export default function Navbar({ transparent = false }: NavbarProps) {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               >
-                <Link href="/education" onClick={() => setResearchOpen(false)} className="flex items-center gap-3 px-4 py-3 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.05] transition-all duration-200 mx-1.5 rounded-lg">
-                  <div className="w-8 h-8 rounded-lg bg-[#3aa9f3]/10 flex items-center justify-center shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3aa9f3" strokeWidth="1.5"><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="10" x2="16" y2="10" /><line x1="8" y1="14" x2="12" y2="14" /></svg>
+                <Link href="/education" onClick={() => setResearchOpen(false)} className="flex items-center gap-3.5 px-4 py-3 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.05] transition-all duration-200 mx-1.5 rounded-lg">
+                  <div className="w-9 h-9 rounded-lg bg-[#3aa9f3]/10 flex items-center justify-center shrink-0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3aa9f3" strokeWidth="1.5"><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="10" x2="16" y2="10" /><line x1="8" y1="14" x2="12" y2="14" /></svg>
                   </div>
                   <div>
                     <div className="font-medium text-white/80">{t('articles')}</div>
-                    <div className="text-[11px] text-white/30 mt-0.5">深度調研與分析</div>
+                    <div className="text-[11px] text-white/30 mt-0.5">{t('articlesDesc')}</div>
                   </div>
                 </Link>
-                <Link href="/video" onClick={() => setResearchOpen(false)} className="flex items-center gap-3 px-4 py-3 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.05] transition-all duration-200 mx-1.5 rounded-lg">
-                  <div className="w-8 h-8 rounded-lg bg-[#3aa9f3]/10 flex items-center justify-center shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3aa9f3" strokeWidth="1.5"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                <Link href="/video" onClick={() => setResearchOpen(false)} className="flex items-center gap-3.5 px-4 py-3 text-[13px] text-white/60 hover:text-white hover:bg-white/[0.05] transition-all duration-200 mx-1.5 rounded-lg">
+                  <div className="w-9 h-9 rounded-lg bg-[#3aa9f3]/10 flex items-center justify-center shrink-0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3aa9f3" strokeWidth="1.5"><polygon points="5 3 19 12 5 21 5 3" /></svg>
                   </div>
                   <div>
                     <div className="font-medium text-white/80">{t('videos')}</div>
-                    <div className="text-[11px] text-white/30 mt-0.5">影片教學與訪談</div>
+                    <div className="text-[11px] text-white/30 mt-0.5">{t('videosDesc')}</div>
                   </div>
                 </Link>
               </motion.div>
