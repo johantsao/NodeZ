@@ -928,10 +928,10 @@ function Services() {
 function OwnedChannels() {
   const { t } = useT();
   const channels = [
-    { name: "YouTube", handle: "@Node.Z", desc: t("ch.yt.d"), icon: <IconYouTube /> },
-    { name: "Twitter / X", handle: "@Node_Z_", desc: t("ch.x.d"), icon: <IconX /> },
-    { name: "Instagram", handle: "@node.z_", desc: t("ch.ig.d"), icon: <IconInstagram /> },
-    { name: "Telegram", handle: "Join Group", desc: t("ch.tg.d"), icon: <IconTelegram /> },
+    { name: "YouTube", handle: "@Node.Z", desc: t("ch.yt.d"), icon: <IconYouTube />, href: "https://www.youtube.com/@Node.Z" },
+    { name: "Twitter / X", handle: "@Node_Z_", desc: t("ch.x.d"), icon: <IconX />, href: "https://x.com/Node_Z_" },
+    { name: "Instagram", handle: "@node.z_", desc: t("ch.ig.d"), icon: <IconInstagram />, href: "https://www.instagram.com/node.z_" },
+    { name: "Telegram", handle: "Join Group", desc: t("ch.tg.d"), icon: <IconTelegram />, href: "#" },
   ];
 
   return (
@@ -946,13 +946,13 @@ function OwnedChannels() {
 
         <motion.div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 border border-[#ddd] rounded-2xl overflow-hidden bg-white" variants={revealSoft}>
           {channels.map((c, i) => (
-            <div key={c.name} className={`p-6 ${i < channels.length - 1 ? "sm:border-r border-b sm:border-b-0 lg:border-b-0 border-[#eee]" : ""}`}>
+            <a key={c.name} href={c.href} target="_blank" rel="noopener noreferrer" className={`block p-6 hover:bg-[#f7f6f2] transition-colors duration-300 ${i < channels.length - 1 ? "sm:border-r border-b sm:border-b-0 lg:border-b-0 border-[#eee]" : ""}`}>
               <div className="mb-4">{c.icon}</div>
               <h3 className="text-base font-bold text-[#111]">{c.name}</h3>
               <p className="mt-2 text-xs text-[#999] leading-relaxed">
                 {c.handle} &middot; {c.desc}
               </p>
-            </div>
+            </a>
           ))}
         </motion.div>
       </motion.div>
@@ -979,7 +979,7 @@ function ContactCTA() {
           {t("cta.desc")}
         </motion.p>
         <motion.div className="mt-10 flex flex-wrap items-center gap-6" variants={revealButton}>
-          <a href="mailto:contact@nodez.io" className="group flex items-center gap-2 bg-[#3aa9f3] hover:bg-white text-black text-sm font-semibold px-7 py-3 rounded-full transition-all duration-500">
+          <a href="mailto:nodezblockchain@gmail.com" className="group flex items-center gap-2 bg-[#3aa9f3] hover:bg-white text-black text-sm font-semibold px-7 py-3 rounded-full transition-all duration-500">
             {t("cta.btn")} <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
           </a>
           <a href="#" className="text-sm text-[#555566] hover:text-[#f2f2f4] underline underline-offset-4 transition-colors duration-300">{t("cta.link")}</a>
@@ -1000,8 +1000,13 @@ function Footer() {
           <span className="text-xs text-[#555566]">{t("foot")}</span>
         </div>
         <div className="flex items-center gap-5 text-xs text-[#555566]">
-          {["contact", "youtube", "twitter", "telegram"].map((l) => (
-            <a key={l} href={l === "contact" ? "#contact" : "#"} className="hover:text-[#f2f2f4] transition-colors duration-300">{l}</a>
+          {[
+            { label: "contact", href: "#contact" },
+            { label: "youtube", href: "https://www.youtube.com/@Node.Z" },
+            { label: "twitter", href: "https://x.com/Node_Z_" },
+            { label: "instagram", href: "https://www.instagram.com/node.z_" },
+          ].map((l) => (
+            <a key={l.label} href={l.href} target={l.href.startsWith("#") ? undefined : "_blank"} rel={l.href.startsWith("#") ? undefined : "noopener noreferrer"} className="hover:text-[#f2f2f4] transition-colors duration-300">{l.label}</a>
           ))}
         </div>
       </div>

@@ -207,7 +207,7 @@ export default function Navbar({ transparent = false }: NavbarProps) {
 
           {/* CTA */}
           <a
-            href="mailto:contact@nodez.io"
+            href="mailto:nodezblockchain@gmail.com"
             className="bg-[#3aa9f3] hover:bg-[#2d9ae0] text-white text-[13px] font-semibold px-5 py-[7px] rounded-lg transition-all duration-300"
           >
             {t('contact')}
